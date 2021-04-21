@@ -8,6 +8,8 @@ const User = require("../models/User");
 const response = require("../utils/response");
 
 const authenticate = async (req, res, next) => {
+
+    // Parse token
     let token;
     if (req.headers.authorization && req.headers.authorization.startsWith("Bearer")) {
         token = req.headers.authorization.split(" ")[1];
@@ -22,7 +24,7 @@ const authenticate = async (req, res, next) => {
 
         const user = await User.findById(id);
         if (!user) {
-            return response(res, 400, "Account does not exist.", true);    
+            return response(res, 401, "Account does not exist.", true);    
         }
         
         req.user = user;

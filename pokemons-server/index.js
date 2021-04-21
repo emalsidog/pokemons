@@ -20,7 +20,7 @@ app.use(cookieParser());
 
 // Routes
 app.use("/users", require("./routes/auth-routes"));
-app.use("/", require("./routes/test"));
+app.use("/", require("./routes/user-routes"));
 
 // Database connection
 const connectDB = require("./config/database");

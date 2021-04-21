@@ -177,6 +177,33 @@ const auth = (state = initialState, action) => {
 			};
 		}
 
+		// Get current user
+		case types.GET_CURRENT_USER_REQUEST: {
+			return {
+				...state,
+				isLoading: true
+			};
+		}
+		case types.GET_CURRENT_USER_SUCCESS: {
+			const { response } = action;
+			return {
+				...state,
+				isLoading: false,
+				status: {
+					...response.status
+				},
+				user: {
+					...response.body.user
+				}
+			};
+		}
+		case types.GET_CURRENT_USER_FAILURE: {
+			return {
+				...state,
+				isLoading: false
+			};
+		}
+
 		// Default
 		default: {
 			return { ...state };

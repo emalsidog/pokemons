@@ -5,3 +5,19 @@ body {
 	margin: 0;
 	background: #FAFAFA;
 }
+
+.app-container {
+	max-width: 1100px;
+	width: 100%;
+	margin: 0 auto;
+}
+
+.validation-error-message {
+	position: relative;
+	color: red;
+	margin: 0;
+}
+
+.form-group {
+	margin-bottom: 0.5rem;
+}

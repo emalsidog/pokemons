@@ -1,0 +1,29 @@
+.info-list {
+    list-style: none;
+    padding: 0;
+}
+
+.info-list li {
+    display: flex;
+    padding: 5px 0;
+}
+
+.label {
+    width: 100%;
+    max-width: 200px;
+}
+
+/* Input */
+input {
+
+    width: 100%;
+    max-width: 250px;
+
+    border: none;
+    border-bottom: 1px solid black;
+}
+
+input:focus {
+    outline: none;
+    border-bottom: 1px solid #17bcee;
+}

@@ -180,6 +180,30 @@ exports.reset = async (req, res) => {
 	}
 };
 
+// GET => /users/current-user
+exports.getCurrentUser = (req, res) => {
+	try {
+		const { givenName, familyName, email, username, phone } = req.user;
+		res.status(200).json({ 
+			status: {
+				isError: false,
+				message: "Done."
+			},
+			body: {
+				user: {
+					givenName,
+					familyName,
+					email,
+					username,
+					phone
+				}
+			}
+		})
+	} catch (error) {
+		response(res, 401, "Unauthorized.", true)
+	}
+}
+
 // Creating activation token
 const createActivationToken = (newUser) => {
 	return jwt.sign(newUser, process.env.ACTIVATION_TOKEN_SECRET, {

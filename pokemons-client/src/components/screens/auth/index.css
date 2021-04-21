@@ -1,3 +1,4 @@
+/* Layout */
 .container {
 	width: 100%;
 	max-width: 350px;
@@ -20,6 +21,7 @@
 	text-align: center;
 }
 
+/* Forgot password */
 .forgot-password-button {
 	background: none !important;
 	border: none;
@@ -35,14 +37,4 @@
 
 .forgot-password-button:focus {
 	outline: none;
-}
-
-.form-group {
-	margin-bottom: 0.5rem;
-}
-
-.validation-error-message {
-	position: relative;
-	color: red;
-	margin: 0;
 }

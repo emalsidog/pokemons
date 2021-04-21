@@ -86,3 +86,25 @@ export const logoutAction = () => {
 		dispatch({ type: types.LOGOUT });
 	}
 }
+
+// GET => /users/current-user
+export const getCurrentUserAction = () => {
+	return async dispatch => {
+		dispatch({ type: types.GET_CURRENT_USER_REQUEST });
+		try {
+			const { data } = await axios.get("http://localhost:4000/users/current-user", {
+				headers: {
+					"Authorization": `Bearer ${localStorage.getItem("accessToken")}`
+				}
+			});
+			dispatch({ type: types.GET_CURRENT_USER_SUCCESS, response: data }) // response.status && response.body.user
+		} catch (error) {
+			if (error.response.status === 401) {
+				localStorage.removeItem("accessToken");
+			}
+
+			const { data } = error.response;
+			dispatch({ type: types.GET_CURRENT_USER_FAILURE, status: data.status });
+		}
+	}
+}

@@ -81,6 +81,8 @@ const Login = ({ history }) => {
 			<div className="container">
 				<form className="wrapper" onSubmit={handleSubmit(handleLoginSubmit)}>
 					<h2>Login</h2>
+
+					{/* Email */}
 					<div className="form-group">
 						<Input
 							{...register("email", {
@@ -101,6 +103,7 @@ const Login = ({ history }) => {
 						)}
 					</div>
 
+					{/* Password */}
 					<div className="form-group">
 						<Input
 							{...register("password", {
@@ -148,7 +151,8 @@ const Login = ({ history }) => {
 					<Link to="/users/register">Do not have an account?</Link>
 				</div>
 			</div>
-
+			
+			{/* Modal for forgot password request */}
 			<Modal
 				title="Pokemons | Forgot password?"
 				visible={isModalVisible}
@@ -159,6 +163,8 @@ const Login = ({ history }) => {
 				]}
 			>
 				<form id="resetForm" onSubmit={forgotHandleSubmit(handleForgotSubmit)}>
+
+					{/* Email */}
 					<div className="form-group">
 						<Input
 							{...forgotRegister("email", {

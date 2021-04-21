@@ -1,18 +1,23 @@
 // Dependencies
 import React from "react";
 import { Link, useHistory } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 // Actions
 import { logoutAction } from "../../../redux/actions/auth-actions";
 
-// Antd components
-import { Button } from "antd";
+// Styles
+import "./navigation.css";
 
 const Navigation = () => {
+	// Redux
 	const dispatch = useDispatch();
+	const { user } = useSelector(({ auth }) => auth);
+
+	// History
 	const history = useHistory();
 
+	// Handle logout
 	const handleLogout = () => {
 		dispatch(logoutAction());
 		history.push("/users/login");
@@ -20,18 +25,21 @@ const Navigation = () => {
 
 	return (
 		<header>
-			<div className="ant-row">
-				<div className="ant-col menu-row" style={{ flex: "1 1 auto" }}>
-					<ul className="ant-menu menu-site ant-menu-root ant-menu-horizontal">
-						<li className="ant-menu-item">
-							<Link to="/profile">Profile</Link>
-						</li>
-						<li className="ant-menu-item">
-							<Button onClick={handleLogout}>Logout</Button>
-						</li>
-					</ul>
-				</div>
-			</div>
+			<nav>
+				<ul className="nav">
+					<li className="nav-item">
+						<Link className="link nav-link" to="/">Home</Link>
+					</li>
+
+					<li className="dropdown nav-item">
+						<span className="link nav-link">Welcome, {user.givenName} ▼</span>
+						<div className="dropdown-content">
+							<Link className="link dropdown-link" to="/settings">Settings</Link>
+							<button onClick={handleLogout} className="logout-button">Logout</button>
+						</div>
+					</li>
+				</ul>
+			</nav>
 		</header>
 	);
 };

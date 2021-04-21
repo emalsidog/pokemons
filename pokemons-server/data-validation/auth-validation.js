@@ -1,7 +1,7 @@
 // Dependencies
 const { check } = require("express-validator");
 
-validate = (method) => {
+validateAuth = (method) => {
 	switch (method) {
 		case "register": {
 			return [
@@ -84,4 +84,4 @@ validate = (method) => {
 	}
 };
 
-module.exports = validate;
+module.exports = validateAuth;

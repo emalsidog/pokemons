@@ -57,6 +57,8 @@ const Register = ({ history }) => {
 			<div className="container">
 				<form className="wrapper" onSubmit={handleSubmit(onSubmit)}>
 					<h2>Register</h2>
+
+					{/* Given name */}
 					<div className="form-group">
 						<Input
 							{...register("givenName", {
@@ -84,6 +86,8 @@ const Register = ({ history }) => {
 							</span>
 						)}
 					</div>
+
+					{/* Family name */}
 					<div className="form-group">
 						<Input
 							{...register("familyName", {
@@ -110,6 +114,8 @@ const Register = ({ history }) => {
 							</span>
 						)}
 					</div>
+
+					{/* Email */}
 					<div className="form-group">
 						<Input
 							{...register("email", {
@@ -128,6 +134,8 @@ const Register = ({ history }) => {
 							</span>
 						)}
 					</div>
+
+					{/* Username */}
 					<div className="form-group">
 						<Input
 							{...register("username", {
@@ -155,6 +163,8 @@ const Register = ({ history }) => {
 							</span>
 						)}
 					</div>
+
+					{/* Password */}
 					<div className="form-group">
 						<Input
 							{...register("password", {
@@ -177,6 +187,8 @@ const Register = ({ history }) => {
 							</span>
 						)}
 					</div>
+
+					{/* Confirm password */}
 					<div className="form-group">
 						<Input
 							{...register("confirmPassword", {
