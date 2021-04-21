@@ -1,0 +1,54 @@
+.container {
+	position: absolute;
+	top: 10px;
+	right: 0px;
+	bottom: 0px;
+	width: 300px;
+	overflow: hidden;
+	z-index: 1;
+}
+.notification {
+	display: flex;
+	align-items: center;
+
+	position: absolute;
+	top: 10px;
+	right: -300px;
+	bottom: 0px;
+
+	min-height: 50px;
+	height: fit-content;
+	width: 300px;
+	box-sizing: border-box;
+
+	animation-name: notification;
+	animation-duration: 3s;
+}
+
+.notificationError {
+	background-color: #f0736a;
+	color: #ffffff;
+	border-bottom: 3px solid red;
+}
+
+.picture {
+	margin: 10px 15px;
+}
+
+.notificationSuccess {
+	background-color: #5dbd51;
+	color: #ffffff;
+	border-bottom: 3px solid green;
+}
+
+@keyframes notification {
+	10% {
+		right: 0px;
+	}
+	90% {
+		right: 0px;
+	}
+	100% {
+		right: -300px;
+	}
+}
