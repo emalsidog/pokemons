@@ -1,4 +1,8 @@
 /* Navigation */
+header {
+	background-color: rgb(245, 245, 245);
+}
+
 .nav {
 	overflow: hidden;
 
@@ -6,8 +10,6 @@
 	padding: 0;
 
 	list-style-type: none;
-
-	background-color: rgb(245, 245, 245);
 }
 
 .nav-item {
@@ -26,9 +28,6 @@
 .dropdown-content {
 	display: none;
 	position: absolute;
-
-	right: 0;
-	left: auto;
 
 	min-width: 160px;
 

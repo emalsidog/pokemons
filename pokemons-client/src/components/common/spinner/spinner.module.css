@@ -1,17 +1,20 @@
 .spinner {
-	display: inline-block;
-	position: relative;
-	text-align: center;
-	width: 80px;
-	height: 80px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+
+	width: 100px;
+	height: 100px;
 }
 .spinner div {
 	position: absolute;
 	top: 33px;
-	width: 13px;
-	height: 13px;
+	width: 15px;
+	height: 15px;
+
 	border-radius: 50%;
-	background: #fff;
+	background: #17bcee;
 	animation-timing-function: cubic-bezier(0, 1, 1, 0);
 }
 .spinner div:nth-child(1) {

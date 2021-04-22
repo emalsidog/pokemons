@@ -1,47 +1,76 @@
 // Dependencies
-import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
+
+// Actions
+import { updateUserAction } from "../../../redux/actions/user-actions";
+
+// Selectors
+import {
+	selectUser,
+	selectStatus,
+} from "../../../redux/selectors/user-selectors";
 
 // Components
 import Navigation from "../../common/navigation";
+import ServerResponseNotify from "../../common/server-response-notify";
+
+// Antd components
+import { Button } from "antd";
 
 // Styles
 import "./settings.css";
 
 const Settings = () => {
-
 	// Redux
-	const { user } = useSelector(({ auth }) => auth);
+	const dispatch = useDispatch();
+	const user = useSelector(selectUser);
+	const status = useSelector(selectStatus);
 
-	// Update user configuration
-	const { register, setValue, formState: { errors }, handleSubmit } = useForm();
+	// Update user form configuration
+	const {
+		register,
+		setValue,
+		formState: { errors },
+		handleSubmit,
+	} = useForm();
 
-	const onSubmit = (data) => {
-		console.log(data);
-	};
-
-	// Load default input values
 	useEffect(() => {
 		for (let prop in user) {
 			setValue(prop, user[prop]);
 		}
 	}, [user, setValue]);
 
+	const onSubmit = (data) => {
+		console.log(data);
+		dispatch(updateUserAction(data));
+		setShowNotify(true);
+	};
+
+	// Server response notify configuration
+	const [showNotify, setShowNotify] = useState(false);
+
+	const onAnimationEnd = () => {
+		setShowNotify(false);
+	};
+
 	return (
 		<>
 			<Navigation />
 			<div className="app-container">
-				<h1>Settings</h1>
-				<p>Here you are able to change your personal information.</p>
-				<hr />
+				<div className="heading">
+					<h1 className="title">Settings</h1>
+					<span>
+						Here you are able to change your personal information.
+					</span>
+				</div>
 
 				<form onSubmit={handleSubmit(onSubmit)}>
-					<ul className="info-list">
-
-						{/* GivenName */}
-						<li>
-							<div className="label">Given name: </div>
+					{/* GivenName */}
+					<div className="group">
+						<div className="label">Given name</div>
+						<div className="input-container">
 							<input
 								{...register("givenName", {
 									required: "Given name is a required field",
@@ -61,17 +90,22 @@ const Settings = () => {
 								})}
 								type="text"
 								placeholder="Given name"
+								className="input"
+								disabled={status.isLoading}
 							/>
-						</li>
-						{errors.givenName && (
-							<span className="validation-error-message">
-								{errors.givenName.message}
-							</span>
-						)}
 
-						{/* Family name */}
-						<li>
-							<div className="label">Family name: </div>
+							{errors.givenName && (
+								<span className="validation-error-message">
+									{errors.givenName.message}
+								</span>
+							)}
+						</div>
+					</div>
+
+					{/* Family name */}
+					<div className="group">
+						<div className="label">Family name</div>
+						<div className="input-container">
 							<input
 								{...register("familyName", {
 									required: "Family name is a required field",
@@ -91,17 +125,21 @@ const Settings = () => {
 								})}
 								type="text"
 								placeholder="Family name"
+								className="input"
+								disabled={status.isLoading}
 							/>
-						</li>
-						{errors.familyName && (
-							<span className="validation-error-message">
-								{errors.familyName.message}
-							</span>
-						)}
+							{errors.familyName && (
+								<span className="validation-error-message">
+									{errors.familyName.message}
+								</span>
+							)}
+						</div>
+					</div>
 
-						{/* Email */}
-						<li>
-							<div className="label">Email: </div>
+					{/* Email */}
+					<div className="group">
+						<div className="label">Email</div>
+						<div className="input-container">
 							<input
 								{...register("email", {
 									required: "Email is a required field",
@@ -111,17 +149,22 @@ const Settings = () => {
 									},
 								})}
 								placeholder="Email"
+								className="input"
+								disabled={status.isLoading}
 							/>
-						</li>
-						{errors.email && (
-							<span className="validation-error-message">
-								{errors.email.message}
-							</span>
-						)}
 
-						{/* Username */}
-						<li>
-							<div className="label">Username: </div>
+							{errors.email && (
+								<span className="validation-error-message">
+									{errors.email.message}
+								</span>
+							)}
+						</div>
+					</div>
+
+					{/* Username */}
+					<div className="group">
+						<div className="label">Username</div>
+						<div className="input-container">
 							<input
 								{...register("username", {
 									required: "Username is a required field",
@@ -140,23 +183,63 @@ const Settings = () => {
 									},
 								})}
 								placeholder="Username"
+								className="input"
+								disabled={status.isLoading}
 							/>
-						</li>
-						{errors.email && (
-							<span className="validation-error-message">
-								{errors.email.message}
-							</span>
-						)}
 
-						{/* Phone */}
-						<li>
-							<div className="label">Phone: </div>
-							<input placeholder="Phone"></input>
-						</li>
-					</ul>
-					<button>Update</button>
+							{errors.username && (
+								<span className="validation-error-message">
+									{errors.username.message}
+								</span>
+							)}
+						</div>
+					</div>
+
+					{/* Phone */}
+					<div className="group">
+						<div className="label">Phone</div>
+						<div className="input-container">
+							<input
+								{...register("phone", {
+									pattern: {
+										value: /^\d+$/,
+										message: "Phone number is invalid",
+									},
+								})}
+								className="input"
+								placeholder="Phone number"
+								disabled={status.isLoading}
+							/>
+
+							{errors.phone && (
+								<span className="validation-error-message">
+									{errors.phone.message}
+								</span>
+							)}
+						</div>
+					</div>
+
+					<div>
+						<span className="label">Participate in the war?</span>
+						<input
+							{...register("warParticipant")}
+							defaultChecked={user.warParticipant}
+							disabled
+							type="checkbox"
+						/>
+					</div>
+
+					<Button loading={status.isLoading} htmlType="submit">
+						Update
+					</Button>
 				</form>
 			</div>
+
+			<ServerResponseNotify
+				show={showNotify}
+				status={{ isError: status.isError, message: status.message }}
+				handleAnimationEnd={onAnimationEnd}
+			/>
 		</>
 	);
 };

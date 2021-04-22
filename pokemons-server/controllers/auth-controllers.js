@@ -92,7 +92,7 @@ exports.login = async (req, res) => {
 		}
 
 		const accessToken = createAccessToken(user._id);
-
+		
 		res.status(200).json({
 			status: {
 				message: "Successfully logged in.",
@@ -104,7 +104,9 @@ exports.login = async (req, res) => {
 					givenName: user.givenName,
 					familyName: user.familyName,
 					email: user.email,
-					username: user.username
+					username: user.username,
+					phone: user.phone,
+					warParticipant: user.warParticipant
 				}
 			},
 		});
@@ -183,7 +185,7 @@ exports.reset = async (req, res) => {
 // GET => /users/current-user
 exports.getCurrentUser = (req, res) => {
 	try {
-		const { givenName, familyName, email, username, phone } = req.user;
+		const { givenName, familyName, email, username, phone, warParticipant } = req.user;
 		res.status(200).json({ 
 			status: {
 				isError: false,
@@ -195,7 +197,8 @@ exports.getCurrentUser = (req, res) => {
 					familyName,
 					email,
 					username,
-					phone
+					phone,
+					warParticipant
 				}
 			}
 		})

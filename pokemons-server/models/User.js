@@ -31,6 +31,10 @@ const UserSchema = new mongoose.Schema(
 			type: Number,
 			default: null
 		},
+		warParticipant: {
+			type: Boolean,
+			default: false
+		}
 	},
 	{
 		timestamps: true,

@@ -2,12 +2,12 @@
 import * as types from "../constants/auth-constants";
 
 const initialState = {
-	user: {},
 	isAuthenticated: false,
-	isLoading: false,
+	
 	status: {
+		isLoading: false,
 		message: "",
-		isError: null,
+		isError: false,
 	},
 };
 
@@ -17,28 +17,28 @@ const auth = (state = initialState, action) => {
 		case types.REGISTER_REQUEST: {
 			return {
 				...state,
-				isLoading: true,
 				status: {
 					message: "",
 					isError: null,
+					isLoading: true,
 				},
 			};
 		}
 		case types.REGISTER_SUCCESS: {
 			return {
 				...state,
-				isLoading: false,
 				status: {
 					...action.status,
+					isLoading: false,
 				},
 			};
 		}
 		case types.REGISTER_FAILURE: {
 			return {
 				...state,
-				isLoading: false,
 				status: {
 					...action.status,
+					isLoading: false,
 				},
 			};
 		}
@@ -47,28 +47,28 @@ const auth = (state = initialState, action) => {
 		case types.ACTIVATE_ACCOUNT_REQUEST: {
 			return {
 				...state,
-				isLoading: true,
 				status: {
 					message: "",
 					isError: null,
+					isLoading: true,
 				},
 			};
 		}
 		case types.ACTIVATE_ACCOUNT_SUCCESS: {
 			return {
 				...state,
-				isLoading: false,
 				status: {
 					...action.status,
+					isLoading: false,
 				},
 			};
 		}
 		case types.ACTIVATE_ACCOUNT_FAILURE: {
 			return {
 				...state,
-				isLoading: false,
 				status: {
 					...action.status,
+					isLoading: false,
 				},
 			};
 		}
@@ -77,33 +77,29 @@ const auth = (state = initialState, action) => {
 		case types.LOGIN_REQUEST: {
 			return {
 				...state,
-				isLoading: true,
 				status: {
 					message: "",
-					isError: null,
+					isError: false,
+					isLoading: true,
 				},
 			};
 		}
 		case types.LOGIN_SUCCESS: {
-			const { response } = action;
 			return {
 				...state,
-				isLoading: false,
 				isAuthenticated: true,
-				user: {
-					...response.body.user,
-				},
 				status: {
-					...response.status,
+					...action.status,
+					isLoading: false,
 				},
 			};
 		}
 		case types.LOGIN_FAILURE: {
 			return {
 				...state,
-				isLoading: false,
 				status: {
 					...action.status,
+					isLoading: false,
 				},
 			};
 		}
@@ -112,28 +108,28 @@ const auth = (state = initialState, action) => {
 		case types.FORGOT_PASSWORD_REQUEST: {
 			return {
 				...state,
-				isLoading: true,
 				status: {
 					message: "",
 					isError: null,
+					isLoading: true,
 				},
 			};
 		}
 		case types.FORGOT_PASSWORD_SUCCESS: {
 			return {
 				...state,
-				isLoading: false,
 				status: {
 					...action.status,
+					isLoading: false,
 				},
 			};
 		}
 		case types.FORGOT_PASSWORD_FAILURE: {
 			return {
 				...state,
-				isLoading: false,
 				status: {
 					...action.status,
+					isLoading: false,
 				},
 			};
 		}
@@ -142,28 +138,28 @@ const auth = (state = initialState, action) => {
 		case types.RESET_PASSWORD_REQUEST: {
 			return {
 				...state,
-				isLoading: true,
 				status: {
 					message: "",
 					isError: null,
+					isLoading: true,
 				},
 			};
 		}
 		case types.RESET_PASSWORD_SUCCESS: {
 			return {
 				...state,
-				isLoading: false,
 				status: {
 					...action.status,
+					isLoading: false,
 				},
 			};
 		}
 		case types.RESET_PASSWORD_FAILURE: {
 			return {
 				...state,
-				isLoading: false,
 				status: {
 					...action.status,
+					isLoading: false,
 				},
 			};
 		}
@@ -174,33 +170,6 @@ const auth = (state = initialState, action) => {
 				...state,
 				isAuthenticated: false,
 				user: null,
-			};
-		}
-
-		// Get current user
-		case types.GET_CURRENT_USER_REQUEST: {
-			return {
-				...state,
-				isLoading: true
-			};
-		}
-		case types.GET_CURRENT_USER_SUCCESS: {
-			const { response } = action;
-			return {
-				...state,
-				isLoading: false,
-				status: {
-					...response.status
-				},
-				user: {
-					...response.body.user
-				}
-			};
-		}
-		case types.GET_CURRENT_USER_FAILURE: {
-			return {
-				...state,
-				isLoading: false
 			};
 		}
 

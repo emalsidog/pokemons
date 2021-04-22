@@ -15,7 +15,7 @@ exports.updateUser = async (req, res) => {
 		return;
 	}
 
-	try {
+	try {	
 		const { givenName, familyName, email, phone, username } = req.body;
 
 		// Finding user
