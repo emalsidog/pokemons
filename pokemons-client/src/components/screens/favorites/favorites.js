@@ -1,10 +1,15 @@
 // Dependencies
 import React from "react";
 
+// Components
+import Layout from "../../layout";
+
 const Favorites = () => {
-    return (
-        <h1>Favorites</h1>
-    )
-}
+	return (
+		<Layout>
+			<h1>Favorites</h1>
+		</Layout>
+	);
+};
 
 export default Favorites;

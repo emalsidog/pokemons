@@ -2,16 +2,13 @@
 import React from "react";
 
 // Components
-import Navigation from "../../common/navigation";
+import Layout from "../../layout";
 
 const Home = () => {
 	return (
-		<>
-			<Navigation />
-			<div>
-				<h1>Home</h1>
-			</div>
-		</>
+		<Layout>
+			<h1>Home</h1>
+		</Layout>
 	);
 };
 

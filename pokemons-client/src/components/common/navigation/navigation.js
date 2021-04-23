@@ -31,6 +31,9 @@ const Navigation = () => {
 			<nav className="app-container">
 				<ul className="nav">
 					<li className="nav-item">
+						<Link className="link nav-link" to="/pokemons">List of pokemons</Link>
+					</li>
+					<li className="nav-item">
 						<Link className="link nav-link" to="/favorites">Favorite Pokémon</Link>
 					</li>
 					<li className="nav-item">

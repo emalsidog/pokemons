@@ -1,12 +1,15 @@
 // Dependencies
 import React from "react";
 
+// Components
+import Layout from "../../layout";
+
 const MyTeam = () => {
-    return (
-        <h1>
-            My team
-        </h1>
-    )
-}
+	return (
+		<Layout>
+			<h1>My team</h1>
+		</Layout>
+	);
+};
 
 export default MyTeam;

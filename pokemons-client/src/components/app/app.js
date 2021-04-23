@@ -19,6 +19,7 @@ import Home from "../screens/home";
 import Settings from "../screens/settings";
 import MyTeam from "../screens/my-team";
 import Favorites from "../screens/favorites";
+import Pokemons from "../screens/pokemons";
 
 import Spinner from "../common/spinner";
 
@@ -26,7 +27,6 @@ const App = () => {
 	// Redux
 	const dispatch = useDispatch();
 	const { fetchingUser } = useSelector(state => state.user)
-	console.log(useSelector(state => state))
 
 	useEffect(() => {
 		if (localStorage.getItem("accessToken")) {
@@ -51,6 +51,7 @@ const App = () => {
 			<ProtectedRoute exact path="/settings" component={Settings} />
 			<ProtectedRoute exact path="/my-team" component={MyTeam} />
 			<ProtectedRoute exact path="/favorites" component={Favorites} />
+			<ProtectedRoute exact path="/pokemons" component={Pokemons} />
 		</Switch>
 	);
 };
