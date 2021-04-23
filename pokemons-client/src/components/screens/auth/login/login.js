@@ -7,8 +7,17 @@ import { useDispatch, useSelector } from "react-redux";
 // Styles
 import "../index.css";
 
+// Selectors
+import {
+	getIsLoading,
+	getAuthStatus,
+} from "../../../../redux/selectors/auth-selectors";
+
 // Actions
-import { loginAction, forgotAction } from "../../../../redux/actions/auth-actions";
+import {
+	loginAction,
+	forgotAction,
+} from "../../../../redux/actions/auth-actions";
 
 // Antd components
 import { Input, Button, Modal } from "antd";
@@ -17,14 +26,14 @@ import { Input, Button, Modal } from "antd";
 import ServerResponseNotify from "../../../common/server-response-notify";
 
 const Login = ({ history }) => {
-
 	// States
 	const [showNotify, setShowNotify] = useState(false);
 	const [isModalVisible, setIsModalVisible] = useState(false);
 
 	// Redux
 	const dispatch = useDispatch();
-	const { isLoading, status } = useSelector(({ auth }) => auth);
+	const isLoading = useSelector(getIsLoading);
+	const status = useSelector(getAuthStatus);
 
 	// Redirect if token exists
 	useEffect(() => {
@@ -35,43 +44,45 @@ const Login = ({ history }) => {
 
 	// Show server notify
 	useEffect(() => {
-		if(status.isError) {
+		if (status.isError && status.message !== "") {
 			setShowNotify(true);
 		}
-	}, [status.isError]);
-	
+	}, [status]);
+
 	// Forgot form configuration
-	const { 
+	const {
 		register: forgotRegister,
-		formState: { 
-			errors: forgotErrors 
-		}, 
-		handleSubmit: forgotHandleSubmit 
+		formState: { errors: forgotErrors },
+		handleSubmit: forgotHandleSubmit,
 	} = useForm();
-	
+
 	const handleForgotSubmit = (data) => {
 		dispatch(forgotAction(data));
 		setIsModalVisible(false);
 		setShowNotify(true);
-	}
-	
+	};
+
 	// Login form configuration
-	const { register, formState: { errors }, handleSubmit } = useForm();
+	const {
+		register,
+		formState: { errors },
+		handleSubmit,
+	} = useForm();
 
 	const handleLoginSubmit = (data) => {
 		dispatch(loginAction(data));
 	};
-	
+
 	// Modal configuration
 	const showModal = () => {
 		setIsModalVisible(true);
 	};
-	
+
 	const handleModalCancel = () => {
 		setIsModalVisible(false);
 	};
-	
-	// Server notify configuration	
+
+	// Server notify configuration
 	const onAnimationEnd = () => {
 		setShowNotify(false);
 	};
@@ -79,7 +90,10 @@ const Login = ({ history }) => {
 	return (
 		<>
 			<div className="container">
-				<form className="wrapper" onSubmit={handleSubmit(handleLoginSubmit)}>
+				<form
+					className="wrapper"
+					onSubmit={handleSubmit(handleLoginSubmit)}
+				>
 					<h2>Login</h2>
 
 					{/* Email */}
@@ -151,19 +165,34 @@ const Login = ({ history }) => {
 					<Link to="/users/register">Do not have an account?</Link>
 				</div>
 			</div>
-			
+
 			{/* Modal for forgot password request */}
 			<Modal
 				title="Pokemons | Forgot password?"
 				visible={isModalVisible}
 				onCancel={handleModalCancel}
 				footer={[
-					<Button key="Cancel" onClick={handleModalCancel} disabled={isLoading}>Cancel</Button>,
-					<Button form="resetForm" htmlType="submit" key="Reset!" loading={isLoading}>Reset!</Button>,
+					<Button
+						key="Cancel"
+						onClick={handleModalCancel}
+						disabled={isLoading}
+					>
+						Cancel
+					</Button>,
+					<Button
+						form="resetForm"
+						htmlType="submit"
+						key="Reset!"
+						loading={isLoading}
+					>
+						Reset!
+					</Button>,
 				]}
 			>
-				<form id="resetForm" onSubmit={forgotHandleSubmit(handleForgotSubmit)}>
-
+				<form
+					id="resetForm"
+					onSubmit={forgotHandleSubmit(handleForgotSubmit)}
+				>
 					{/* Email */}
 					<div className="form-group">
 						<Input
@@ -188,9 +217,9 @@ const Login = ({ history }) => {
 			</Modal>
 
 			<ServerResponseNotify
-					status={status}
-					show={showNotify}
-					handleAnimationEnd={onAnimationEnd}
+				status={status}
+				show={showNotify}
+				handleAnimationEnd={onAnimationEnd}
 			/>
 		</>
 	);

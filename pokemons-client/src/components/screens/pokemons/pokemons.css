@@ -1,7 +1,7 @@
 .cards {
 	display: flex;
 	flex-direction: row;
-	justify-content: space-around;
+	justify-content: space-between;
 	flex-flow: wrap;
 }
 
@@ -44,4 +44,15 @@
 
 .activeClass .linkClass {
     color: #17bcee
+}
+
+
+@media screen and (max-width: 620px) {
+	.cards {
+		justify-content: space-around;
+	}
+
+    .itemClass {
+        padding: 3.5px 7px;
+    }
 }

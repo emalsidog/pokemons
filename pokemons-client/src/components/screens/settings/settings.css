@@ -42,20 +42,11 @@
     background: rgba(238, 238, 238, 0.89);
 }
 
-
 /* Typography */
 .label {
     width: 100%;
     max-width: 250px;
     font-size: 1.1rem;
-}
-
-.heading {
-    margin: 1.2rem 0;
-}
-
-.title {
-    margin: 0;
 }
 
 @media screen and (max-width: 400px) {

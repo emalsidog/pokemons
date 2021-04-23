@@ -10,6 +10,9 @@ import "../index.css";
 // Actions
 import { registerAction } from "../../../../redux/actions/auth-actions";
 
+// Selectors
+import { getAuthStatus, getIsLoading } from "../../../../redux/selectors/auth-selectors";
+
 // Antd components
 import { Input, Button } from "antd";
 
@@ -17,9 +20,11 @@ import { Input, Button } from "antd";
 import ServerResponseNotify from "../../../common/server-response-notify";
 
 const Register = ({ history }) => {
-	
+	const [showNotify, setShowNotify] = useState(false);
+
 	// Redux
-	const { status, isLoading } = useSelector(({ auth }) => auth);
+	const isLoading = useSelector(getIsLoading);
+	const status = useSelector(getAuthStatus);
 	const dispatch = useDispatch();
 
 	// Redirect if token exists
@@ -41,13 +46,16 @@ const Register = ({ history }) => {
 	password.current = watch("password", "");
 
 	const onSubmit = (data) => {
-		setShowNotify(true);
 		dispatch(registerAction(data));
 	};
 	
 	// Server notify configuration
-	const [showNotify, setShowNotify] = useState(false);
 	
+	useEffect(() => {
+		if(status.message !== "")
+			setShowNotify(true);
+	}, [status]);
+
 	const onAnimationEnd = () => {
 		setShowNotify(false);
 	};

@@ -42,6 +42,15 @@ const Card = (props) => {
 			<div className="card-stats">
 				<ul>{displayStats}</ul>
 			</div>
+
+			<div className="actions-controller">
+				<button onClick={() => console.log(id)} className="action-button add-team">
+					<i className="fas fa-plus"></i>
+				</button>
+				<button onClick={() => console.log(id)} className="action-button add-favorite">
+					<i className="fas fa-heart"></i>
+				</button>
+			</div>
 		</article>
 	);
 };

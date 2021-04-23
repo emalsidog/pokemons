@@ -10,6 +10,7 @@ import { updateUserAction } from "../../../redux/actions/user-actions";
 import {
 	selectUser,
 	selectStatus,
+	selectIsLoading
 } from "../../../redux/selectors/user-selectors";
 
 // Components
@@ -23,10 +24,13 @@ import { Button } from "antd";
 import "./settings.css";
 
 const Settings = () => {
+	const [showNotify, setShowNotify] = useState(false);
+
 	// Redux
 	const dispatch = useDispatch();
 	const user = useSelector(selectUser);
 	const status = useSelector(selectStatus);
+	const isLoading = useSelector(selectIsLoading);
 
 	// Update user form configuration
 	const {
@@ -42,14 +46,17 @@ const Settings = () => {
 		}
 	}, [user, setValue]);
 
+	useEffect(() => {
+		if (status.message !== "") {
+			setShowNotify(true);
+		}
+	}, [status]);
+
 	const onSubmit = (data) => {
-		console.log(data);
 		dispatch(updateUserAction(data));
-		setShowNotify(true);
 	};
 
-	// Server response notify configuration
-	const [showNotify, setShowNotify] = useState(false);
+	// Server notify
 
 	const onAnimationEnd = () => {
 		setShowNotify(false);
@@ -88,7 +95,7 @@ const Settings = () => {
 							type="text"
 							placeholder="Given name"
 							className="input"
-							disabled={status.isLoading}
+							disabled={isLoading}
 						/>
 
 						{errors.givenName && (
@@ -122,7 +129,7 @@ const Settings = () => {
 							type="text"
 							placeholder="Family name"
 							className="input"
-							disabled={status.isLoading}
+							disabled={isLoading}
 						/>
 						{errors.familyName && (
 							<span className="validation-error-message">
@@ -146,7 +153,7 @@ const Settings = () => {
 							})}
 							placeholder="Email"
 							className="input"
-							disabled={status.isLoading}
+							disabled={isLoading}
 						/>
 
 						{errors.email && (
@@ -180,7 +187,7 @@ const Settings = () => {
 							})}
 							placeholder="Username"
 							className="input"
-							disabled={status.isLoading}
+							disabled={isLoading}
 						/>
 
 						{errors.username && (
@@ -204,7 +211,7 @@ const Settings = () => {
 							})}
 							className="input"
 							placeholder="Phone number"
-							disabled={status.isLoading}
+							disabled={isLoading}
 						/>
 
 						{errors.phone && (
@@ -225,7 +232,7 @@ const Settings = () => {
 					/>
 				</div>
 
-				<Button loading={status.isLoading} htmlType="submit">
+				<Button loading={isLoading} htmlType="submit">
 					Update
 				</Button>
 			</form>
