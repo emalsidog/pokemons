@@ -1,99 +1,77 @@
-/* Navigation */
-header {
-	background-color: rgb(245, 245, 245);
+.nav-wrapper {
+	box-shadow: 0px -2px 8px 2px #888888;
 }
 
 .nav {
-	overflow: hidden;
+	display: flex;
+	align-items: center;
 
-	margin: 0;
-	padding: 0;
+	padding-top: 15px;
+	padding-bottom: 15px;
 
-	list-style-type: none;
+	color: #000000;
 }
 
-.nav-item {
-	float: left;
-}
+.nav-items {
+	display: flex;
 
-/* Dropdown */
-.dropdown {
-	float: right;
-}
-
-.dropdown:hover .dropdown-content {
-	display: block;
-}
-
-.dropdown-content {
-	display: none;
-	position: absolute;
-
-	min-width: 160px;
-
-	background-color: #f9f9f9;
-	box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-
-	z-index: 1;
-}
-
-/* Logout button */
-.logout-button {
-	display: block;
-
-	padding: 12px 16px;
-
-	width: 100%;
-
-	text-align: left;
-	background: none;
-
-	border: none;
-	border-left: 3px solid transparent;
-}
-
-.logout-button:hover {
-	border-color: #17bcee;
-	color: #17bcee;
-	background-color: #f1f1f1;
-
-	cursor: pointer;
-}
-
-.logout-button:focus {
-	outline: none;
-}
-
-.logout-button:active {
-	outline: none;
-}
-
-/* Links */
-.link {
-	display: block;
-	padding: 10px 16px;
-
-	color: black;
-	
-	text-decoration: none;
-	text-align: center;
+	margin-left: auto;
 }
 
 .nav-link {
-	border-top: 2px solid transparent;
+	padding-left: 20px;
+
+	color: #17beec;
+	font-size: 1.1rem;
+
 	cursor: pointer;
+	transition: none;
 }
 
 .nav-link:hover {
-	border-color: #17bcee;
+	color: 1px solid #135da3;
 }
 
-.dropdown-link {
-	border-left: 3px solid transparent;
-	text-align: left;
+.brand {
+	padding: 0;
+
+	font-family: "NCS Rogueland";
+	font-size: 1.2rem;
+	font-style: italic;
+	
+	color: #000000;
 }
 
-.dropdown-link:hover {
-	border-color: #17bcee;
-	background-color: #f1f1f1;
+.toggle {
+	display: none;
+
+	color: #000000;
+}
+
+@media only screen and (max-width: 768px) {
+	.nav-items,
+	.nav {
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.nav-items {
+		display: none;
+	}
+
+	.nav-link {
+		padding: 5px 0;
+	}
+
+	.nav-toggle-show {
+		display: flex;
+		margin-left: 0;
+	}
+
+	.toggle {
+		align-self: flex-end;
+		display: initial;
+		position: absolute;
+		cursor: pointer;
+	}
 }

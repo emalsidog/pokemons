@@ -1,22 +1,20 @@
 // Dependencies
-import React from "react";
+import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 // Actions
 import { logoutAction } from "../../../redux/actions/auth-actions";
-
-// Selectors
-import { selectUser } from "../../../redux/selectors/user-selectors";
 
 // Styles
 import "./navigation.css";
 
 const Navigation = () => {
+	const [toggleResponsiveNav, setToggleResponsiveNav] = useState(false);
+
 	// Redux
 	const dispatch = useDispatch();
-	const user = useSelector(selectUser);
-	
+
 	// History
 	const history = useHistory();
 
@@ -26,30 +24,28 @@ const Navigation = () => {
 		history.push("/users/login");
 	};
 
-	return (
-		<header>
-			<nav className="app-container">
-				<ul className="nav">
-					<li className="nav-item">
-						<Link className="link nav-link" to="/pokemons">List of pokemons</Link>
-					</li>
-					<li className="nav-item">
-						<Link className="link nav-link" to="/favorites">Favorite Pokémon</Link>
-					</li>
-					<li className="nav-item">
-						<Link className="link nav-link" to="/my-team">My team</Link>
-					</li>
+	// Handle navbar toggling
+	const navbarToggle = () => {
+		setToggleResponsiveNav(!toggleResponsiveNav);
+	};
 
-					<li className="dropdown nav-item">
-						<span className="link nav-link">Welcome, {user.givenName} <i className="fas fa-chevron-down"></i></span>
-						<div className="dropdown-content">
-							<Link className="link dropdown-link" to="/settings">Settings</Link>
-							<button onClick={handleLogout} className="logout-button">Logout</button>
-						</div>
-					</li>
-				</ul>
-			</nav>
-		</header>
+	const classNames = `nav-items ${toggleResponsiveNav ? "nav-toggle-show" : ""}`;
+
+	return (
+		<div className="nav-wrapper">
+			<div className="nav app-container">
+				<Link to="/" className="nav-link brand">Pokemons</Link>
+				<div onClick={navbarToggle} className="nav-link toggle">
+					<i className="fas fa-bars"></i>
+				</div>
+				<nav className={classNames}>
+					<Link to="/pokemons" className="nav-link">List</Link>
+					<Link to="/favourites" className="nav-link">Favourites</Link>
+					<Link to="/settings" className="nav-link">Settings</Link>
+					<div onClick={handleLogout} className="nav-link">Logout</div>
+				</nav>
+			</div>
+		</div>
 	);
 };
 

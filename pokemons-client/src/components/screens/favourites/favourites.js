@@ -4,12 +4,12 @@ import React from "react";
 // Components
 import Layout from "../../layout";
 
-const Favorites = () => {
+const Favourites = () => {
 	return (
 		<Layout>
-			<h1>Favorites</h1>
+			<h1>Favourites</h1>
 		</Layout>
 	);
 };
 
-export default Favorites;
+export default Favourites;

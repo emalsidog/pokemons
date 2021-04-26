@@ -5,55 +5,162 @@ const { validationResult } = require("express-validator");
 const User = require("../models/User");
 
 // Utils
-const response = require("../utils/response");
+const ErrorResponse = require("../utils/error-response");
 
-// POST => /update-user
-exports.updateUser = async (req, res) => {
+// POST => update/name
+exports.updateName = async (req, res) => {
+	const errors = validationResult(req);
+	if (!errors.isEmpty()) {
+		res.status(422).json({ errors: errors.array() });
+		return;
+	}
+	const { givenName, familyName } = req.body;
+
+	try {
+		const user = await User.findByIdAndUpdate(
+			req.user._id,
+			{
+				givenName,
+				familyName,
+			},
+			{ new: true }
+		);
+
+		res.status(200).json({
+			status: {
+				isError: false,
+				message: "Saved.",
+			},
+			body: {
+				user: {
+					givenName: user.givenName,
+					familyName: user.familyName,
+				},
+			},
+		});
+	} catch (error) {
+		next(error);
+	}
+
+	res.status(200);
+};
+
+// POST => /update/email
+exports.updateEmail = async (req, res, next) => {
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
 		res.status(422).json({ errors: errors.array() });
 		return;
 	}
 
-	try {	
-		const { givenName, familyName, email, phone, username } = req.body;
+	const { email } = req.body;
 
+	try {
+		// Find user
+		const user = await User.findById(req.user._id);
+		if (!user) {
+			return next(new ErrorResponse("User does not exist", 400));
+		}
+
+		// Check if email is alredy exists
+		const emailExists = await User.findOne({ email });
+		if (emailExists) {
+			return next(new ErrorResponse("Email is already taken", 400));
+		}
+
+		user.email = email;
+		await user.save();
+
+		res.status(200).json({
+			status: {
+				isError: false,
+				message: "Saved.",
+			},
+			body: {
+				user: {
+					email: user.email,
+				},
+			},
+		});
+	} catch (error) {
+		next(error);
+	}
+};
+
+// POST => /update/username
+exports.updateUsername = async (req, res) => {
+	const errors = validationResult(req);
+	if (!errors.isEmpty()) {
+		res.status(422).json({ errors: errors.array() });
+		return;
+	}
+
+	const { username } = req.body;
+
+	try {
 		// Finding user
 		const user = await User.findById(req.user._id);
 		if (!user) {
-			return response(res, 400, "User does not exist.", true);
+			return next(new ErrorResponse("User does not exist", 400));
 		}
 
-		// Check if email or username is already taken
-		const users = await User.find({ $or: [{ email }, { username }] });
-		if (users.length !== 0) {
-			return response(res, 400, "Email or username is alredy taken.",	true);
+		// Check if username is already taken
+		const usernameExists = await User.findOne({ username });
+		if (usernameExists) {
+			return next(new ErrorResponse("Username is already taken", 400));
 		}
 
-		// Updating
-		user.givenName = givenName;
-		user.familyName = familyName;
-		user.email = email;
-		user.phone = phone;
 		user.username = username;
 		await user.save();
 
 		res.status(200).json({
 			status: {
 				isError: false,
-				message: "Account is successfully updated.",
+				message: "Saved.",
 			},
 			body: {
 				user: {
-					givenName: user.givenName,
-					familyName: user.familyName,
-					email: user.email,
-					phone: user.phone,
 					username: user.username,
 				},
 			},
 		});
 	} catch (error) {
-		response(res, 500, "Something went wrong. Please, try again later.", true);
+		next(error);
+	}
+};
+
+// POST => /update/phone
+exports.updatePhone = async (req, res) => {
+	const errors = validationResult(req);
+	if (!errors.isEmpty()) {
+		res.status(422).json({ errors: errors.array() });
+		return;
+	}
+
+	const { phone } = req.body;
+
+	try {
+		// Finding user
+		const user = await User.findById(req.user._id);
+		if (!user) {
+			return next(new ErrorResponse("User does not exist", 400));
+		}
+
+		user.phone = phone;
+		await user.save();
+
+		res.status(200).json({
+			status: {
+				isError: false,
+				message: "Saved.",
+			},
+			body: {
+				user: {
+					phone: user.phone,
+				},
+			},
+		});
+	} catch (error) {
+		next(error);
 	}
 };

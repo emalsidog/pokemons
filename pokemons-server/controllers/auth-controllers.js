@@ -4,13 +4,13 @@ const { validationResult } = require("express-validator");
 
 // Utils
 const sendMail = require("../utils/sendMail");
-const response = require("../utils/response");
+const ErrorResponse = require("../utils/error-response");
 
 // Models
 const User = require("../models/User");
 
 // POST => /users/register
-exports.register = async (req, res) => {
+exports.register = async (req, res, next) => {
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
 		res.status(422).json({ errors: errors.array() });
@@ -20,13 +20,13 @@ exports.register = async (req, res) => {
 	const {	givenName, familyName, email, username, password, confirmPassword } = req.body;
 
 	if (password !== confirmPassword) {
-		return response(res, 400, "Passwords do not match", true);
+		return next(new ErrorResponse("Passwords do not match", 400));
 	}
 
 	try {
 		const user = await User.findOne({ $or: [{ email }, { username }] });
-		if (user) {
-			return response(res, 400, "Email or username is already taken.", true);
+		if (user) {		
+			return next(new ErrorResponse("Email or username is already taken.", 400));
 		}
 
 		const newUser = {givenName,	familyName,	email, username, password };
@@ -40,9 +40,14 @@ exports.register = async (req, res) => {
         `;
 		sendMail({ to: email, subject, html });
 
-		response(res, 200, "Check your inbox", false);
+		res.status(200).json({
+			status: {
+				isError: false,
+				message: "Check your inbox!"
+			}
+		})
 	} catch (error) {
-		response(res, 500, "Something went wrong. Please, try again later.", true );
+		next(error);
 	}
 };
 
@@ -58,20 +63,25 @@ exports.activate = async (req, res) => {
 
 		const exists = await User.findOne({ $or: [{ email }, { username }] });
 		if (exists) {
-			return response(res, 400, "Failed to activate. Email or username is already taken.", true);
+			return next(new ErrorResponse("Failed to activate. Email or username is already taken.", 400));
 		}
 
 		const newUser = new User({ givenName, familyName, email, username, password });
 		await newUser.save();
 
-		response(res, 201, "Account has been successfully created. Please, login now.",	false);
+		res.status(201).json({
+			status: {
+				isError: false,
+				message: "Account has been successfully created. Please, login now."
+			}
+		})
 	} catch (error) {
-		response(res, 500, "Something went wrong. Please, try again later.", true);
+		next(error);
 	}
 };
 
 // POST => /users/login
-exports.login = async (req, res) => {
+exports.login = async (req, res, next) => {
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
 		res.status(422).json({ errors: errors.array() });
@@ -83,12 +93,12 @@ exports.login = async (req, res) => {
 	try {
 		const user = await User.findOne({ email });
 		if (!user) {
-			return response(res, 400, "Email does not exist.", true);
+			return next(new ErrorResponse("Email does not exist.", 400));
 		}
 
 		const isMatch = await user.comparePasswords(password);
 		if (!isMatch) {
-			return response(res, 400, "Password is incorrect.", true);
+			return next(new ErrorResponse("Password is incorrect.", 400));
 		}
 
 		const accessToken = createAccessToken(user._id);
@@ -111,12 +121,12 @@ exports.login = async (req, res) => {
 			},
 		});
 	} catch (error) {
-		response(res, 500, "Something went wrong. Please, try again later.", true);
+		next(error);
 	}
 };
 
 // POST => /users/forgot
-exports.forgot = async (req, res) => {
+exports.forgot = async (req, res, next) => {
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
 		res.status(422).json({ errors: errors.array() });
@@ -128,7 +138,7 @@ exports.forgot = async (req, res) => {
 	try {
 		const user = await User.findOne({ email });
 		if (!user) {
-			return response(res, 400, "Email does not exist.", true);
+			return next(new ErrorResponse("Email does not exist.", 400));
 		}
 
 		const resetToken = createResetToken(user._id);
@@ -141,14 +151,19 @@ exports.forgot = async (req, res) => {
         `;
 		sendMail({ to: email, subject, html });
 
-		response(res, 200, "Your request is successfull. Check your inbox!", false);
+		res.status(200).json({
+			status: {
+				isError: false,
+				message: "Your request is successfull. Check your inbox!"
+			}
+		})
 	} catch (error) {
-		response(res, 500, "Something went wrong. Please, try again later.", true);
+		next(error);
 	}
 };
 
 // POST => /users/reset
-exports.reset = async (req, res) => {
+exports.reset = async (req, res, error) => {
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
 		res.status(422).json({ errors: errors.array() });
@@ -157,7 +172,7 @@ exports.reset = async (req, res) => {
 	const { password, confirmPassword, resetToken } = req.body;
 
 	if (password !== confirmPassword) {
-		response(res, 400, "Passwords do not match", true);
+		return next(new ErrorResponse("Passwords do not match", 400));
 	}
 
 	try {
@@ -165,7 +180,7 @@ exports.reset = async (req, res) => {
 
 		const user = await User.findById(id);
 		if (!user) {
-			return response(res, 500, "Something went wrong. Please, try again later.",	true);
+			return next(new ErrorResponse("Something went wrong. Please, try again later.", 400));
 		}
 
 		user.password = password;
@@ -176,9 +191,14 @@ exports.reset = async (req, res) => {
 
 		sendMail({to: user.email, subject, html });
 
-		response(res, 200, "Password has been successfully changed. Login now!", false);
+		res.status(200).json({
+			status: {
+				isError: false,
+				message: "Password has been successfully changed. Login now!"
+			}
+		})
 	} catch (error) {
-		response(res, 500, "Something went wrong. Please, try again later.", true);
+		next(error)
 	}
 };
 
@@ -203,7 +223,10 @@ exports.getCurrentUser = (req, res) => {
 			}
 		})
 	} catch (error) {
-		response(res, 401, "Unauthorized.", true)
+		res.status(401).json({
+			isError: true,
+			message: "Unauthorized."
+		})
 	}
 }
 

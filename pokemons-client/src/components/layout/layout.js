@@ -6,10 +6,10 @@ import Navigation from "../common/navigation";
 
 const Layout = ({ children }) => {
 	return (
-		<div>
-			<Navigation />
+		<>
+			<header><Navigation /></header>
 			<main className="app-container">{children}</main>
-		</div>
+		</>
 	);
 };
 

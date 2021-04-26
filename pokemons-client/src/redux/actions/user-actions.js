@@ -3,6 +3,7 @@ import axios from "axios";
 
 // Constants
 import * as userTypes from "../constants/user-constants";
+const url = "http://localhost:4000";
 
 // Stop fetching user action
 export const stopFetchingUser = () => ({
@@ -32,27 +33,96 @@ export const getCurrentUserAction = () => {
 	}
 }
 
-// POST => /update-user
-export const updateUserAction = (newUserData) => {
+// UPDATE NAME
+export const updateName = (newUserName) => {
     return async dispatch => {
-        dispatch({ type: userTypes.UPDATE_USER_REQUEST });
+        dispatch({ type: userTypes.UPDATE_NAME_REQUEST });
         try {
-
-            const { data } = await axios.post("http://localhost:4000/update-user", newUserData, {
+            const { data } = await axios.post(`${url}/update/name`, newUserName, {
                 headers: {
                     "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
                 }
             });
-            console.log(data);
 
-            dispatch({ type: userTypes.UPDATE_USER_SUCCESS, response: data })
+            dispatch({ type: userTypes.UPDATE_NAME_SUCCESS, response: data });
+
         } catch (error) {
             if (error.response.status === 401) {
                 localStorage.removeItem("accessToken");
             }
 
             const { status } = error.response.data;
-            dispatch({ type: userTypes.UPDATE_USER_FAILURE, status })
+            dispatch({ type: userTypes.UPDATE_NAME_FAILURE, status })
+        }
+    }
+}
+
+// UPDATE EMAIL
+export const updateEmail = (newUserEmail) => {
+    return async dispatch => {
+        dispatch({ type: userTypes.UPDATE_EMAIL_REQUEST });
+        try {
+            const { data } = await axios.post(`${url}/update/email`, newUserEmail, {
+                headers: {
+                    "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
+                }
+            });
+
+            dispatch({ type: userTypes.UPDATE_EMAIL_SUCCESS, response: data });
+
+        } catch (error) {
+            if (error.response.status === 401) {
+                localStorage.removeItem("accessToken");
+            }
+
+            const { status } = error.response.data;
+            dispatch({ type: userTypes.UPDATE_EMAIL_FAILURE, status })
+        }
+    }
+}
+
+// UPDATE USERNAME
+export const updateUsername = (newUserUsername) => {
+    return async dispatch => {
+        dispatch({ type: userTypes.UPDATE_USERNAME_REQUEST });
+        try {
+            const { data } = await axios.post(`${url}/update/username`, newUserUsername, {
+                headers: {
+                    "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
+                }
+            });
+
+            dispatch({ type: userTypes.UPDATE_USERNAME_SUCCESS, response: data });
+        } catch (error) {
+            if (error.response.status === 401) {
+                localStorage.removeItem("accessToken");
+            }
+
+            const { status } = error.response.data;
+            dispatch({ type: userTypes.UPDATE_USERNAME_FAILURE, status })
+        }
+    }
+}
+
+// UPDATE PHONE
+export const updatePhone = (newUserPhone) => {
+    return async dispatch => {
+        dispatch({ type: userTypes.UPDATE_PHONE_REQUEST });
+        try {
+            const { data } = await axios.post(`${url}/update/phone`, newUserPhone, {
+                headers: {
+                    "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
+                }
+            });
+
+            dispatch({ type: userTypes.UPDATE_PHONE_SUCCESS, response: data });
+        } catch (error) {
+            if (error.response.status === 401) {
+                localStorage.removeItem("accessToken");
+            }
+
+            const { status } = error.response.data;
+            dispatch({ type: userTypes.UPDATE_PHONE_FAILURE, status })
         }
     }
 }

@@ -1,16 +1,21 @@
 // Dependencies
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 
 // Actions
-import { updateUserAction } from "../../../redux/actions/user-actions";
+import {
+	updateName,
+	updateEmail,
+	updateUsername,
+	updatePhone,
+} from "../../../redux/actions/user-actions";
 
 // Selectors
 import {
 	selectUser,
 	selectStatus,
-	selectIsLoading
+	selectIsLoading,
 } from "../../../redux/selectors/user-selectors";
 
 // Components
@@ -24,7 +29,11 @@ import { Button } from "antd";
 import "./settings.css";
 
 const Settings = () => {
-	const [showNotify, setShowNotify] = useState(false);
+	// const [showNotify, setShowNotify] = useState(false);
+	const [showChangeEmailForm, setShowChangeEmailForm] = useState(false);
+	const [showChangeUsernameForm, setShowChangeUsernameForm] = useState(false);
+	const [showChangePhoneForm, setShowChangePhoneForm] = useState(false);
+	const [showChangeNameForm, setShowChangeNameForm] = useState(false);
 
 	// Redux
 	const dispatch = useDispatch();
@@ -32,35 +41,77 @@ const Settings = () => {
 	const status = useSelector(selectStatus);
 	const isLoading = useSelector(selectIsLoading);
 
-	// Update user form configuration
 	const {
-		register,
-		setValue,
-		formState: { errors },
-		handleSubmit,
+		register: changeEmailRegister,
+		formState: { errors: changeEmailErrors },
+		handleSubmit: changeEmailHandleSubmit,
 	} = useForm();
 
-	useEffect(() => {
-		for (let prop in user) {
-			setValue(prop, user[prop]);
-		}
-	}, [user, setValue]);
+	const {
+		register: changeUsernameRegister,
+		formState: { errors: changeUsernameErrors },
+		handleSubmit: changeUsernameHandleSubmit,
+	} = useForm();
 
-	useEffect(() => {
-		if (status.message !== "") {
-			setShowNotify(true);
-		}
-	}, [status]);
+	const {
+		register: changePhoneRegister,
+		formState: { errors: changePhoneErrors },
+		handleSubmit: changePhoneHandleSubmit,
+	} = useForm();
 
-	const onSubmit = (data) => {
-		dispatch(updateUserAction(data));
+	const {
+		register: changeNameRegister,
+		formState: { errors: changeNameErrors },
+		handleSubmit: changeNameHandleSubmit,
+	} = useForm();
+
+	const changeEmailOnSubmit = (data) => {
+		dispatch(updateEmail(data));
+		setShowChangeEmailForm(false);
 	};
+
+	const changeUsernameOnSubmit = (data) => {
+		dispatch(updateUsername(data));
+		setShowChangeUsernameForm(false);
+	};
+
+	const changePhoneOnSubmit = (data) => {
+		dispatch(updatePhone(data));
+		setShowChangePhoneForm(false);
+	};
+
+	const changeNameOnSubmit = (data) => {
+		dispatch(updateName(data));
+		setShowChangeNameForm(false);
+	};
+
+	const handleShowChangeNameForm = () => {
+		setShowChangeNameForm(!showChangeNameForm);
+	};
+
+	const handleShowChangeEmailForm = () => {
+		setShowChangeEmailForm(!showChangeEmailForm);
+	};
+
+	const handleShowChangeUsernameForm = () => {
+		setShowChangeUsernameForm(!showChangeUsernameForm);
+	};
+
+	const handleShowChangePhoneForm = () => {
+		setShowChangePhoneForm(!showChangePhoneForm);
+	};
+
+	// useEffect(() => {
+	// 	if (status.message !== "") {
+	// 		setShowNotify(true);
+	// 	}
+	// }, [status]);
 
 	// Server notify
 
-	const onAnimationEnd = () => {
-		setShowNotify(false);
-	};
+	// const onAnimationEnd = () => {
+	// 	setShowNotify(false);
+	// };
 
 	return (
 		<Layout>
@@ -71,177 +122,263 @@ const Settings = () => {
 				</span>
 			</div>
 
-			<form onSubmit={handleSubmit(onSubmit)}>
-				{/* GivenName */}
-				<div className="group">
-					<div className="label">Given name</div>
-					<div className="input-container">
-						<input
-							{...register("givenName", {
-								required: "Given name is a required field",
-								minLength: {
-									value: 2,
-									message: "Minimal length is 2",
-								},
-								maxLength: {
-									value: 32,
-									message: "Maximal value is 32",
-								},
-								pattern: {
-									value: /^[A-zА-я]+$/,
-									message: "Name should contain only letters",
-								},
-							})}
-							type="text"
-							placeholder="Given name"
-							className="input"
-							disabled={isLoading}
-						/>
-
-						{errors.givenName && (
-							<span className="validation-error-message">
-								{errors.givenName.message}
-							</span>
-						)}
-					</div>
+			{/* =================== EMAIL =================== */}
+			<div className="settings-row">
+				<div className="settings-row-labels">
+					<div>Email</div>
 				</div>
 
-				{/* Family name */}
-				<div className="group">
-					<div className="label">Family name</div>
-					<div className="input-container">
-						<input
-							{...register("familyName", {
-								required: "Family name is a required field",
-								minLength: {
-									value: 2,
-									message: "Minimal length is 2",
-								},
-								maxLength: {
-									value: 32,
-									message: "Maximal value is 32",
-								},
-								pattern: {
-									value: /^[A-zА-я]+$/,
-									message: "Name should contain only letters",
-								},
-							})}
-							type="text"
-							placeholder="Family name"
-							className="input"
-							disabled={isLoading}
-						/>
-						{errors.familyName && (
-							<span className="validation-error-message">
-								{errors.familyName.message}
-							</span>
-						)}
-					</div>
+				<div className="settings-row-main">
+					<span>{user.email}</span>
+					{showChangeEmailForm && (
+						<form
+							onSubmit={changeEmailHandleSubmit(
+								changeEmailOnSubmit
+							)}
+						>
+							<div className="form-group">
+								<input
+									{...changeEmailRegister("email", {
+										required: "Required field",
+										pattern: {
+											value: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+											message: "Email is invalid",
+										},
+									})}
+									className="inp"
+									placeholder="Email"
+									disabled={isLoading}
+									autoComplete="off"
+								/>
+
+								{changeEmailErrors.email && (
+									<div className="validation-error-message">
+										{changeEmailErrors.email.message}
+									</div>
+								)}
+							</div>
+
+							<button className="btn" disabled={isLoading}>
+								{isLoading ? "Loading..." : "Submit"}
+							</button>
+						</form>
+					)}
 				</div>
 
-				{/* Email */}
-				<div className="group">
-					<div className="label">Email</div>
-					<div className="input-container">
-						<input
-							{...register("email", {
-								required: "Email is a required field",
-								pattern: {
-									value: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-									message: "Email is invalid",
-								},
-							})}
-							placeholder="Email"
-							className="input"
-							disabled={isLoading}
-						/>
+				<div className="settings-row-action">
+					<button onClick={handleShowChangeEmailForm} className="btn">
+						{showChangeEmailForm ? "Cancel" : "Change"}
+					</button>
+				</div>
+			</div>
 
-						{errors.email && (
-							<span className="validation-error-message">
-								{errors.email.message}
-							</span>
-						)}
-					</div>
+			{/* =================== USERNAME =================== */}
+			<div className="settings-row">
+				<div className="settings-row-labels">
+					<div>Username</div>
 				</div>
 
-				{/* Username */}
-				<div className="group">
-					<div className="label">Username</div>
-					<div className="input-container">
-						<input
-							{...register("username", {
-								required: "Username is a required field",
-								minLength: {
-									value: 2,
-									message: "Minimal length is 2",
-								},
-								maxLength: {
-									value: 32,
-									message: "Maximal length is 32",
-								},
-								pattern: {
-									value: /^[A-z0-9_]*$/,
-									message:
-										"Username should contain only numbers, letters and _",
-								},
-							})}
-							placeholder="Username"
-							className="input"
-							disabled={isLoading}
-						/>
-
-						{errors.username && (
-							<span className="validation-error-message">
-								{errors.username.message}
-							</span>
-						)}
-					</div>
+				<div className="settings-row-main">
+					<span>{user.username}</span>
+					{showChangeUsernameForm && (
+						<form
+							onSubmit={changeUsernameHandleSubmit(
+								changeUsernameOnSubmit
+							)}
+						>
+							<div className="form-group">
+								<input
+									{...changeUsernameRegister("username", {
+										required:
+											"Required field",
+										minLength: {
+											value: 2,
+											message: "Minimal length is 2",
+										},
+										maxLength: {
+											value: 32,
+											message: "Maximal length is 32",
+										},
+										pattern: {
+											value: /^[A-z0-9_]*$/,
+											message:
+												"Should contain only numbers, letters and _",
+										},
+									})}
+									className="inp"
+									placeholder="Username"
+									disabled={isLoading}
+									autoComplete="off"
+								/>
+								{changeUsernameErrors.username && (
+									<span className="validation-error-message">
+										{changeUsernameErrors.username.message}
+									</span>
+								)}
+							</div>
+							<button className="btn" disabled={isLoading}>
+								{isLoading ? "Loading..." : "Submit"}
+							</button>
+						</form>
+					)}
 				</div>
 
-				{/* Phone */}
-				<div className="group">
-					<div className="label">Phone</div>
-					<div className="input-container">
-						<input
-							{...register("phone", {
-								pattern: {
-									value: /^\d+$/,
-									message: "Phone number is invalid",
-								},
-							})}
-							className="input"
-							placeholder="Phone number"
-							disabled={isLoading}
-						/>
+				<div className="settings-row-action">
+					<button
+						onClick={handleShowChangeUsernameForm}
+						className="btn"
+					>
+						{showChangeUsernameForm ? "Cancel" : "Change"}
+					</button>
+				</div>
+			</div>
 
-						{errors.phone && (
-							<span className="validation-error-message">
-								{errors.phone.message}
-							</span>
-						)}
-					</div>
+			{/* =================== PHONE =================== */}
+			<div className="settings-row">
+				<div className="settings-row-labels">
+					<div>Phone</div>
 				</div>
 
-				<div>
-					<span className="label">Participate in the war?</span>
-					<input
-						{...register("warParticipant")}
-						defaultChecked={user.warParticipant}
-						disabled
-						type="checkbox"
-					/>
+				<div className="settings-row-main">
+					<span>{user.phone ? user.phone : "Not specified"}</span>
+					{showChangePhoneForm && (
+						<form
+							onSubmit={changePhoneHandleSubmit(
+								changePhoneOnSubmit
+							)}
+						>
+							<div className="form-group">
+								<input
+									{...changePhoneRegister("phone", {
+										required: "Required field",
+										pattern: {
+											value: /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im,
+											message: "Phone is invalid",
+										},
+									})}
+									className="inp"
+									placeholder="Phone"
+									disabled={isLoading}
+									autoComplete="off"
+								/>
+								{changePhoneErrors.phone && (
+									<div className="validation-error-message">
+										{changePhoneErrors.phone.message}
+									</div>
+								)}
+							</div>
+							<button className="btn" disabled={isLoading}>
+								{isLoading ? "Loading..." : "Submit"}
+							</button>
+						</form>
+					)}
 				</div>
 
-				<Button loading={isLoading} htmlType="submit">
-					Update
-				</Button>
-			</form>
+				<div className="settings-row-action">
+					<button className="btn" onClick={handleShowChangePhoneForm}>
+						{showChangePhoneForm ? "Cancel" : "Change"}
+					</button>
+				</div>
+			</div>
 
-			<ServerResponseNotify
+			{/* =================== Name =================== */}
+
+			<div className="settings-row">
+				<div className="settings-row-labels">
+					<div>Display name</div>
+				</div>
+
+				<div className="settings-row-main">
+					<span>{`${user.givenName} ${user.familyName}`}</span>
+					{showChangeNameForm && (
+						<form
+							onSubmit={changeNameHandleSubmit(
+								changeNameOnSubmit
+							)}
+						>
+							<div className="form-group">
+								<input
+									{...changeNameRegister("givenName", {
+										required:
+											"Required field",
+										minLength: {
+											value: 2,
+											message: "Minimal length is 2",
+										},
+										maxLength: {
+											value: 32,
+											message: "Maximal value is 32",
+										},
+										pattern: {
+											value: /^[A-zА-я]+$/,
+											message:
+												"Should contain only letters",
+										},
+									})}
+									className="inp"
+									placeholder="Given name"
+									disabled={isLoading}
+									autoComplete="off"
+								/>
+								{changeNameErrors.givenName && (
+									<div className="validation-error-message">
+										{changeNameErrors.givenName.message}
+									</div>
+								)}
+							</div>
+
+							<div className="form-group">
+								<input
+									{...changeNameRegister("familyName", {
+										required:
+											"Required field",
+										minLength: {
+											value: 2,
+											message: "Minimal length is 2",
+										},
+										maxLength: {
+											value: 32,
+											message: "Maximal value is 32",
+										},
+										pattern: {
+											value: /^[A-zА-я]+$/,
+											message:
+												"Should contain only letters",
+										},
+									})}
+									className="inp"
+									placeholder="Family name"
+									disabled={isLoading}
+									autoComplete="off"
+								/>
+								{changeNameErrors.familyName && (
+									<div className="validation-error-message">
+										{changeNameErrors.familyName.message}
+									</div>
+								)}
+							</div>
+							<button className="btn" disabled={isLoading}>
+								{isLoading ? "Loading..." : "Submit"}
+							</button>
+						</form>
+					)}
+				</div>
+
+				<div className="settings-row-action">
+					<button
+						onClick={handleShowChangeNameForm}
+						className="btn"
+					>
+						{showChangeNameForm ? "Cancel" : "Change"}
+					</button>
+				</div>
+			</div>
+
+			{/* <ServerResponseNotify
 				show={showNotify}
 				status={{ isError: status.isError, message: status.message }}
 				handleAnimationEnd={onAnimationEnd}
-			/>
+			/> */}
 		</Layout>
 	);
 };

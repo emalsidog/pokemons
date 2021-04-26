@@ -64,32 +64,116 @@ const user = (state = initialState, action) => {
 			};
 		}
 
-		// Updating user
-		case types.UPDATE_USER_REQUEST: {
+		// Update name
+		case types.UPDATE_NAME_REQUEST: {
 			return {
 				...state,
 				isLoading: true,
 			};
 		}
-		case types.UPDATE_USER_SUCCESS: {
+		case types.UPDATE_NAME_SUCCESS: {
+			const { body, status } = action.response;
 			return {
 				...state,
 				isLoading: false,
 				user: {
-					...action.response.body.user,
+					...state.user,
+					givenName: body.user.givenName,
+					familyName: body.user.familyName
 				},
-				status: {
-					...action.response.status,
-				},
+				status: { ...status }
 			};
 		}
-		case types.UPDATE_USER_FAILURE: {
+		case types.UPDATE_NAME_FAILURE: {
+			const { status } = action;
 			return {
 				...state,
 				isLoading: false,
-				status: {
-					...action.status,
+				status: { ...status }
+			};
+		}
+
+		// Update email
+		case types.UPDATE_EMAIL_REQUEST: {
+			return {
+				...state,
+				isLoading: true,
+			};
+		}
+		case types.UPDATE_EMAIL_SUCCESS: {
+			const { body, status } = action.response;
+			return {
+				...state,
+				isLoading: false,
+				user: {
+					...state.user,
+					email: body.user.email
 				},
+				status: { ...status }
+			};
+		}
+		case types.UPDATE_EMAIL_FAILURE: {
+			const { status } = action;
+			return {
+				...state,
+				isLoading: false,
+				status: { ...status }
+			};
+		}
+
+		// Update username
+		case types.UPDATE_USERNAME_REQUEST: {
+			return {
+				...state,
+				isLoading: true,
+			};
+		}
+		case types.UPDATE_USERNAME_SUCCESS: {
+			const { body, status } = action.response;
+			return {
+				...state,
+				isLoading: false,
+				user: {
+					...state.user,
+					username: body.user.username
+				},
+				status: { ...status }
+			};
+		}
+		case types.UPDATE_USERNAME_FAILURE: {
+			const { status } = action;
+			return {
+				...state,
+				isLoading: false,
+				status: { ...status }
+			};
+		}
+
+		// Update phone
+		case types.UPDATE_PHONE_REQUEST: {
+			return {
+				...state,
+				isLoading: true,
+			};
+		}
+		case types.UPDATE_PHONE_SUCCESS: {
+			const { body, status } = action.response;
+			return {
+				...state,
+				isLoading: false,
+				user: {
+					...state.user,
+					phone: body.user.phone
+				},
+				status: { ...status }
+			};
+		}
+		case types.UPDATE_PHONE_FAILURE: {
+			const { status } = action;
+			return {
+				...state,
+				isLoading: false,
+				status: { ...status }
 			};
 		}
 

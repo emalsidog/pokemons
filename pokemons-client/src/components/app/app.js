@@ -18,7 +18,7 @@ import Reset from "../screens/auth/reset";
 import Home from "../screens/home";
 import Settings from "../screens/settings";
 import MyTeam from "../screens/my-team";
-import Favorites from "../screens/favorites";
+import Favourites from "../screens/favourites";
 import Pokemons from "../screens/pokemons";
 
 import Spinner from "../common/spinner";
@@ -50,7 +50,7 @@ const App = () => {
 			<ProtectedRoute exact path="/" component={Home} />
 			<ProtectedRoute exact path="/settings" component={Settings} />
 			<ProtectedRoute exact path="/my-team" component={MyTeam} />
-			<ProtectedRoute exact path="/favorites" component={Favorites} />
+			<ProtectedRoute exact path="/favourites" component={Favourites} />
 			<ProtectedRoute exact path="/pokemons" component={Pokemons} />
 		</Switch>
 	);

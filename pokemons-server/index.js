@@ -9,6 +9,10 @@ const cors = require("cors");
 // Express app
 const app = express();
 
+// Database connection
+const connectDB = require("./config/database");
+connectDB();
+
 // CORS
 app.use(cors());
 
@@ -20,11 +24,10 @@ app.use(cookieParser());
 
 // Routes
 app.use("/users", require("./routes/auth-routes"));
-app.use("/", require("./routes/user-routes"));
+app.use("/update", require("./routes/user-update-routes"));
 
-// Database connection
-const connectDB = require("./config/database");
-connectDB();
+// Error handler
+app.use(require("./middleware/error-handler"));
 
 // Server startup
 const PORT = process.env.PORT || 4000;

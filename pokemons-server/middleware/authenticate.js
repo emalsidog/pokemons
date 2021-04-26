@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
 // Utils
-const response = require("../utils/response");
+const ErrorResponse = require("../utils/error-response");
 
 const authenticate = async (req, res, next) => {
 
@@ -16,7 +16,7 @@ const authenticate = async (req, res, next) => {
     }
 
     if (!token) {
-        return response(res, 401, "Unauthorized.", true);
+        return next(new ErrorResponse("Unauthorized.", 401))
     }
 
     try {
@@ -24,13 +24,13 @@ const authenticate = async (req, res, next) => {
 
         const user = await User.findById(id);
         if (!user) {
-            return response(res, 401, "Account does not exist.", true);    
+            return next(new ErrorResponse("Account does not exist.", 401))
         }
         
         req.user = user;
         next()
     } catch (error) {
-        return response(res, 401, "Unauthorized", true);
+        return next(new ErrorResponse("Unauthorized.", 401))
     }
 }
 

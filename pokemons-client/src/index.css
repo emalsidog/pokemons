@@ -1,4 +1,16 @@
+@font-face {
+	font-family: "NCS Rogueland";
+	src: url("./assets/fonts/NCS\ Rogueland.ttf") format("truetype");
+	font-weight: normal;
+	font-style: normal;
+}
+
 @import "~antd/dist/antd.css";
+
+
+:root {
+	--primary: #17beec;
+}
 
 html,
 body {
@@ -18,18 +30,76 @@ body {
 	margin: 5px 0;
 }
 
-.form-group {
-	margin-bottom: 0.5rem;
-}
 
 /* Typography (for heading on screens) */
 .heading {
-	/* margin-left: auto;
-	margin-right: auto; */
 	margin-top: 1rem;
 	margin-bottom: 2rem;
+
+	font-size: 1.1rem;
 }
 
 .title {
     margin: 0;
+}
+
+/* Buttons */
+.btn {
+	min-width: 100px;
+
+	border: 0;
+	border-radius: 5px;
+
+	background: var(--primary);
+	color: #fff;
+
+	padding: 5px;
+	font-size: 16px;
+
+	cursor: pointer;
+
+	transition: .3s;
+}
+
+.btn:hover {
+	background: #12a2ce;
+}
+
+.btn:focus {
+	transform: scale(1.08);
+}
+
+/* Input */
+.inp {
+	display: block;
+    width: 100%;
+
+    box-sizing: border-box;
+
+    border: none;
+    background-color: #FAFAFA;
+
+    border-bottom: 1px solid rgb(148, 148, 148);
+}
+
+.inp:focus {
+	outline: none;
+    border-color: #17bcee;
+    box-shadow: 0px 6px 7px -8px #17bcee;
+}
+
+.inp:focus::-webkit-input-placeholder {
+	opacity: 0;
+    transform: translate(70%);
+    -webkit-transition: all 0.25s ease-in-out;
+    transition: all 0.25s ease-in-out;
+}
+
+.inp:disabled {
+	background: rgba(238, 238, 238, 0.89);
+}
+
+/* Forms */
+.form-group {
+	margin: 15px 0;
 }
