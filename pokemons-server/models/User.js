@@ -29,12 +29,21 @@ const UserSchema = new mongoose.Schema(
 		},
 		phone: {
 			type: Number,
-			default: null
+			default: null,
 		},
 		warParticipant: {
 			type: Boolean,
-			default: false
-		}
+			default: false,
+		},
+		favouritePokemons: {
+			type: [
+				{
+					pokemonId: {
+						type: Number,
+					},
+				},
+			],
+		},
 	},
 	{
 		timestamps: true,
@@ -42,18 +51,18 @@ const UserSchema = new mongoose.Schema(
 );
 
 UserSchema.pre("save", async function (next) {
-	if(!this.isModified("password")) {
+	if (!this.isModified("password")) {
 		next();
 	}
 
 	const salt = await bcrypt.genSalt(10);
 	this.password = await bcrypt.hash(this.password, salt);
-	
+
 	next();
-})
+});
 
 UserSchema.methods.comparePasswords = async function (password) {
 	return await bcrypt.compare(password, this.password);
-}
+};
 
 module.exports = User = mongoose.model("User", UserSchema);

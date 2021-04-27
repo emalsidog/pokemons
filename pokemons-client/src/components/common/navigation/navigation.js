@@ -41,6 +41,8 @@ const Navigation = () => {
 				<nav className={classNames}>
 					<Link to="/pokemons" className="nav-link">List</Link>
 					<Link to="/favourites" className="nav-link">Favourites</Link>
+					<Link to="/team" className="nav-link">My team</Link>
+					<Link to="/users" className="nav-link">Users</Link>
 					<Link to="/settings" className="nav-link">Settings</Link>
 					<div onClick={handleLogout} className="nav-link">Logout</div>
 				</nav>

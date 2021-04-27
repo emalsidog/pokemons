@@ -25,6 +25,7 @@ app.use(cookieParser());
 // Routes
 app.use("/users", require("./routes/auth-routes"));
 app.use("/update", require("./routes/user-update-routes"));
+app.use("/pokemons/favourite", require("./routes/user-favouritePokemons-routes"));
 
 // Error handler
 app.use(require("./middleware/error-handler"));

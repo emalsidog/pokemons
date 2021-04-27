@@ -4,7 +4,7 @@ import { Switch, Route } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 // Actions
-import { getCurrentUserAction, stopFetchingUser } from "../../redux/actions/user-actions";
+import { getCurrentUserAction, stopFetchingUser } from "../../redux/actions/user-update-actions";
 
 // Hocs
 import ProtectedRoute from "../../hocs/protected-route";
@@ -20,6 +20,7 @@ import Settings from "../screens/settings";
 import MyTeam from "../screens/my-team";
 import Favourites from "../screens/favourites";
 import Pokemons from "../screens/pokemons";
+import Users from "../screens/users"
 
 import Spinner from "../common/spinner";
 
@@ -49,7 +50,8 @@ const App = () => {
 
 			<ProtectedRoute exact path="/" component={Home} />
 			<ProtectedRoute exact path="/settings" component={Settings} />
-			<ProtectedRoute exact path="/my-team" component={MyTeam} />
+			<ProtectedRoute exact path="/team" component={MyTeam} />
+			<ProtectedRoute exact path="/users" component={Users} />
 			<ProtectedRoute exact path="/favourites" component={Favourites} />
 			<ProtectedRoute exact path="/pokemons" component={Pokemons} />
 		</Switch>

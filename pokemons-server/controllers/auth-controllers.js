@@ -116,7 +116,8 @@ exports.login = async (req, res, next) => {
 					email: user.email,
 					username: user.username,
 					phone: user.phone,
-					warParticipant: user.warParticipant
+					warParticipant: user.warParticipant,
+					favouritePokemons: user.favouritePokemons
 				}
 			},
 		});
@@ -205,7 +206,7 @@ exports.reset = async (req, res, error) => {
 // GET => /users/current-user
 exports.getCurrentUser = (req, res) => {
 	try {
-		const { givenName, familyName, email, username, phone, warParticipant } = req.user;
+		const { givenName, familyName, email, username, phone, warParticipant, favouritePokemons } = req.user;
 		res.status(200).json({ 
 			status: {
 				isError: false,
@@ -218,7 +219,8 @@ exports.getCurrentUser = (req, res) => {
 					email,
 					username,
 					phone,
-					warParticipant
+					warParticipant,
+					favouritePokemons
 				}
 			}
 		})

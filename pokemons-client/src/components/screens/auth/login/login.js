@@ -111,7 +111,7 @@ const Login = ({ history }) => {
 							autoFocus
 						/>
 						{errors.email && (
-							<span className="validation-error-message">
+							<span className="error-message">
 								{errors.email.message}
 							</span>
 						)}
@@ -135,7 +135,7 @@ const Login = ({ history }) => {
 							placeholder="Password"
 						/>
 						{errors.password && (
-							<span className="validation-error-message">
+							<span className="error-message">
 								{errors.password.message}
 							</span>
 						)}
@@ -208,7 +208,7 @@ const Login = ({ history }) => {
 							autoFocus
 						/>
 						{forgotErrors.email && (
-							<span className="validation-error-message">
+							<span className="error-message">
 								{forgotErrors.email.message}
 							</span>
 						)}

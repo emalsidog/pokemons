@@ -1,7 +1,7 @@
 // Dependencies
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { set, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 
 // Actions
 import {
@@ -9,7 +9,7 @@ import {
 	updateEmail,
 	updateUsername,
 	updatePhone,
-} from "../../../redux/actions/user-actions";
+} from "../../../redux/actions/user-update-actions";
 
 // Selectors
 import {
@@ -21,15 +21,14 @@ import {
 // Components
 import Layout from "../../layout";
 import ServerResponseNotify from "../../common/server-response-notify";
-
-// Antd components
-import { Button } from "antd";
+import Heading from "../../common/heading";
 
 // Styles
 import "./settings.css";
 
 const Settings = () => {
-	// const [showNotify, setShowNotify] = useState(false);
+	const [showNotify, setShowNotify] = useState(false);
+
 	const [showChangeEmailForm, setShowChangeEmailForm] = useState(false);
 	const [showChangeUsernameForm, setShowChangeUsernameForm] = useState(false);
 	const [showChangePhoneForm, setShowChangePhoneForm] = useState(false);
@@ -101,26 +100,23 @@ const Settings = () => {
 		setShowChangePhoneForm(!showChangePhoneForm);
 	};
 
-	// useEffect(() => {
-	// 	if (status.message !== "") {
-	// 		setShowNotify(true);
-	// 	}
-	// }, [status]);
+	// Notification
+	useEffect(() => {
+		if (status.message !== "") {
+			setShowNotify(true);
+		}
+	}, [status]);
 
-	// Server notify
-
-	// const onAnimationEnd = () => {
-	// 	setShowNotify(false);
-	// };
+	const onAnimationEnd = () => {
+		setShowNotify(false);
+	};
 
 	return (
 		<Layout>
-			<div className="heading">
-				<h1 className="title">Settings</h1>
-				<span>
-					Here you are able to change your personal information.
-				</span>
-			</div>
+			<Heading
+				title="Settings"
+				description="Here you are able to change your personal information."
+			/>
 
 			{/* =================== EMAIL =================== */}
 			<div className="settings-row">
@@ -152,7 +148,7 @@ const Settings = () => {
 								/>
 
 								{changeEmailErrors.email && (
-									<div className="validation-error-message">
+									<div className="error-message">
 										{changeEmailErrors.email.message}
 									</div>
 								)}
@@ -189,8 +185,7 @@ const Settings = () => {
 							<div className="form-group">
 								<input
 									{...changeUsernameRegister("username", {
-										required:
-											"Required field",
+										required: "Required field",
 										minLength: {
 											value: 2,
 											message: "Minimal length is 2",
@@ -211,7 +206,7 @@ const Settings = () => {
 									autoComplete="off"
 								/>
 								{changeUsernameErrors.username && (
-									<span className="validation-error-message">
+									<span className="error-message">
 										{changeUsernameErrors.username.message}
 									</span>
 								)}
@@ -262,7 +257,7 @@ const Settings = () => {
 									autoComplete="off"
 								/>
 								{changePhoneErrors.phone && (
-									<div className="validation-error-message">
+									<div className="error-message">
 										{changePhoneErrors.phone.message}
 									</div>
 								)}
@@ -299,8 +294,7 @@ const Settings = () => {
 							<div className="form-group">
 								<input
 									{...changeNameRegister("givenName", {
-										required:
-											"Required field",
+										required: "Required field",
 										minLength: {
 											value: 2,
 											message: "Minimal length is 2",
@@ -321,7 +315,7 @@ const Settings = () => {
 									autoComplete="off"
 								/>
 								{changeNameErrors.givenName && (
-									<div className="validation-error-message">
+									<div className="error-message">
 										{changeNameErrors.givenName.message}
 									</div>
 								)}
@@ -330,8 +324,7 @@ const Settings = () => {
 							<div className="form-group">
 								<input
 									{...changeNameRegister("familyName", {
-										required:
-											"Required field",
+										required: "Required field",
 										minLength: {
 											value: 2,
 											message: "Minimal length is 2",
@@ -352,7 +345,7 @@ const Settings = () => {
 									autoComplete="off"
 								/>
 								{changeNameErrors.familyName && (
-									<div className="validation-error-message">
+									<div className="error-message">
 										{changeNameErrors.familyName.message}
 									</div>
 								)}
@@ -365,20 +358,17 @@ const Settings = () => {
 				</div>
 
 				<div className="settings-row-action">
-					<button
-						onClick={handleShowChangeNameForm}
-						className="btn"
-					>
+					<button onClick={handleShowChangeNameForm} className="btn">
 						{showChangeNameForm ? "Cancel" : "Change"}
 					</button>
 				</div>
 			</div>
 
-			{/* <ServerResponseNotify
+			<ServerResponseNotify
 				show={showNotify}
 				status={{ isError: status.isError, message: status.message }}
 				handleAnimationEnd={onAnimationEnd}
-			/> */}
+			/>
 		</Layout>
 	);
 };

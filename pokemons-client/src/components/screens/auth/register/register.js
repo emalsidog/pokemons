@@ -89,7 +89,7 @@ const Register = ({ history }) => {
 							autoFocus
 						/>
 						{errors.givenName && (
-							<span className="validation-error-message">
+							<span className="error-message">
 								{errors.givenName.message}
 							</span>
 						)}
@@ -117,7 +117,7 @@ const Register = ({ history }) => {
 							placeholder="Family name"
 						/>
 						{errors.familyName && (
-							<span className="validation-error-message">
+							<span className="error-message">
 								{errors.familyName.message}
 							</span>
 						)}
@@ -137,7 +137,7 @@ const Register = ({ history }) => {
 							placeholder="Email"
 						/>
 						{errors.email && (
-							<span className="validation-error-message">
+							<span className="error-message">
 								{errors.email.message}
 							</span>
 						)}
@@ -166,7 +166,7 @@ const Register = ({ history }) => {
 							placeholder="Username"
 						/>
 						{errors.username && (
-							<span className="validation-error-message">
+							<span className="error-message">
 								{errors.username.message}
 							</span>
 						)}
@@ -190,7 +190,7 @@ const Register = ({ history }) => {
 							placeholder="Password"
 						/>
 						{errors.password && (
-							<span className="validation-error-message">
+							<span className="error-message">
 								{errors.password.message}
 							</span>
 						)}
@@ -210,7 +210,7 @@ const Register = ({ history }) => {
 							placeholder="Confirm password"
 						/>
 						{errors.confirmPassword && (
-							<span className="validation-error-message">
+							<span className="error-message">
 								{errors.confirmPassword.message}
 							</span>
 						)}

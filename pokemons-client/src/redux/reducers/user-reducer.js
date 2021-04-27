@@ -1,5 +1,6 @@
 // Constants
-import * as types from "../constants/user-constants";
+import * as updateTypes from "../constants/user-update-constants";
+import * as favouritePokemonsTypes from "../constants/user-favouritePokemons-constants";
 
 const initialState = {
 	user: null,
@@ -16,13 +17,13 @@ const user = (state = initialState, action) => {
 	switch (action.type) {
 		// Set user
 		// @desc - call in authReducer after successfull login
-		case types.SET_USER: {
+		case updateTypes.SET_USER: {
 			return { ...state, user: { ...action.user } };
 		}
 
 		// Stop fetching
 		// @desc - call if there is no token
-		case types.STOP_FETCHING_USER: {
+		case updateTypes.STOP_FETCHING_USER: {
 			return {
 				...state,
 				fetchingUser: false,
@@ -30,7 +31,7 @@ const user = (state = initialState, action) => {
 		}
 
 		// Get current user
-		case types.GET_CURRENT_USER_REQUEST: {
+		case updateTypes.GET_CURRENT_USER_REQUEST: {
 			return {
 				...state,
 				fetchingUser: true,
@@ -39,39 +40,33 @@ const user = (state = initialState, action) => {
 				},
 			};
 		}
-		case types.GET_CURRENT_USER_SUCCESS: {
+		case updateTypes.GET_CURRENT_USER_SUCCESS: {
 			const { response } = action;
 			return {
 				...state,
 				fetchingUser: false,
 				isLoading: false,
-				status: {
-					...response.status,
-				},
 				user: {
 					...response.body.user,
 				},
 			};
 		}
-		case types.GET_CURRENT_USER_FAILURE: {
+		case updateTypes.GET_CURRENT_USER_FAILURE: {
 			return {
 				...state,
 				fetchingUser: false,
 				isLoading: false,
-				status: {
-					...state.status,
-				},
 			};
 		}
 
 		// Update name
-		case types.UPDATE_NAME_REQUEST: {
+		case updateTypes.UPDATE_NAME_REQUEST: {
 			return {
 				...state,
 				isLoading: true,
 			};
 		}
-		case types.UPDATE_NAME_SUCCESS: {
+		case updateTypes.UPDATE_NAME_SUCCESS: {
 			const { body, status } = action.response;
 			return {
 				...state,
@@ -79,102 +74,165 @@ const user = (state = initialState, action) => {
 				user: {
 					...state.user,
 					givenName: body.user.givenName,
-					familyName: body.user.familyName
+					familyName: body.user.familyName,
 				},
-				status: { ...status }
+				status: { ...status },
 			};
 		}
-		case types.UPDATE_NAME_FAILURE: {
+		case updateTypes.UPDATE_NAME_FAILURE: {
 			const { status } = action;
 			return {
 				...state,
 				isLoading: false,
-				status: { ...status }
+				status: { ...status },
 			};
 		}
 
 		// Update email
-		case types.UPDATE_EMAIL_REQUEST: {
+		case updateTypes.UPDATE_EMAIL_REQUEST: {
 			return {
 				...state,
 				isLoading: true,
 			};
 		}
-		case types.UPDATE_EMAIL_SUCCESS: {
+		case updateTypes.UPDATE_EMAIL_SUCCESS: {
 			const { body, status } = action.response;
 			return {
 				...state,
 				isLoading: false,
 				user: {
 					...state.user,
-					email: body.user.email
+					email: body.user.email,
 				},
-				status: { ...status }
+				status: { ...status },
 			};
 		}
-		case types.UPDATE_EMAIL_FAILURE: {
+		case updateTypes.UPDATE_EMAIL_FAILURE: {
 			const { status } = action;
 			return {
 				...state,
 				isLoading: false,
-				status: { ...status }
+				status: { ...status },
 			};
 		}
 
 		// Update username
-		case types.UPDATE_USERNAME_REQUEST: {
+		case updateTypes.UPDATE_USERNAME_REQUEST: {
 			return {
 				...state,
 				isLoading: true,
 			};
 		}
-		case types.UPDATE_USERNAME_SUCCESS: {
+		case updateTypes.UPDATE_USERNAME_SUCCESS: {
 			const { body, status } = action.response;
 			return {
 				...state,
 				isLoading: false,
 				user: {
 					...state.user,
-					username: body.user.username
+					username: body.user.username,
 				},
-				status: { ...status }
+				status: { ...status },
 			};
 		}
-		case types.UPDATE_USERNAME_FAILURE: {
+		case updateTypes.UPDATE_USERNAME_FAILURE: {
 			const { status } = action;
 			return {
 				...state,
 				isLoading: false,
-				status: { ...status }
+				status: { ...status },
 			};
 		}
 
 		// Update phone
-		case types.UPDATE_PHONE_REQUEST: {
+		case updateTypes.UPDATE_PHONE_REQUEST: {
 			return {
 				...state,
 				isLoading: true,
 			};
 		}
-		case types.UPDATE_PHONE_SUCCESS: {
+		case updateTypes.UPDATE_PHONE_SUCCESS: {
 			const { body, status } = action.response;
 			return {
 				...state,
 				isLoading: false,
 				user: {
 					...state.user,
-					phone: body.user.phone
+					phone: body.user.phone,
 				},
-				status: { ...status }
+				status: { ...status },
 			};
 		}
-		case types.UPDATE_PHONE_FAILURE: {
+		case updateTypes.UPDATE_PHONE_FAILURE: {
 			const { status } = action;
 			return {
 				...state,
 				isLoading: false,
-				status: { ...status }
+				status: { ...status },
 			};
+		}
+		
+		// Add to favourite
+		case favouritePokemonsTypes.ADD_TO_FAVOURITE_REQUEST: {
+			return {
+				...state,
+				isLoading: true,
+			};
+		}
+		case favouritePokemonsTypes.ADD_TO_FAVOURITE_SUCCESS: {
+			const { status, body } = action.response;
+			const newFavouritePokemons = body.favouritePokemons
+				? [...body.favouritePokemons]
+				: [...state.user.favouritePokemons];
+
+			return {
+				...state,
+				isLoading: false,
+				status: {
+					...status,
+				},
+				user: {
+					...state.user,
+					favouritePokemons: newFavouritePokemons,
+				},
+			};
+		}
+		case favouritePokemonsTypes.ADD_TO_FAVOURITE_FAILURE: {
+			return {
+				...state,
+				isLoading: false,
+				status: {
+					...action.status
+				}
+			};
+		}
+
+		// Remove from favourite
+		case favouritePokemonsTypes.REMOVE_FROM_FAVOURITE_REQUEST: {
+			return {
+				...state,
+				isLoading: true
+			}
+		}
+		case favouritePokemonsTypes.REMOVE_FROM_FAVOURITE_SUCCESS: {
+			const { status, body } = action.response;
+			return {
+				...state,
+				isLoading: false,
+				status: {
+					...status
+				},
+				user: {
+					...state.user,
+					favouritePokemons: [...body.favouritePokemons]
+				}
+			}
+		}
+		case favouritePokemonsTypes.REMOVE_FROM_FAVOURITE_FAILURE: {
+			return {
+				...state,
+				isLoading: false
+			}
 		}
 
 		default: {

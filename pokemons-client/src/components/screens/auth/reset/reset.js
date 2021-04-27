@@ -25,14 +25,14 @@ const Reset = ({ history }) => {
     const { resetToken } = useParams();
 	
 	useEffect(() => {
-		if(!status.isError && status.isError !== null) {
+		if(!status.isError && status.message !== "") {
 			history.push("/users/login");
 		}
 
 		if(status.isError) {
 			setShowNotify(true);
 		}
-	}, [status.isError, history]);
+	}, [status.isError, history, status.message]);
 
 	// Form configuration
 	const { watch, register, formState: { errors }, handleSubmit } = useForm();
@@ -74,7 +74,7 @@ const Reset = ({ history }) => {
 							placeholder="Password"
 						/>
 						{errors.password && (
-							<span className="validation-error-message">
+							<span className="error-message">
 								{errors.password.message}
 							</span>
 						)}
@@ -92,7 +92,7 @@ const Reset = ({ history }) => {
 							placeholder="Confirm password"
 						/>
 						{errors.confirmPassword && (
-							<span className="validation-error-message">
+							<span className="error-message">
 								{errors.confirmPassword.message}
 							</span>
 						)}

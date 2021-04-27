@@ -78,6 +78,14 @@
     color: #17bcee;
 }
 
+.add-favorite:disabled {
+    color: red;
+}
+
+.add-team:disabled {
+    color: #17bcee;
+}
+
 @media screen and (max-width: 1000px) {
 	.card {
 		width: 48%;
