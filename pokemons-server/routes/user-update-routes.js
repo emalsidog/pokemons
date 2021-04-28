@@ -22,4 +22,7 @@ router.post("/username", authenticate, validateUser("updateUsername"), User.upda
 // POST => /update/phone
 router.post("/phone", authenticate, validateUser("updatePhone"), User.updatePhone);
 
+// GET => /update/war-participant
+router.get("/war-participant", authenticate, User.updateWarParticipant);
+
 module.exports = router;

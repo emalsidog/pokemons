@@ -12,6 +12,10 @@ exports.add = async (req, res, next) => {
 		return next(new ErrorResponse("Pokemon id is not specified.", 400));
 	}
 
+    if (isNaN(pokemonId)) {
+        return next(new ErrorResponse("Pokemon id is invalid.", 400));
+    }
+
 	try {
 		const user = await User.findOneAndUpdate(
 			{
@@ -44,6 +48,10 @@ exports.remove = async (req, res, next) => {
 		return next(new ErrorResponse("Pokemon id is not specified.", 400));
 	}
 
+    if (isNaN(pokemonId)) {
+        return next(new ErrorResponse("Pokemon id is invalid.", 400));
+    }
+
 	try {
 
 		const user = await User.findByIdAndUpdate(
@@ -57,8 +65,6 @@ exports.remove = async (req, res, next) => {
 				new: true,
 			}
 		);
-
-		console.log(user);
 
 		res.status(200).json({
 			status: {

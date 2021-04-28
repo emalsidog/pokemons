@@ -17,7 +17,14 @@ exports.register = async (req, res, next) => {
 		return;
 	}
 
-	const {	givenName, familyName, email, username, password, confirmPassword } = req.body;
+	const {
+		givenName,
+		familyName,
+		email,
+		username,
+		password,
+		confirmPassword,
+	} = req.body;
 
 	if (password !== confirmPassword) {
 		return next(new ErrorResponse("Passwords do not match", 400));
@@ -25,11 +32,13 @@ exports.register = async (req, res, next) => {
 
 	try {
 		const user = await User.findOne({ $or: [{ email }, { username }] });
-		if (user) {		
-			return next(new ErrorResponse("Email or username is already taken.", 400));
+		if (user) {
+			return next(
+				new ErrorResponse("Email or username is already taken.", 400)
+			);
 		}
 
-		const newUser = {givenName,	familyName,	email, username, password };
+		const newUser = { givenName, familyName, email, username, password };
 		const activationToken = createActivationToken(newUser);
 
 		const url = `${process.env.CLIENT_URL}/users/activate/${activationToken}`;
@@ -43,9 +52,9 @@ exports.register = async (req, res, next) => {
 		res.status(200).json({
 			status: {
 				isError: false,
-				message: "Check your inbox!"
-			}
-		})
+				message: "Check your inbox!",
+			},
+		});
 	} catch (error) {
 		next(error);
 	}
@@ -63,18 +72,30 @@ exports.activate = async (req, res) => {
 
 		const exists = await User.findOne({ $or: [{ email }, { username }] });
 		if (exists) {
-			return next(new ErrorResponse("Failed to activate. Email or username is already taken.", 400));
+			return next(
+				new ErrorResponse(
+					"Failed to activate. Email or username is already taken.",
+					400
+				)
+			);
 		}
 
-		const newUser = new User({ givenName, familyName, email, username, password });
+		const newUser = new User({
+			givenName,
+			familyName,
+			email,
+			username,
+			password,
+		});
 		await newUser.save();
 
 		res.status(201).json({
 			status: {
 				isError: false,
-				message: "Account has been successfully created. Please, login now."
-			}
-		})
+				message:
+					"Account has been successfully created. Please, login now.",
+			},
+		});
 	} catch (error) {
 		next(error);
 	}
@@ -102,7 +123,7 @@ exports.login = async (req, res, next) => {
 		}
 
 		const accessToken = createAccessToken(user._id);
-		
+
 		res.status(200).json({
 			status: {
 				message: "Successfully logged in.",
@@ -117,8 +138,9 @@ exports.login = async (req, res, next) => {
 					username: user.username,
 					phone: user.phone,
 					warParticipant: user.warParticipant,
-					favouritePokemons: user.favouritePokemons
-				}
+					favouritePokemons: user.favouritePokemons,
+					teamPokemons: user.teamPokemons
+				},
 			},
 		});
 	} catch (error) {
@@ -155,9 +177,9 @@ exports.forgot = async (req, res, next) => {
 		res.status(200).json({
 			status: {
 				isError: false,
-				message: "Your request is successfull. Check your inbox!"
-			}
-		})
+				message: "Your request is successfull. Check your inbox!",
+			},
+		});
 	} catch (error) {
 		next(error);
 	}
@@ -181,7 +203,12 @@ exports.reset = async (req, res, error) => {
 
 		const user = await User.findById(id);
 		if (!user) {
-			return next(new ErrorResponse("Something went wrong. Please, try again later.", 400));
+			return next(
+				new ErrorResponse(
+					"Something went wrong. Please, try again later.",
+					400
+				)
+			);
 		}
 
 		user.password = password;
@@ -190,47 +217,47 @@ exports.reset = async (req, res, error) => {
 		const subject = "Pokemons | Password has been successfully reseted";
 		const html = `<p>Your password has been changed.</p>`;
 
-		sendMail({to: user.email, subject, html });
+		sendMail({ to: user.email, subject, html });
 
 		res.status(200).json({
 			status: {
 				isError: false,
-				message: "Password has been successfully changed. Login now!"
-			}
-		})
+				message: "Password has been successfully changed. Login now!",
+			},
+		});
 	} catch (error) {
-		next(error)
+		next(error);
 	}
 };
 
 // GET => /users/current-user
 exports.getCurrentUser = (req, res) => {
 	try {
-		const { givenName, familyName, email, username, phone, warParticipant, favouritePokemons } = req.user;
-		res.status(200).json({ 
+		res.status(200).json({
 			status: {
 				isError: false,
-				message: "Done."
+				message: "Done.",
 			},
 			body: {
 				user: {
-					givenName,
-					familyName,
-					email,
-					username,
-					phone,
-					warParticipant,
-					favouritePokemons
-				}
-			}
-		})
+					givenName: req.user.givenName,
+					familyName: req.user.familyName,
+					email: req.user.email,
+					username: req.user.username,
+					phone: req.user.phone,
+					warParticipant: req.user.warParticipant,
+					favouritePokemons: req.user.favouritePokemons,
+					teamPokemons: req.user.teamPokemons,
+				},
+			},
+		});
 	} catch (error) {
 		res.status(401).json({
 			isError: true,
-			message: "Unauthorized."
-		})
+			message: "Unauthorized.",
+		});
 	}
-}
+};
 
 // Creating activation token
 const createActivationToken = (newUser) => {

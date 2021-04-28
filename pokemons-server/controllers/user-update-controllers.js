@@ -164,3 +164,35 @@ exports.updatePhone = async (req, res) => {
 		next(error);
 	}
 };
+
+// GET => /update/war-participant
+exports.updateWarParticipant = async (req, res, next) => {
+	try {
+		const user = await User.findById(req.user._id);
+		if (!user) {
+			return next(new ErrorResponse("User does not exist", 400));
+		}
+
+		if (user.teamPokemons.length < 5) {
+			return next(new ErrorResponse("You need to have full team to be war participant!", 400));
+		}
+
+		user.warParticipant = !user.warParticipant;
+		await user.save();
+
+		res.status(200).json({
+			status: {
+				isError: false,
+				message: "Saved.",
+			},
+			body: {
+				user: {
+					warParticipant: user.warParticipant,
+				},
+			},
+		})
+
+	} catch (error) {
+		next(error);
+	}
+}

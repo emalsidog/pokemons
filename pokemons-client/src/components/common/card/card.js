@@ -7,6 +7,10 @@ import {
 	addToFavourite,
 	removeFromFavourite,
 } from "../../../redux/actions/user-favouritePokemons-actions";
+import {
+	addToTeam,
+	removeFromTeam,
+} from "../../../redux/actions/user-teamPokemons-actions";
 
 // Styles
 import "./card.css";
@@ -15,10 +19,11 @@ const Card = (props) => {
 	const {
 		id,
 		name,
-		sprites,
+		sprite,
 		types,
 		stats,
 		favouritePokemons,
+		teamPokemons,
 		cardType,
 	} = props;
 
@@ -33,37 +38,86 @@ const Card = (props) => {
 	};
 
 	const handleAddToTeam = (id) => {
-		console.log("Added: " + id);
+		dispatch(addToTeam(id));
 	};
 
-	const displayTypes = types.map((prop, idx) => {
-		const { type } = prop;
-
+	const handleRemoveFromTeam = (id) => {
+		dispatch(removeFromTeam(id));
+	};
+	
+	const displayTypes = types.map((type, idx) => {		
 		let name = formatString(type.name);
 
 		return <span key={idx}>{name}</span>;
 	});
 
-	const displayStats = stats.map(({ stat, base_stat }, idx) => {
-		let name = stat.name.replace(/-/, " ");
-		name = formatString(name);
+	const displayStats = stats.map(({ name, value }, idx) => {
+		let displayName = name.replace(/-/, " ");
+		displayName = formatString(displayName);
 
 		return (
 			<li key={idx}>
-				<span>{name}</span>
-				<span>{base_stat}</span>
+				<span>{displayName}</span>
+				<span>{value}</span>
 			</li>
 		);
 	});
 
 	let displayActionButtons;
+	let cardClassNames = "card ";
 	switch (cardType) {
-		case "ALL": {
+		case "FAVOURITE": {
+			displayActionButtons = (
+				<>
+					<button
+						onClick={() => handleAddToTeam(id)}
+						className="action-button add-team"
+					>
+						<i className="fas fa-plus"></i>
+					</button>
+					<button
+						onClick={() => handleRemoveFromFavourite(id)}
+						className="action-button add-favorite"
+					>
+						<i className="fas fa-heart-broken"></i>
+					</button>
+				</>
+			);
+			break;
+		}
+		case "TEAM": {
+			displayActionButtons = (
+				<button
+					onClick={() => handleRemoveFromTeam(id)}
+					className="action-button add-favorite"
+				>
+					<i className="fas fa-minus-square"></i>
+				</button>
+			);
+			break;
+		}
+		default: {
 			let isFavourite = false;
+			let isTeam = false;
+
 			for (let pokemon of favouritePokemons) {
 				if (pokemon.pokemonId === id) {
 					isFavourite = true;
 				}
+			}
+
+			for (let pokemon of teamPokemons) {
+				if (pokemon.pokemonId === id) {
+					isTeam = true;
+				}
+			}
+			
+			if (isTeam && isFavourite) {
+				cardClassNames += "team-favourite";
+			} else if (isFavourite) {
+				cardClassNames += "favourite"
+			} else if (isTeam) {
+				cardClassNames += "team";
 			}
 
 			displayActionButtons = (
@@ -71,6 +125,7 @@ const Card = (props) => {
 					<button
 						onClick={() => handleAddToTeam(id)}
 						className="action-button add-team"
+						disabled={isTeam}
 					>
 						<i className="fas fa-plus"></i>
 					</button>
@@ -83,27 +138,13 @@ const Card = (props) => {
 					</button>
 				</>
 			);
-			break;
-		}
-		case "FAVOURITE": {
-			displayActionButtons = (
-				<button
-					onClick={() => handleRemoveFromFavourite(id)}
-					className="action-button add-favorite"
-				>
-					<i className="fas fa-heart-broken"></i>
-				</button>
-			);
-			break;
-		}
-		case "TEAM": {
 		}
 	}
 
 	return (
-		<article className="card">
+		<article className={cardClassNames}>
 			<div className="card-header">
-				<img src={sprites.front_default} alt={name} />
+				<img src={sprite} alt={name} />
 				<h2>{name}</h2>
 			</div>
 

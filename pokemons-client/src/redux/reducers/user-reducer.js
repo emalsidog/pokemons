@@ -1,6 +1,7 @@
 // Constants
 import * as updateTypes from "../constants/user-update-constants";
 import * as favouritePokemonsTypes from "../constants/user-favouritePokemons-constants";
+import * as teamPokemonsTypes from "../constants/user-teamPokemons-constants";
 
 const initialState = {
 	user: null,
@@ -171,7 +172,38 @@ const user = (state = initialState, action) => {
 				status: { ...status },
 			};
 		}
-		
+
+		// Update war participant
+		case updateTypes.UPDATE_WAR_PARTICIPANT_REQUEST: {
+			return {
+				...state,
+				isLoading: true
+			}	
+		}
+		case updateTypes.UPDATE_WAR_PARTICIPANT_SUCCESS: {
+			const { status, body } = action.response;
+			return {
+				...state,
+				isLoading: false,
+				status: {
+					...status
+				},
+				user: {
+					...state.user,
+					warParticipant: body.warParticipant
+				}
+			}
+		}
+		case updateTypes.UPDATE_WAR_PARTICIPANT_FAILURE: {
+			return {
+				...state,
+				isLoading: false,
+				status: {
+					...action.status
+				}
+			}
+		}
+
 		// Add to favourite
 		case favouritePokemonsTypes.ADD_TO_FAVOURITE_REQUEST: {
 			return {
@@ -202,8 +234,8 @@ const user = (state = initialState, action) => {
 				...state,
 				isLoading: false,
 				status: {
-					...action.status
-				}
+					...action.status,
+				},
 			};
 		}
 
@@ -211,8 +243,8 @@ const user = (state = initialState, action) => {
 		case favouritePokemonsTypes.REMOVE_FROM_FAVOURITE_REQUEST: {
 			return {
 				...state,
-				isLoading: true
-			}
+				isLoading: true,
+			};
 		}
 		case favouritePokemonsTypes.REMOVE_FROM_FAVOURITE_SUCCESS: {
 			const { status, body } = action.response;
@@ -220,19 +252,83 @@ const user = (state = initialState, action) => {
 				...state,
 				isLoading: false,
 				status: {
-					...status
+					...status,
 				},
 				user: {
 					...state.user,
-					favouritePokemons: [...body.favouritePokemons]
-				}
-			}
+					favouritePokemons: [...body.favouritePokemons],
+				},
+			};
 		}
 		case favouritePokemonsTypes.REMOVE_FROM_FAVOURITE_FAILURE: {
 			return {
 				...state,
-				isLoading: false
-			}
+				isLoading: false,
+			};
+		}
+
+		// Add to team
+		case teamPokemonsTypes.ADD_TO_TEAM_REQUEST: {
+			return {
+				...state,
+				isLoading: true,
+			};
+		}
+		case teamPokemonsTypes.ADD_TO_TEAM_SUCCESS: {
+			const { status, body } = action.response;
+			return {
+				...state,
+				isLoading: false,
+				status: {
+					...status,
+				},
+				user: {
+					...state.user,
+					teamPokemons: [...body.teamPokemons],
+					warParticipant: body.warParticipant
+				},
+			};
+		}
+		case teamPokemonsTypes.ADD_TO_TEAM_FAILURE: {
+			return {
+				...state,
+				isLoading: false,
+				status: {
+					...action.status,
+				},
+			};
+		}
+
+		// Remove from team
+		case teamPokemonsTypes.REMOVE_FROM_TEAM_REQUEST: {
+			return {
+				...state,
+				isLoading: true,
+			};
+		}
+		case teamPokemonsTypes.REMOVE_FROM_TEAM_SUCCESS: {
+			const { status, body } = action.response;
+			return {
+				...state,
+				isLoading: false,
+				status: {
+					...status,
+				},
+				user: {
+					...state.user,
+					teamPokemons: [...body.teamPokemons],
+					warParticipant: body.warParticipant
+				},
+			};
+		}
+		case teamPokemonsTypes.REMOVE_FROM_TEAM_FAILURE: {
+			return {
+				...state,
+				isLoading: false,
+				status: {
+					...action.status,
+				},
+			};
 		}
 
 		default: {

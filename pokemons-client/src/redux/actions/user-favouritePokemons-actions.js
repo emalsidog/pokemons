@@ -13,7 +13,10 @@ export const addToFavourite = (pokemonId) => {
 				pokemonId,
 			});
 
-			dispatch({ type: types.ADD_TO_FAVOURITE_SUCCESS, response: data });
+			dispatch({ 
+				type: types.ADD_TO_FAVOURITE_SUCCESS, 
+				response: data 
+			});
 		} catch (error) {
 			if (isUnauthorized(error.response.status)) {
 				// ...

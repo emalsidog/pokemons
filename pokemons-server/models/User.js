@@ -44,6 +44,15 @@ const UserSchema = new mongoose.Schema(
 				},
 			],
 		},
+		teamPokemons: {
+			type: [
+				{
+					pokemonId: {
+						type: Number,
+					},
+				},
+			],
+		},
 	},
 	{
 		timestamps: true,

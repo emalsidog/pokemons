@@ -23,8 +23,9 @@ export const getPokemonsAction = ({ offset, limit }) => {
 			let promises = data.results.map((pokemon) =>
 				axios.get(pokemon.url)
 			);
-			const pokemons = await Promise.all(promises);
+			const pokemonsServerData = await Promise.all(promises);
 
+			const pokemons = parsePokemonsData(pokemonsServerData);
 			pokemonsData.pokemons = pokemons;
 
 			dispatch({ type: types.GET_POKEMONS_SUCCESS, pokemonsData });
@@ -41,7 +42,9 @@ export const getFavouritePokemons = (userFavouritePokemonIds) => {
 			let promises = userFavouritePokemonIds.map((pokemon) =>
 				axios.get(`${_pokeapiURL}/pokemon/${pokemon.pokemonId}`)
 			);
-			const pokemons = await Promise.all(promises);
+			const pokemonsData = await Promise.all(promises);
+
+			const pokemons = parsePokemonsData(pokemonsData);
 
 			dispatch({
 				type: types.GET_FAVOURITE_POKEMONS_SUCCESS,
@@ -52,3 +55,49 @@ export const getFavouritePokemons = (userFavouritePokemonIds) => {
 		}
 	};
 };
+
+// GET => Team pokemons
+export const getTeamPokemons = (userTeamPokemonIds) => {
+	return async (dispatch) => {
+		dispatch({ type: types.GET_TEAM_POKEMONS_REQUEST });
+		try {
+			let promises = userTeamPokemonIds.map((pokemon) =>
+				axios.get(`${_pokeapiURL}/pokemon/${pokemon.pokemonId}`)
+			);
+			const pokemonsData = await Promise.all(promises);
+
+			const pokemons = parsePokemonsData(pokemonsData);
+
+			dispatch({
+				type: types.GET_TEAM_POKEMONS_SUCCESS,
+				teamPokemons: pokemons,
+			});
+		} catch (error) {
+			dispatch({ type: types.GET_TEAM_POKEMONS_FAILURE });
+		}
+	};
+};
+
+const parsePokemonsData = (pokemonsData) => {
+	return pokemonsData.map(({ data }) => {
+		let stats = data.stats.map(stat => {
+			return {
+				name: stat.stat.name,
+				value: stat.base_stat
+			}
+		})
+
+		let types = data.types.map(type => {
+			return {
+				name: type.type.name
+			}
+		})
+		return {
+			id: data.id,
+			name: data.name,
+			sprite: data.sprites.front_default,
+			stats,
+			types
+		}
+	})
+}

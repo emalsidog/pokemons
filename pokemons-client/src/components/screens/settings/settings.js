@@ -4,12 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 
 // Actions
-import {
-	updateName,
-	updateEmail,
-	updateUsername,
-	updatePhone,
-} from "../../../redux/actions/user-update-actions";
+import * as updateActions from "../../../redux/actions/user-update-actions";
 
 // Selectors
 import {
@@ -65,22 +60,22 @@ const Settings = () => {
 	} = useForm();
 
 	const changeEmailOnSubmit = (data) => {
-		dispatch(updateEmail(data));
+		dispatch(updateActions.updateEmail(data));
 		setShowChangeEmailForm(false);
 	};
 
 	const changeUsernameOnSubmit = (data) => {
-		dispatch(updateUsername(data));
+		dispatch(updateActions.updateUsername(data));
 		setShowChangeUsernameForm(false);
 	};
 
 	const changePhoneOnSubmit = (data) => {
-		dispatch(updatePhone(data));
+		dispatch(updateActions.updatePhone(data));
 		setShowChangePhoneForm(false);
 	};
 
 	const changeNameOnSubmit = (data) => {
-		dispatch(updateName(data));
+		dispatch(updateActions.updateName(data));
 		setShowChangeNameForm(false);
 	};
 
@@ -99,6 +94,10 @@ const Settings = () => {
 	const handleShowChangePhoneForm = () => {
 		setShowChangePhoneForm(!showChangePhoneForm);
 	};
+
+	const handleWarParticipantChange = () => {
+		dispatch(updateActions.updateWarParticipant());
+	}
 
 	// Notification
 	useEffect(() => {
@@ -361,6 +360,18 @@ const Settings = () => {
 					<button onClick={handleShowChangeNameForm} className="btn">
 						{showChangeNameForm ? "Cancel" : "Change"}
 					</button>
+				</div>
+			</div>
+
+			<div className="settings-row">
+				<div>Participate in the war?</div>
+				<div>
+					<input
+						onChange={handleWarParticipantChange}
+						type="checkbox"
+						disabled={user.teamPokemons.length < 5}
+						defaultChecked={user.warParticipant}
+					/>
 				</div>
 			</div>
 

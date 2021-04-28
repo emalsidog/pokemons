@@ -7,6 +7,22 @@
 	margin-bottom: 20px;
 }
 
+.card.favourite {
+    border: 1px solid rgb(255, 0, 0);
+}
+
+.card.team {
+    border: 1px solid #17bcee;
+}
+
+.card.team-favourite {
+    border-top: 1px solid rgb(255, 0, 0);
+    border-left: 1px solid rgb(255, 0, 0);
+
+    border-bottom: 1px solid #17beec;
+    border-right: 1px solid #17bcee;
+}
+
 .card-header {
     text-align: center;
     margin-top: 15px;

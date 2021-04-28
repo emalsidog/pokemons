@@ -59,19 +59,18 @@ const Pokemons = () => {
 
 
     // Render array of cards
-	const main = pokemons.map(({ data }) => {
-		const { id, sprites, name, types, stats } = data;
+	const main = pokemons.map((pokemon) => {
+		const { id, sprite, name, types, stats } = pokemon;
 		return (
 			<Card
 				key={id}
-				sprites={sprites}
+				sprite={sprite}
 				id={id}
 				name={name}
 				types={types}
 				stats={stats}
 				favouritePokemons={user.favouritePokemons}
-
-				cardType="ALL"
+				teamPokemons={user.teamPokemons}
 			/>
 		);
 	});

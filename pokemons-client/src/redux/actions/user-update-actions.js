@@ -127,3 +127,25 @@ export const updatePhone = (newUserPhone) => {
 		}
 	};
 };
+
+export const updateWarParticipant = () => {
+	return async (dispatch) => {
+		dispatch({ type: userTypes.UPDATE_WAR_PARTICIPANT_REQUEST });
+		try {
+			const { data } = await AxiosGetRequest("/update/war-participant");
+			dispatch({
+				type: userTypes.UPDATE_WAR_PARTICIPANT_SUCCESS,
+				response: data,
+			});
+		} catch (error) {
+			if (isUnauthorized(error.response.status)) {
+				// ...
+			}
+
+			dispatch({
+				type: userTypes.UPDATE_WAR_PARTICIPANT_FAILURE,
+				status: error.response.data.status,
+			});
+		}
+	};
+};

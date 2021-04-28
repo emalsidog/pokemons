@@ -4,6 +4,7 @@ import * as types from "../constants/pokemons-constants";
 const initialState = {
     pokemons: [],
     favouritePokemons: [],
+    teamPokemons: [],
 
     totalCount: 0,
 
@@ -19,6 +20,8 @@ const pokemons = (state = initialState, action) => {
                 totalCount: action.pokemonsData.totalCount
             }
         }
+
+        // GET FAVOURITE POKEMONS
         case types.GET_FAVOURITE_POKEMONS_REQUEST: {
             return {
                 ...state,
@@ -35,9 +38,31 @@ const pokemons = (state = initialState, action) => {
         case types.GET_FAVOURITE_POKEMONS_FAILURE: {
             return {
                 ...state,
-                isLoading: false
+                isLoading: false,
             }
         }
+
+        // GET TEAM POKEMONS
+        case types.GET_TEAM_POKEMONS_REQUEST: {
+            return {
+                ...state,
+                isLoading: true
+            }
+        }
+        case types.GET_TEAM_POKEMONS_SUCCESS: {
+            return {
+                ...state,
+                isLoading: false,
+                teamPokemons: [...action.teamPokemons]
+            }
+        }
+        case types.GET_TEAM_POKEMONS_FAILURE: {
+            return {
+                ...state,
+                isLoading: false,
+            }
+        }
+
         default: {
             return {
                 ...state
