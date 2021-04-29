@@ -2,7 +2,7 @@
 const router = require("express").Router();
 
 // Controller
-const FavouritePokemons = require("../controllers/user-favouritePokemons-controller");
+const FavouritePokemons = require("../controllers/favourite-pokemons-controller");
 
 // Middleware
 const authenticate = require("../middleware/authenticate");

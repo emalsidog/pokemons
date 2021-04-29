@@ -9,7 +9,6 @@ import { getPokemonsAction } from "../../../redux/actions/pokemons-actions";
 import {
 	selectUser,
 	selectStatus,
-	selectIsLoading,
 } from "../../../redux/selectors/user-selectors";
 
 // Pagination

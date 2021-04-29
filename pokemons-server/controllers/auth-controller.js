@@ -61,7 +61,7 @@ exports.register = async (req, res, next) => {
 };
 
 // POST => /users/activate
-exports.activate = async (req, res) => {
+exports.activate = async (req, res, next) => {
 	const { activationToken } = req.body;
 	try {
 		const user = jwt.verify(
@@ -79,7 +79,6 @@ exports.activate = async (req, res) => {
 				)
 			);
 		}
-
 		const newUser = new User({
 			givenName,
 			familyName,

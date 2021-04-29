@@ -2,7 +2,7 @@
 const router = require("express").Router();
 
 // Controller
-const User = require("../controllers/user-update-controllers");
+const User = require("../controllers/user-update-controller");
 
 // Middleware
 const authenticate = require("../middleware/authenticate");

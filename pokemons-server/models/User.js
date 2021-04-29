@@ -35,6 +35,11 @@ const UserSchema = new mongoose.Schema(
 			type: Boolean,
 			default: false,
 		},
+		warPoints: {
+			type: Number,
+			default: 0,
+		},
+		battles: [{ type: mongoose.Schema.Types.ObjectId, ref: "Battle" }],
 		favouritePokemons: {
 			type: [
 				{

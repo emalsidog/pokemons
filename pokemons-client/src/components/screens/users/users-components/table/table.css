@@ -1,0 +1,29 @@
+table {
+	width: 100%;
+	text-align: center;
+
+	border-collapse: collapse;
+}
+
+table,
+th,
+td {
+	border: 1px solid rgb(146, 146, 146);
+}
+
+th {
+	padding: 12px 0;
+	font-family: "NCS Rogueland";
+	font-size: 1.1rem;
+	font-weight: 400;
+	font-style: italic;
+	background-color: rgb(211, 211, 211);
+}
+
+tr:nth-child(even) {
+	background-color: #f2f2f2;
+}
+
+td {
+	font-size: 1.1rem;
+}
