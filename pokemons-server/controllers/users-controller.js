@@ -45,8 +45,34 @@ exports.getUsers = async (req, res, next) => {
 	}
 };
 
+exports.getUserBattles = async (req, res, next) => {
+	try {
+		const user = await User.findById(req.user._id)
+			.populate("battles")
+			.exec();
+			
+		res.status(200).json({
+			status: {
+				isError: false,
+				message: "Done.",
+			},
+			body: {
+				battles: user.battles,
+			},
+		});
+	} catch (error) {
+		next(error);
+	}
+};
+
 exports.battle = async (req, res, next) => {
 	try {
+		if (!req.user.warParticipant) {
+			return next(
+				new ErrorResponse("You are now the war particapant.", 400)
+			);
+		}
+
 		let randomArray = await User.aggregate([
 			{
 				$match: {
@@ -56,8 +82,13 @@ exports.battle = async (req, res, next) => {
 			},
 			{ $sample: { size: 1 } },
 		]).exec();
-		const randomUser = randomArray[0];
-		
+		const randomUser = await User.findById(randomArray[0]._id);
+
+		if (!randomUser) {
+			return next(new ErrorResponse("Could not find opponent.", 400));
+		}
+
+		// Parse team
 		const [opponentTeam, opponentTeamTotal] = await getParsedTeam(
 			randomUser.teamPokemons
 		);
@@ -65,6 +96,7 @@ exports.battle = async (req, res, next) => {
 			req.user.teamPokemons
 		);
 
+		// Create clear player objects (to compare and send to client)
 		const currentUser = createPlayer(
 			req.user,
 			currentUserTeam,
@@ -76,62 +108,65 @@ exports.battle = async (req, res, next) => {
 			opponentTeamTotal
 		);
 
+		// Decide the winner
 		const winPoints = 10;
 		const tiePoints = 5;
-			
-		if (currentUser.teamTotal > opponent.teamTotal) {
-			req.user.warPoints += winPoints;
 
+		if (currentUser.teamTotal > opponent.teamTotal) {
 			const battle = new Battle({
-				winner: currentUser._id,
-				loser: opponent._id,
+				winner: currentUser,
+				loser: opponent,
 				result: "hasWinner",
 			});
 
+			req.user.warPoints += winPoints;
+			req.user.battles.push(battle._id);
+			randomUser.battles.push(battle._id);
+
 			await req.user.save();
+			await randomUser.save();
 			await battle.save();
 
 			res.status(200).json({
-				currentUserTeamTotal,
-				opponentTeamTotal,
 				winner: currentUser,
 				loser: opponent,
 			});
 		} else if (currentUser.teamTotal < opponent.teamTotal) {
-			randomUser.warPoints += winPoints;
-
 			const battle = new Battle({
-				winner: opponent._id,
-				loser: currentUser._id,
+				winner: opponent,
+				loser: currentUser,
 				result: "hasWinner",
 			});
 
-			await randomUser.save();
-			await battle.save();
-
-			res.status(200).json({
-				currentUserTeamTotal,
-				opponentTeamTotal,
-				winner: opponent,
-				loser: currentUser,
-			});
-		} else if (currentUser.teamTotal === opponent.teamTotal) {
-			randomUser.warPoints += tiePoints;
-			req.user.warPoints += tiePoints;
-
-			const battle = new Battle({
-				winner: opponent._id,
-				loser: currentUser._id,
-				result: "tie",
-			});
+			randomUser.warPoints += winPoints;
+			randomUser.battles.push(battle._id);
+			req.user.battles.push(battle._id);
 
 			await randomUser.save();
 			await req.user.save();
 			await battle.save();
 
 			res.status(200).json({
-				currentUserTeamTotal,
-				opponentTeamTotal,
+				winner: opponent,
+				loser: currentUser,
+			});
+		} else if (currentUser.teamTotal === opponent.teamTotal) {
+			const battle = new Battle({
+				winner: opponent,
+				loser: currentUser,
+				result: "tie",
+			});
+
+			randomUser.warPoints += tiePoints;
+			req.user.warPoints += tiePoints;
+			randomUser.battles.push(battle._id);
+			req.user.battles.push(battle._id);
+
+			await randomUser.save();
+			await req.user.save();
+			await battle.save();
+
+			res.status(200).json({
 				winner: opponent,
 				loser: currentUser,
 			});

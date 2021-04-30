@@ -1,7 +1,7 @@
 // Constants
 import * as updateTypes from "../constants/user-update-constants";
-import * as favouritePokemonsTypes from "../constants/user-favouritePokemons-constants";
-import * as teamPokemonsTypes from "../constants/user-teamPokemons-constants";
+import * as favouritePokemonsTypes from "../constants/favourite-pokemons-constants";
+import * as teamPokemonsTypes from "../constants/team-pokemons-constants";
 
 const initialState = {
 	user: null,

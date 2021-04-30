@@ -20,7 +20,8 @@ import Settings from "../screens/settings";
 import MyTeam from "../screens/my-team";
 import Favourites from "../screens/favourites";
 import Pokemons from "../screens/pokemons";
-import Users from "../screens/users"
+import Users from "../screens/users";
+import BattlesHistory from "../screens/battles-history";
 
 import Spinner from "../common/spinner";
 
@@ -54,6 +55,7 @@ const App = () => {
 			<ProtectedRoute exact path="/users" component={Users} />
 			<ProtectedRoute exact path="/favourites" component={Favourites} />
 			<ProtectedRoute exact path="/pokemons" component={Pokemons} />
+			<ProtectedRoute exact path="/battles" component={BattlesHistory} />
 		</Switch>
 	);
 };

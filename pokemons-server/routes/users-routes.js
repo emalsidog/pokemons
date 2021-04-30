@@ -13,4 +13,7 @@ router.get("/", authenticate, Users.getUsers);
 // GET => /users/battle
 router.get("/battle", authenticate, Users.battle);
 
+// GET => /users/battles
+router.get("/battles", authenticate, Users.getUserBattles);
+
 module.exports = router;

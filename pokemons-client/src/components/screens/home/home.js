@@ -1,16 +1,27 @@
 // Dependencies
 import React from "react";
+import { useDispatch } from "react-redux";
+
+// Actions
+import { battle } from "../../../redux/actions/battles-actions";
 
 // Components
 import Layout from "../../layout";
 
 const Home = () => {
+
+	const dispatch = useDispatch();
+
+	const handleBattleClick = () => {
+		dispatch(battle());
+	}
+
 	return (
 		<Layout>
 			<h1>
 				Let's battle
 			</h1>
-			<button>Battle!</button>
+			<button onClick={handleBattleClick}>Battle!</button>
 
 			<div>
 				instead of lets battle and button

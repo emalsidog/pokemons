@@ -1,5 +1,5 @@
 // Constants
-import * as types from "../constants/user-teamPokemons-constants";
+import * as types from "../constants/team-pokemons-constants";
 
 // Utils
 import { AxiosPostRequest } from "../utils/server-request";

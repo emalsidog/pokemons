@@ -6,11 +6,11 @@ import { useDispatch } from "react-redux";
 import {
 	addToFavourite,
 	removeFromFavourite,
-} from "../../../redux/actions/user-favouritePokemons-actions";
+} from "../../../redux/actions/favourite-pokemons-actions";
 import {
 	addToTeam,
 	removeFromTeam,
-} from "../../../redux/actions/user-teamPokemons-actions";
+} from "../../../redux/actions/team-pokemons-actions";
 
 // Styles
 import "./card.css";

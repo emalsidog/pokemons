@@ -3,7 +3,7 @@ import { AxiosPostRequest } from "../utils/server-request";
 import { isUnauthorized } from "../utils/is-unauthorized";
 
 // Constants
-import * as types from "../constants/user-favouritePokemons-constants";
+import * as types from "../constants/favourite-pokemons-constants";
 
 export const addToFavourite = (pokemonId) => {
 	return async (dispatch) => {
