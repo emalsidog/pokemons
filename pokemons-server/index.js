@@ -28,6 +28,7 @@ app.use("/update", require("./routes/user-update-routes"));
 app.use("/pokemons/favourite", require("./routes/favourite-pokemons-routes"));
 app.use("/pokemons/team", require("./routes/team-pokemons-routes"));
 app.use("/users", require("./routes/users-routes"));
+app.use("/battles", require("./routes/battles-routes"));
 
 // Error handler
 app.use(require("./middleware/error-handler"));

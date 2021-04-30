@@ -1,50 +1,60 @@
 // Dependencies
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 // Actions
 import { battle } from "../../../redux/actions/battles-actions";
 
+// Selectors
+import { selectUser } from "../../../redux/selectors/user-selectors";
+
+// Styles
+import "./home.css";
+
 // Components
 import Layout from "../../layout";
+import Card from "../../common/card";
 
 const Home = () => {
-
+	// Redux
 	const dispatch = useDispatch();
+	const user = useSelector(selectUser);
+	const { battleResult } = useSelector((state) => state.battles);
 
 	const handleBattleClick = () => {
 		dispatch(battle());
-	}
+	};
+
+	console.log(battleResult);
 
 	return (
 		<Layout>
-			<h1>
-				Let's battle
-			</h1>
-			<button onClick={handleBattleClick}>Battle!</button>
-
-			<div>
-				instead of lets battle and button
-				<div>
-					<span>The winner is: </span>
-					<h2>User1</h2>
+			{Object.keys(battleResult).length === 0 ? (
+				<div className="home-heading">
+					<h1>Let's battle!</h1>
+					<button
+						className="btn"
+						disabled={user.teamPokemons.length < 5}
+						onClick={handleBattleClick}
+					>
+						Battle
+					</button>
 				</div>
-			</div>
+			) : (
+				<div>
+					<div>
+						<div>Winner</div>
+						<div>{battleResult.winner.username}</div>
+					</div>
+					<div>
+						<div>{battleResult.winner.username}</div>
+						<div>
 
-			<h3>Results</h3>
-
-			<div>
-				<span>User1 VS User2</span>
-			</div>
-
-			<div>
-				<span>User1 pokemon team | User2 pokemon team</span>
-			</div>
-
-			<div>
-				<span>User1 pokemon team TOTAL | User2 pokemon team TOTAL</span>
-			</div>
-			
+						</div>
+						<div></div>
+					</div>
+				</div>
+			)}
 		</Layout>
 	);
 };

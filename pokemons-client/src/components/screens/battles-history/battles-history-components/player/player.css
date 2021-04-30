@@ -1,0 +1,8 @@
+.player-container {
+	text-align: center;
+}
+
+.player-username,
+.player-total {
+	font-size: 1.2rem;
+}

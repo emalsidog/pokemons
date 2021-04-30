@@ -139,6 +139,14 @@ body {
 	transform: scale(1.08);
 }
 
+.btn:disabled {
+	background-color: #91def3;
+}
+
+.btn:disabled:hover {
+	cursor: not-allowed;
+}
+
 /* Input */
 .inp {
 	display: block;

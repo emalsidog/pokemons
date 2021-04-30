@@ -96,6 +96,10 @@ const Card = (props) => {
 			);
 			break;
 		}
+		case "BATTLE": {
+			displayActionButtons = null;
+			break;
+		}
 		default: {
 			let isFavourite = false;
 			let isTeam = false;

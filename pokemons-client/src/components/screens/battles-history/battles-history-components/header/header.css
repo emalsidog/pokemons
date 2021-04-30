@@ -1,0 +1,11 @@
+.battle-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    font-size: 1.1rem;
+    font-family: "NCS Rogueland";
+    font-style: italic;
+
+    font-weight: 600;
+}

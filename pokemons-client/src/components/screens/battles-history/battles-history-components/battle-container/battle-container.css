@@ -1,0 +1,19 @@
+.battle-container {
+    border: 1px solid rgb(204, 204, 204);
+    padding: 10px;
+    margin-bottom: 30px;
+}
+
+.battle-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.battle-info div {
+    margin: 10px 0;
+}
+
+.battle-vs {
+    font-size: 1.5rem;
+}

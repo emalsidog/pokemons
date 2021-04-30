@@ -10,7 +10,7 @@ export const battle = () => {
         try {
             dispatch({ type: battleTypes.BATTLE_REQUEST });
 
-            const { data } = await AxiosGetRequest("/users/battle");
+            const { data } = await AxiosGetRequest("/battles/battle");
 
             dispatch({
                 type: battleTypes.BATTLE_SUCCESS,
@@ -37,7 +37,7 @@ export const getBattlesHistory = () => {
         try {
             dispatch({ type: battleTypes.GET_BATTLES_HISTORY_REQUEST });
 
-            const { data } = await AxiosGetRequest("/users/battles");
+            const { data } = await AxiosGetRequest("/battles/battles");
 
             dispatch({
                 type: battleTypes.GET_BATTLES_HISTORY_SUCCESS,

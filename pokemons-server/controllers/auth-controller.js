@@ -39,7 +39,11 @@ exports.register = async (req, res, next) => {
 		}
 
 		const newUser = { givenName, familyName, email, username, password };
-		const activationToken = createActivationToken(newUser);
+		const activationToken = createToken(
+			newUser,
+			process.env.ACTIVATION_TOKEN_SECRET,
+			"1h"
+		);
 
 		const url = `${process.env.CLIENT_URL}/users/activate/${activationToken}`;
 		const subject = "Pokemons | Verify your identity";
@@ -121,7 +125,11 @@ exports.login = async (req, res, next) => {
 			return next(new ErrorResponse("Password is incorrect.", 400));
 		}
 
-		const accessToken = createAccessToken(user._id);
+		const accessToken = createToken(
+			{ id: user._id },
+			process.env.ACCESS_TOKEN_SECRET,
+			"7d"
+		);
 
 		res.status(200).json({
 			status: {
@@ -138,7 +146,7 @@ exports.login = async (req, res, next) => {
 					phone: user.phone,
 					warParticipant: user.warParticipant,
 					favouritePokemons: user.favouritePokemons,
-					teamPokemons: user.teamPokemons
+					teamPokemons: user.teamPokemons,
 				},
 			},
 		});
@@ -163,7 +171,11 @@ exports.forgot = async (req, res, next) => {
 			return next(new ErrorResponse("Email does not exist.", 400));
 		}
 
-		const resetToken = createResetToken(user._id);
+		const resetToken = createToken(
+			{ id: user._id },
+			process.env.RESET_TOKEN_SECRET,
+			"15m"
+		);
 
 		const url = `${process.env.CLIENT_URL}/users/reset/${resetToken}`;
 		const subject = "Pokemons | Reset your password";
@@ -276,5 +288,11 @@ const createAccessToken = (id) => {
 const createResetToken = (id) => {
 	return jwt.sign({ id }, process.env.RESET_TOKEN_SECRET, {
 		expiresIn: "15m",
+	});
+};
+
+const createToken = (payload, secretKey, expireTime) => {
+	return jwt.sign(payload, secretKey, {
+		expiresIn: expireTime,
 	});
 };
