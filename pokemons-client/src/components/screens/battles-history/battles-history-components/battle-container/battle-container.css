@@ -17,3 +17,11 @@
 .battle-vs {
     font-size: 1.5rem;
 }
+
+.battle-points-info {
+    font-size: 1.1rem;
+}
+
+.battle-points-info span {
+    font-weight: 700;
+}

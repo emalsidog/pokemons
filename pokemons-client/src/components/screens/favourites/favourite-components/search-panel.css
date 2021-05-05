@@ -1,0 +1,21 @@
+.search-panel {
+    width: 30%;
+}
+
+.search-panel select {
+    width: 100%;
+    margin-top: 10px;
+    padding: 2px 10px;
+}
+
+.search-panel select:focus {
+    outline: none;
+    border-color: #17beec;
+}
+
+@media screen and (max-width: 768px) {
+    .search-panel {
+        margin-top: 15px;
+        width: 100%;
+    }
+}

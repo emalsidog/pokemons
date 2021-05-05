@@ -1,6 +1,8 @@
 // Dependencies
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
+import queryString from "query-string";
 
 // Actions
 import { getBattlesHistory } from "../../../redux/actions/battles-actions";
@@ -14,16 +16,23 @@ import Heading from "../../common/heading";
 import BattleContainer from "./battles-history-components/battle-container";
 
 const BattlesHistory = () => {
+	// History
+	const history = useHistory();
+
 	// Redux
 	const dispatch = useDispatch();
 	const { battlesHistory } = useSelector((state) => state.battles);
 
+	const handleSelectChange = (e) => {
+		history.push(`/battles?sort=${e.target.value.toLowerCase()}`);
+	}
+
+	const values = queryString.parse(history.location.search);
+
 	// Get battles history
 	useEffect(() => {
-		dispatch(getBattlesHistory());
-	}, [dispatch]);
-
-	console.log(battlesHistory);
+		dispatch(getBattlesHistory(values.sort));
+	}, [dispatch, values.sort]);
 
 	const main = battlesHistory.map((battle) => {
 		return <BattleContainer key={battle._id} battle={battle} />;
@@ -34,7 +43,16 @@ const BattlesHistory = () => {
 			<Heading
 				title="Battles history"
 				description="Just battles history."
-			/>
+			>
+				<div className="sort-selection">
+					<select onChange={handleSelectChange} defaultValue="time-descending">
+						<option value="time-ascending">Time ascending</option>
+						<option value="time-descending">Time descending</option>
+						<option value="points-ascending">Points ascending</option>
+						<option value="points-descending">Points descending</option>
+					</select>
+				</div>
+			</Heading>
 
 			{main}
 		</Layout>

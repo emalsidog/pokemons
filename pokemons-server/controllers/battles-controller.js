@@ -7,10 +7,37 @@ const getParsedTeam = require("../utils/battles-utils/get-parsed-team");
 const ErrorResponse = require("../utils/error-response");
 
 exports.getUserBattles = async (req, res, next) => {
+	let { sort = "time-descending" } = req.query;
+	sort = sort.toLowerCase();
+
 	try {
 		const user = await User.findById(req.user._id)
 			.populate("battles")
 			.exec();
+
+		let battles = user.battles;
+
+		if (sort === "time-descending") {
+			battles.sort(
+				(a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+			);
+		} else if (sort === "time-ascending") {
+			battles.sort(
+				(a, b) => new Date(a.createdAt) - new Date(b.createdAt)
+			);
+		} else if (sort === "points-descending") {
+			battles.sort(
+				(a, b) =>
+					new Date(b.currentUserPoints) -
+					new Date(a.currentUserPoints)
+			);
+		} else if (sort === "points-ascending") {
+			battles.sort(
+				(a, b) =>
+					new Date(a.currentUserPoints) -
+					new Date(b.currentUserPoints)
+			);
+		}
 
 		res.status(200).json({
 			status: {
@@ -18,7 +45,7 @@ exports.getUserBattles = async (req, res, next) => {
 				message: "Done.",
 			},
 			body: {
-				battles: user.battles,
+				battles,
 			},
 		});
 	} catch (error) {
@@ -72,11 +99,13 @@ exports.battle = async (req, res, next) => {
 		// Decide the winner
 		const winPoints = 10;
 		const tiePoints = 5;
+		const losePoints = 0;
 
 		if (currentUser.teamTotal > opponent.teamTotal) {
 			const battle = new Battle({
 				winner: currentUser,
 				loser: opponent,
+				currentUserPoints: winPoints,
 				result: "hasWinner",
 			});
 
@@ -96,6 +125,7 @@ exports.battle = async (req, res, next) => {
 			const battle = new Battle({
 				winner: opponent,
 				loser: currentUser,
+				currentUserPoints: losePoints,
 				result: "hasWinner",
 			});
 
@@ -115,6 +145,7 @@ exports.battle = async (req, res, next) => {
 			const battle = new Battle({
 				winner: opponent,
 				loser: currentUser,
+				currentUserPoints: tiePoints,
 				result: "tie",
 			});
 

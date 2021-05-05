@@ -31,7 +31,6 @@ export const getCurrentUserAction = () => {
 			dispatch({
 				type: userTypes.GET_CURRENT_USER_FAILURE,
 			});
-			dispatch(addNotification(error.response.data.status));
 		}
 	};
 };

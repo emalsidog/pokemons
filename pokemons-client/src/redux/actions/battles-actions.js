@@ -22,6 +22,7 @@ export const battle = () => {
 					loser: data.loser,
 				},
 			});
+			dispatch(addNotification({ isError: false, message: "battles actions temp notify" }));
 		} catch (error) {
 			isUnauthorized(error.response.status);
 
@@ -31,12 +32,12 @@ export const battle = () => {
 	};
 };
 
-export const getBattlesHistory = () => {
+export const getBattlesHistory = (sort = "time-descending") => {
 	return async (dispatch) => {
 		try {
 			dispatch({ type: battleTypes.GET_BATTLES_HISTORY_REQUEST });
-
-			const { data } = await AxiosGetRequest("/battles/battles");
+			console.log(sort);
+			const { data } = await AxiosGetRequest(`/battles/battles?sort=${sort}`);
 			const { body } = data;
 
 			dispatch({

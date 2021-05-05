@@ -27,7 +27,7 @@ const Users = () => {
 	);
 
 	const values = queryString.parse(history.location.search);
-
+		console.log(history);
 	useEffect(() => {
 		dispatch(getUsers(values.page));
 	}, [dispatch, values.page]);

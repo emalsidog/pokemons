@@ -3,20 +3,27 @@ const mongoose = require("mongoose");
 
 const BattleSchema = new mongoose.Schema(
 	{
-		// winner: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-		// loser: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
 		winner: {
-			type: Object
+			type: Object,
 		},
 		loser: {
-			type: Object
+			type: Object,
 		},
-        result: {
-            type: String,
-            enum: ["tie", "hasWinner"]
-        }
+		currentUserPoints: {
+			type: Number,
+		},
+		result: {
+			type: String,
+			enum: ["tie", "hasWinner"],
+		},
 	},
 	{
+		capped: {
+			max: 10,
+			size: 50000,
+			autoIndexId: true,
+		},
+
 		timestamps: true,
 	}
 );

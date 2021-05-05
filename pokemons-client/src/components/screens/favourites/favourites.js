@@ -14,6 +14,7 @@ import "./favourites.css";
 // Components
 import Layout from "../../layout";
 import Heading from "../../common/heading";
+import SearchPanel from "./favourite-components/search-panel";
 import Card from "../../common/card";
 
 const Favourites = () => {
@@ -72,11 +73,14 @@ const Favourites = () => {
 			<Heading
 				title="Favourites"
 				description="Oh... Your favourite pokemons are here!"
-				searchBox
-				handleSelectChange={handleSelectChange}
-				handleSearchChange={handleSearchChange}
-				searchValue={searchValue}
-			/>
+			>
+				<SearchPanel
+					handleSearchChange={handleSearchChange}
+					handleSelectChange={handleSelectChange}
+					searchValue={searchValue}
+				/>
+			</Heading>
+
 			<section className="cards">{main}</section>
 		</Layout>
 	);
