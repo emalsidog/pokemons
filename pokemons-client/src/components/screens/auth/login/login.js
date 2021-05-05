@@ -8,10 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import "../index.css";
 
 // Selectors
-import {
-	getIsLoading,
-	getAuthStatus,
-} from "../../../../redux/selectors/auth-selectors";
+import { getIsLoading } from "../../../../redux/selectors/auth-selectors";
 
 // Actions
 import {

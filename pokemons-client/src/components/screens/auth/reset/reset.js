@@ -1,5 +1,5 @@
 // Dependencies
-import React, { useState, useRef, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";

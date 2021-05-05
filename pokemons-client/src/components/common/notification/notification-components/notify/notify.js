@@ -1,6 +1,5 @@
 // Dependencies
 import React, { useState, useEffect } from "react";
-import ReactDOM from "react-dom";
 import { useDispatch } from "react-redux";
 
 // Actions

@@ -16,7 +16,7 @@ import BattleContainer from "./battles-history-components/battle-container";
 const BattlesHistory = () => {
 	// Redux
 	const dispatch = useDispatch();
-	const { battlesHistory, isLoading } = useSelector((state) => state.battles);
+	const { battlesHistory } = useSelector((state) => state.battles);
 
 	// Get battles history
 	useEffect(() => {

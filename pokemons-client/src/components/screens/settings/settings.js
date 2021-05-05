@@ -1,5 +1,5 @@
 // Dependencies
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 
@@ -9,7 +9,6 @@ import * as updateActions from "../../../redux/actions/user-update-actions";
 // Selectors
 import {
 	selectUser,
-	selectStatus,
 	selectIsLoading,
 } from "../../../redux/selectors/user-selectors";
 
@@ -93,7 +92,7 @@ const Settings = () => {
 
 	const handleWarParticipantChange = () => {
 		dispatch(updateActions.updateWarParticipant());
-	}
+	};
 
 	return (
 		<Layout>

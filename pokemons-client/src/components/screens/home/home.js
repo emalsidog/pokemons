@@ -13,7 +13,6 @@ import "./home.css";
 
 // Components
 import Layout from "../../layout";
-import Card from "../../common/card";
 
 const Home = () => {
 	// Redux

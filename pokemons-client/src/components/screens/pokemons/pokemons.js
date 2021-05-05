@@ -6,10 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { getPokemonsAction } from "../../../redux/actions/pokemons-actions";
 
 // Selectors
-import {
-	selectUser,
-	selectStatus,
-} from "../../../redux/selectors/user-selectors";
+import { selectUser } from "../../../redux/selectors/user-selectors";
 
 // Pagination
 import Pagination from "react-js-pagination";
@@ -41,7 +38,7 @@ const Pokemons = () => {
 		setPage(page);
 	};
 
-    // Render array of cards
+	// Render array of cards
 	const main = pokemons.map((pokemon) => {
 		const { id, sprite, name, types, stats } = pokemon;
 		return (
@@ -69,18 +66,15 @@ const Pokemons = () => {
 
 			<Pagination
 				hideFirstLastPages
-
 				prevPageText={<i className="fas fa-angle-left"></i>}
 				nextPageText={<i className="fas fa-angle-right"></i>}
 				firstPageText={<i className="fas fa-angle-double-left"></i>}
 				lastPageText={<i className="fas fa-angle-double-right"></i>}
-                
 				activePage={page}
 				itemsCountPerPage={limit}
 				totalItemsCount={totalCount}
 				pageRangeDisplayed={5}
 				onChange={handlePageChange}
-
 				innerClass="innerClass"
 				activeClass="activeClass"
 				itemClass="itemClass"

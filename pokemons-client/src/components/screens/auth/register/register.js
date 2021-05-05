@@ -1,5 +1,5 @@
 // Dependencies
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,7 +11,7 @@ import "../index.css";
 import { registerAction } from "../../../../redux/actions/auth-actions";
 
 // Selectors
-import { getAuthStatus, getIsLoading } from "../../../../redux/selectors/auth-selectors";
+import { getIsLoading } from "../../../../redux/selectors/auth-selectors";
 
 // Antd components
 import { Input, Button } from "antd";
@@ -19,7 +19,6 @@ import { Input, Button } from "antd";
 const Register = ({ history }) => {
 	// Redux
 	const isLoading = useSelector(getIsLoading);
-	const status = useSelector(getAuthStatus);
 	const dispatch = useDispatch();
 
 	// Redirect if token exists
