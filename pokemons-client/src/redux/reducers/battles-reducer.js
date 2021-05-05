@@ -48,13 +48,10 @@ const battles = (state = initialState, action) => {
             }
         }
         case battleTypes.GET_BATTLES_HISTORY_SUCCESS: {
-            const { status, battles } = action.response;
+            const { battles } = action.response;
             return {
                 ...state,
                 isLoading: false,
-                status: {
-                    ...status
-                },
                 battlesHistory: [...battles]
             }
         }
@@ -62,9 +59,6 @@ const battles = (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: false,
-                status: {
-                    ...action.status
-                }
             }
         }
 

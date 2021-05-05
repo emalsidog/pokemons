@@ -4,6 +4,9 @@ import axios from "axios";
 // Constatns
 import * as types from "../constants/users-constants";
 
+// Actions
+import { addNotification } from "../actions/notification-actions";
+
 // Utils
 import { AxiosGetRequest } from "../utils/server-request";
 import { isUnauthorized } from "../utils/is-unauthorized";
@@ -18,7 +21,6 @@ export const getUsers = (page = 1) => {
 		});
 
 		try {
-            
 			const { data } = await AxiosGetRequest(`/users?page=${page}`);
 			const { users, totalCount, limit } = data.body;
 
@@ -46,25 +48,22 @@ export const getUsers = (page = 1) => {
 					};
 				})
 			);
-            
+
 			dispatch({
 				type: types.GET_USERS_SUCCESS,
 				response: {
 					status: data.status,
 					users: parsedUsers,
-                    totalCount: totalCount,
-                    limit
+					totalCount: totalCount,
+					limit,
 				},
 			});
-
 		} catch (error) {
-			if (isUnauthorized(error.reponse.status)) {
+			if (isUnauthorized(error.response.status)) {
 			}
 
-			dispatch({
-				type: types.GET_USERS_FAILURE,
-				status: error.response.data.status,
-			});
+			dispatch({ type: types.GET_USERS_FAILURE });
+			dispatch(addNotification(error.response.data.status));
 		}
 	};
 };

@@ -1,10 +1,11 @@
 .notification-item {
 	margin-bottom: 10px;
-
 	box-sizing: border-box;
-	color: #424242;
-	cursor: default;
+
 	min-height: 60px;
+	
+	font-size: 1.1rem;
+	cursor: default;
 
 	animation: SlideLeft 0.4s forwards;
 }
@@ -26,10 +27,12 @@
 
 .notification-item.notification-error {
 	background-color: #ffa7a7;
+	color: #a12929;
 }
 
 .notification-item.notification-success {
 	background-color: #bdfdbb;
+	color: #279736;
 }
 
 .notification-item.notification-error .notification-bar {

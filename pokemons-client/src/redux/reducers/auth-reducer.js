@@ -4,10 +4,10 @@ import * as types from "../constants/auth-constants";
 const initialState = {
 	isAuthenticated: false,
 	isLoading: false,
-	
+
 	status: {
+		isError: null,
 		message: "",
-		isError: false,
 	},
 };
 
@@ -24,18 +24,12 @@ const auth = (state = initialState, action) => {
 			return {
 				...state,
 				isLoading: false,
-				status: {
-					...action.status,
-				},
 			};
 		}
 		case types.REGISTER_FAILURE: {
 			return {
 				...state,
 				isLoading: false,
-				status: {
-					...action.status,
-				},
 			};
 		}
 
@@ -51,7 +45,7 @@ const auth = (state = initialState, action) => {
 				...state,
 				isLoading: false,
 				status: {
-					...action.status,
+					...action.activationStatus,
 				},
 			};
 		}
@@ -60,7 +54,7 @@ const auth = (state = initialState, action) => {
 				...state,
 				isLoading: false,
 				status: {
-					...action.status,
+					...action.activationStatus,
 				},
 			};
 		}
@@ -77,18 +71,12 @@ const auth = (state = initialState, action) => {
 				...state,
 				isAuthenticated: true,
 				isLoading: false,
-				status: {
-					...action.status,
-				},
 			};
 		}
 		case types.LOGIN_FAILURE: {
 			return {
 				...state,
 				isLoading: false,
-				status: {
-					...action.status,
-				},
 			};
 		}
 
@@ -103,18 +91,12 @@ const auth = (state = initialState, action) => {
 			return {
 				...state,
 				isLoading: false,
-				status: {
-					...action.status,
-				},
 			};
 		}
 		case types.FORGOT_PASSWORD_FAILURE: {
 			return {
 				...state,
 				isLoading: false,
-				status: {
-					...action.status,
-				},
 			};
 		}
 
@@ -130,7 +112,7 @@ const auth = (state = initialState, action) => {
 				...state,
 				isLoading: false,
 				status: {
-					...action.status,
+					...action.resetStatus,
 				},
 			};
 		}
@@ -139,7 +121,7 @@ const auth = (state = initialState, action) => {
 				...state,
 				isLoading: false,
 				status: {
-					...action.status,
+					...action.resetStatus,
 				},
 			};
 		}

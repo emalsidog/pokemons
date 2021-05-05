@@ -1,6 +1,9 @@
 // Constants
 import * as types from "../constants/team-pokemons-constants";
 
+// Actions
+import { addNotification } from "../actions/notification-actions";
+
 // Utils
 import { AxiosPostRequest } from "../utils/server-request";
 import { isUnauthorized } from "../utils/is-unauthorized";
@@ -12,19 +15,18 @@ export const addToTeam = (pokemonId) => {
 			const { data } = await AxiosPostRequest("/pokemons/team/add", {
 				pokemonId,
 			});
-			dispatch({
-				type: types.ADD_TO_TEAM_SUCCESS,
-				response: data,
-			});
+
+			const { body, status } = data;
+
+			dispatch({ type: types.ADD_TO_TEAM_SUCCESS, body });
+			dispatch(addNotification(status));
 		} catch (error) {
 			if (isUnauthorized(error.response.status)) {
 				// ...
 			}
 
-			dispatch({
-				type: types.ADD_TO_TEAM_FAILURE,
-				status: error.response.data.status,
-			});
+			dispatch({ type: types.ADD_TO_TEAM_FAILURE });
+			dispatch(addNotification(error.response.data.status));
 		}
 	};
 };
@@ -36,19 +38,21 @@ export const removeFromTeam = (pokemonId) => {
 			const { data } = await AxiosPostRequest("/pokemons/team/remove", {
 				pokemonId,
 			});
+
+			const { body, status } = data;
+
 			dispatch({
 				type: types.REMOVE_FROM_TEAM_SUCCESS,
-				response: data,
+				body,
 			});
+			dispatch(addNotification(status));
 		} catch (error) {
 			if (isUnauthorized(error.response.status)) {
 				// ...
 			}
 
-			dispatch({
-				type: types.REMOVE_FROM_TEAM_FAILURE,
-				status: error.response.data.status,
-			});
+			dispatch({ type: types.REMOVE_FROM_TEAM_FAILURE });
+			dispatch(addNotification(error.response.data.status));
 		}
 	};
 };

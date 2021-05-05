@@ -17,15 +17,12 @@ const users = (state = initialState, action) => {
 			};
 		}
 		case types.GET_USERS_SUCCESS: {
-			const { status, users, totalCount, limit } = action.response;
+			const { users, totalCount, limit } = action.response;
 			return {
 				...state,
 				isLoading: false,
                 totalCount,
                 limit,
-				status: {
-					...status,
-				},
 				users: [...users],
 			};
 		}
@@ -33,9 +30,6 @@ const users = (state = initialState, action) => {
 			return {
 				...state,
 				isLoading: false,
-				status: {
-					...action.status,
-				},
 			};
 		}
 

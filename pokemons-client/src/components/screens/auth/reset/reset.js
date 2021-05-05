@@ -22,10 +22,10 @@ const Reset = ({ history }) => {
     const { resetToken } = useParams();
 	
 	useEffect(() => {
-		if(!status.isError && status.message !== "") {
-			history.push("/users/login");
+		if(!status.isError && status.isError !== null) {
+			return history.push("/users/login");
 		}
-	}, [history, status.message]);
+	}, [history, status.isError]);
 
 	// Form configuration
 	const { watch, register, formState: { errors }, handleSubmit } = useForm();

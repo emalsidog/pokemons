@@ -1,5 +1,6 @@
 // Dependencies
 import React, { useState, useEffect } from "react";
+import ReactDOM from "react-dom";
 import { useDispatch } from "react-redux";
 
 // Actions
@@ -24,7 +25,7 @@ const Notify = (props) => {
 					return prev + 0.5;
 				}
 
-				clearInterval(id)
+				clearInterval(id);
 				return prev;
 			});
 		}, 20);
@@ -39,9 +40,9 @@ const Notify = (props) => {
 		handlePauseTimer();
 		setExit(true);
 		setTimeout(() => {
-			dispatch(removeNotification(id))
+			dispatch(removeNotification(id));
 		}, 400);
-	}
+	};
 
 	useEffect(() => {
 		handleStartTimer();
@@ -51,7 +52,7 @@ const Notify = (props) => {
 		if (width === 100) {
 			handleCloseNotification();
 		}
-	}, [width])
+	}, [width]);
 
 	return (
 		<div

@@ -3,4 +3,6 @@
 	right: 0;
 	bottom: 50px;
 	width: 300px;
+
+	z-index: 1;
 }
