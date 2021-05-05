@@ -22,18 +22,13 @@ import {
 // Antd components
 import { Input, Button, Modal } from "antd";
 
-// Components
-import ServerResponseNotify from "../../../common/server-response-notify";
-
 const Login = ({ history }) => {
 	// States
-	const [showNotify, setShowNotify] = useState(false);
 	const [isModalVisible, setIsModalVisible] = useState(false);
 
 	// Redux
 	const dispatch = useDispatch();
 	const isLoading = useSelector(getIsLoading);
-	const status = useSelector(getAuthStatus);
 
 	// Redirect if token exists
 	useEffect(() => {
@@ -41,13 +36,6 @@ const Login = ({ history }) => {
 			return history.push("/");
 		}
 	});
-
-	// Show server notify
-	useEffect(() => {
-		if (status.isError && status.message !== "") {
-			setShowNotify(true);
-		}
-	}, [status]);
 
 	// Forgot form configuration
 	const {
@@ -59,7 +47,6 @@ const Login = ({ history }) => {
 	const handleForgotSubmit = (data) => {
 		dispatch(forgotAction(data));
 		setIsModalVisible(false);
-		setShowNotify(true);
 	};
 
 	// Login form configuration
@@ -80,11 +67,6 @@ const Login = ({ history }) => {
 
 	const handleModalCancel = () => {
 		setIsModalVisible(false);
-	};
-
-	// Server notify configuration
-	const onAnimationEnd = () => {
-		setShowNotify(false);
 	};
 
 	return (
@@ -215,12 +197,6 @@ const Login = ({ history }) => {
 					</div>
 				</form>
 			</Modal>
-
-			<ServerResponseNotify
-				status={status}
-				show={showNotify}
-				handleAnimationEnd={onAnimationEnd}
-			/>
 		</>
 	);
 };

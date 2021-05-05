@@ -16,12 +16,7 @@ import { getAuthStatus, getIsLoading } from "../../../../redux/selectors/auth-se
 // Antd components
 import { Input, Button } from "antd";
 
-// Components
-import ServerResponseNotify from "../../../common/server-response-notify";
-
 const Register = ({ history }) => {
-	const [showNotify, setShowNotify] = useState(false);
-
 	// Redux
 	const isLoading = useSelector(getIsLoading);
 	const status = useSelector(getAuthStatus);
@@ -47,17 +42,6 @@ const Register = ({ history }) => {
 
 	const onSubmit = (data) => {
 		dispatch(registerAction(data));
-	};
-	
-	// Server notify configuration
-	
-	useEffect(() => {
-		if(status.message !== "")
-			setShowNotify(true);
-	}, [status]);
-
-	const onAnimationEnd = () => {
-		setShowNotify(false);
 	};
 
 	return (
@@ -224,11 +208,6 @@ const Register = ({ history }) => {
 					<Link to="/users/login">Already have an account?</Link>
 				</div>
 			</div>
-			<ServerResponseNotify
-				status={status}
-				show={showNotify}
-				handleAnimationEnd={onAnimationEnd}
-			/>
 		</>
 	);
 };

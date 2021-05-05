@@ -20,20 +20,15 @@ import "./pokemons.css";
 // Components
 import Layout from "../../layout";
 import Card from "../../common/card";
-import ServerResponseNotify from "../../common/server-response-notify";
 import Heading from "../../common/heading";
 
 const Pokemons = () => {
-
-	const [showNotify, setShowNotify] = useState(false);
-
 	// Pagination config
 	const [limit] = useState(12);
 	const [page, setPage] = useState(1);
 
 	// Redux
 	const dispatch = useDispatch();
-	const status = useSelector(selectStatus);
 	const user = useSelector(selectUser);
 	const { pokemons, totalCount } = useSelector((state) => state.pokemons);
 
@@ -42,20 +37,9 @@ const Pokemons = () => {
 		dispatch(getPokemonsAction({ offset: (page - 1) * limit, limit }));
 	}, [dispatch, limit, page]);
 
-	useEffect(() => {
-		if (status.message !== "") {
-			setShowNotify(true);
-		}
-	}, [status]);
-
-	const onAnimationEnd = () => {
-		setShowNotify(false);
-	};
-
 	const handlePageChange = (page) => {
 		setPage(page);
 	};
-
 
     // Render array of cards
 	const main = pokemons.map((pokemon) => {
@@ -101,12 +85,6 @@ const Pokemons = () => {
 				activeClass="activeClass"
 				itemClass="itemClass"
 				linkClass="linkClass"
-			/>
-			
-			<ServerResponseNotify
-				show={showNotify}
-				status={{ isError: status.isError, message: status.message }}
-				handleAnimationEnd={onAnimationEnd}
 			/>
 		</Layout>
 	);

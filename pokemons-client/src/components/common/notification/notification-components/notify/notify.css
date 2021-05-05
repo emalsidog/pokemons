@@ -1,0 +1,65 @@
+.notification-item {
+	margin-bottom: 10px;
+
+	box-sizing: border-box;
+	color: #424242;
+	cursor: default;
+	min-height: 60px;
+
+	animation: SlideLeft 0.4s forwards;
+}
+
+.notification-item.exit {
+	animation: SlideRight 0.3s forwards;
+}
+
+.notification-item p {
+	padding: 5px 10px;
+	margin: 0;
+}
+
+.notification-item .notification-bar {
+	height: 5px;
+	position: absolute;
+	bottom: 0;
+}
+
+.notification-item.notification-error {
+	background-color: #ffa7a7;
+}
+
+.notification-item.notification-success {
+	background-color: #bdfdbb;
+}
+
+.notification-item.notification-error .notification-bar {
+	background-color: #fd4646;
+}
+
+.notification-item.notification-success .notification-bar {
+	background-color: #4cfd46;
+}
+
+@keyframes SlideLeft {
+	0% {
+		transform: translateX(100%);
+	}
+	30% {
+		transform: translateX(-10%);
+	}
+	50% {
+		transform: translateX(-5%);
+	}
+	100% {
+		transform: translateX(-7%);
+	}
+}
+
+@keyframes SlideRight {
+	0% {
+		transform: translateX(-7%);
+	}
+	100% {
+		transform: translateX(100%);
+	}
+}

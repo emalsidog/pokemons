@@ -8,10 +8,6 @@ const initialState = {
 	fetchingUser: true,
 
 	isLoading: false,
-	status: {
-		isError: false,
-		message: "",
-	},
 };
 
 const user = (state = initialState, action) => {
@@ -36,19 +32,16 @@ const user = (state = initialState, action) => {
 			return {
 				...state,
 				fetchingUser: true,
-				status: {
-					...state.status,
-				},
 			};
 		}
 		case updateTypes.GET_CURRENT_USER_SUCCESS: {
-			const { response } = action;
+			const { body } = action;
 			return {
 				...state,
 				fetchingUser: false,
 				isLoading: false,
 				user: {
-					...response.body.user,
+					...body.user,
 				},
 			};
 		}
@@ -68,7 +61,7 @@ const user = (state = initialState, action) => {
 			};
 		}
 		case updateTypes.UPDATE_NAME_SUCCESS: {
-			const { body, status } = action.response;
+			const { body } = action;
 			return {
 				...state,
 				isLoading: false,
@@ -77,15 +70,12 @@ const user = (state = initialState, action) => {
 					givenName: body.user.givenName,
 					familyName: body.user.familyName,
 				},
-				status: { ...status },
 			};
 		}
 		case updateTypes.UPDATE_NAME_FAILURE: {
-			const { status } = action;
 			return {
 				...state,
 				isLoading: false,
-				status: { ...status },
 			};
 		}
 
@@ -97,7 +87,7 @@ const user = (state = initialState, action) => {
 			};
 		}
 		case updateTypes.UPDATE_EMAIL_SUCCESS: {
-			const { body, status } = action.response;
+			const { body } = action;
 			return {
 				...state,
 				isLoading: false,
@@ -105,15 +95,12 @@ const user = (state = initialState, action) => {
 					...state.user,
 					email: body.user.email,
 				},
-				status: { ...status },
 			};
 		}
 		case updateTypes.UPDATE_EMAIL_FAILURE: {
-			const { status } = action;
 			return {
 				...state,
 				isLoading: false,
-				status: { ...status },
 			};
 		}
 
@@ -125,7 +112,7 @@ const user = (state = initialState, action) => {
 			};
 		}
 		case updateTypes.UPDATE_USERNAME_SUCCESS: {
-			const { body, status } = action.response;
+			const { body } = action;
 			return {
 				...state,
 				isLoading: false,
@@ -133,15 +120,12 @@ const user = (state = initialState, action) => {
 					...state.user,
 					username: body.user.username,
 				},
-				status: { ...status },
 			};
 		}
 		case updateTypes.UPDATE_USERNAME_FAILURE: {
-			const { status } = action;
 			return {
 				...state,
 				isLoading: false,
-				status: { ...status },
 			};
 		}
 
@@ -153,7 +137,7 @@ const user = (state = initialState, action) => {
 			};
 		}
 		case updateTypes.UPDATE_PHONE_SUCCESS: {
-			const { body, status } = action.response;
+			const { body } = action;
 			return {
 				...state,
 				isLoading: false,
@@ -161,15 +145,12 @@ const user = (state = initialState, action) => {
 					...state.user,
 					phone: body.user.phone,
 				},
-				status: { ...status },
 			};
 		}
 		case updateTypes.UPDATE_PHONE_FAILURE: {
-			const { status } = action;
 			return {
 				...state,
 				isLoading: false,
-				status: { ...status },
 			};
 		}
 
@@ -177,31 +158,25 @@ const user = (state = initialState, action) => {
 		case updateTypes.UPDATE_WAR_PARTICIPANT_REQUEST: {
 			return {
 				...state,
-				isLoading: true
-			}	
+				isLoading: true,
+			};
 		}
 		case updateTypes.UPDATE_WAR_PARTICIPANT_SUCCESS: {
-			const { status, body } = action.response;
+			const { body } = action;
 			return {
 				...state,
 				isLoading: false,
-				status: {
-					...status
-				},
 				user: {
 					...state.user,
-					warParticipant: body.warParticipant
-				}
-			}
+					warParticipant: body.warParticipant,
+				},
+			};
 		}
 		case updateTypes.UPDATE_WAR_PARTICIPANT_FAILURE: {
 			return {
 				...state,
 				isLoading: false,
-				status: {
-					...action.status
-				}
-			}
+			};
 		}
 
 		// Add to favourite
@@ -212,7 +187,7 @@ const user = (state = initialState, action) => {
 			};
 		}
 		case favouritePokemonsTypes.ADD_TO_FAVOURITE_SUCCESS: {
-			const { status, body } = action.response;
+			const { body } = action;
 			const newFavouritePokemons = body.favouritePokemons
 				? [...body.favouritePokemons]
 				: [...state.user.favouritePokemons];
@@ -220,9 +195,6 @@ const user = (state = initialState, action) => {
 			return {
 				...state,
 				isLoading: false,
-				status: {
-					...status,
-				},
 				user: {
 					...state.user,
 					favouritePokemons: newFavouritePokemons,
@@ -233,9 +205,6 @@ const user = (state = initialState, action) => {
 			return {
 				...state,
 				isLoading: false,
-				status: {
-					...action.status,
-				},
 			};
 		}
 
@@ -247,13 +216,10 @@ const user = (state = initialState, action) => {
 			};
 		}
 		case favouritePokemonsTypes.REMOVE_FROM_FAVOURITE_SUCCESS: {
-			const { status, body } = action.response;
+			const { body } = action;
 			return {
 				...state,
 				isLoading: false,
-				status: {
-					...status,
-				},
 				user: {
 					...state.user,
 					favouritePokemons: [...body.favouritePokemons],
@@ -275,17 +241,14 @@ const user = (state = initialState, action) => {
 			};
 		}
 		case teamPokemonsTypes.ADD_TO_TEAM_SUCCESS: {
-			const { status, body } = action.response;
+			const { body } = action;
 			return {
 				...state,
 				isLoading: false,
-				status: {
-					...status,
-				},
 				user: {
 					...state.user,
 					teamPokemons: [...body.teamPokemons],
-					warParticipant: body.warParticipant
+					warParticipant: body.warParticipant,
 				},
 			};
 		}
@@ -293,9 +256,6 @@ const user = (state = initialState, action) => {
 			return {
 				...state,
 				isLoading: false,
-				status: {
-					...action.status,
-				},
 			};
 		}
 
@@ -307,17 +267,14 @@ const user = (state = initialState, action) => {
 			};
 		}
 		case teamPokemonsTypes.REMOVE_FROM_TEAM_SUCCESS: {
-			const { status, body } = action.response;
+			const { body } = action;
 			return {
 				...state,
 				isLoading: false,
-				status: {
-					...status,
-				},
 				user: {
 					...state.user,
 					teamPokemons: [...body.teamPokemons],
-					warParticipant: body.warParticipant
+					warParticipant: body.warParticipant,
 				},
 			};
 		}
@@ -325,9 +282,6 @@ const user = (state = initialState, action) => {
 			return {
 				...state,
 				isLoading: false,
-				status: {
-					...action.status,
-				},
 			};
 		}
 

@@ -15,15 +15,12 @@ import {
 
 // Components
 import Layout from "../../layout";
-import ServerResponseNotify from "../../common/server-response-notify";
 import Heading from "../../common/heading";
 
 // Styles
 import "./settings.css";
 
 const Settings = () => {
-	const [showNotify, setShowNotify] = useState(false);
-
 	const [showChangeEmailForm, setShowChangeEmailForm] = useState(false);
 	const [showChangeUsernameForm, setShowChangeUsernameForm] = useState(false);
 	const [showChangePhoneForm, setShowChangePhoneForm] = useState(false);
@@ -32,7 +29,6 @@ const Settings = () => {
 	// Redux
 	const dispatch = useDispatch();
 	const user = useSelector(selectUser);
-	const status = useSelector(selectStatus);
 	const isLoading = useSelector(selectIsLoading);
 
 	const {
@@ -98,17 +94,6 @@ const Settings = () => {
 	const handleWarParticipantChange = () => {
 		dispatch(updateActions.updateWarParticipant());
 	}
-
-	// Notification
-	useEffect(() => {
-		if (status.message !== "") {
-			setShowNotify(true);
-		}
-	}, [status]);
-
-	const onAnimationEnd = () => {
-		setShowNotify(false);
-	};
 
 	return (
 		<Layout>
@@ -374,12 +359,6 @@ const Settings = () => {
 					/>
 				</div>
 			</div>
-
-			<ServerResponseNotify
-				show={showNotify}
-				status={{ isError: status.isError, message: status.message }}
-				handleAnimationEnd={onAnimationEnd}
-			/>
 		</Layout>
 	);
 };

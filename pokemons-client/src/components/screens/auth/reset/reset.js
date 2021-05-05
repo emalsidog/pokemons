@@ -13,9 +13,6 @@ import "../index.css";
 // Antd components
 import { Input, Button } from "antd";
 
-// Components
-import ServerResponseNotify from "../../../common/server-response-notify";
-
 const Reset = ({ history }) => {
 	// Redux
 	const { isLoading, status } = useSelector(({ auth }) => auth);
@@ -28,11 +25,7 @@ const Reset = ({ history }) => {
 		if(!status.isError && status.message !== "") {
 			history.push("/users/login");
 		}
-
-		if(status.isError) {
-			setShowNotify(true);
-		}
-	}, [status.isError, history, status.message]);
+	}, [history, status.message]);
 
 	// Form configuration
 	const { watch, register, formState: { errors }, handleSubmit } = useForm();
@@ -44,13 +37,6 @@ const Reset = ({ history }) => {
 		data.resetToken = resetToken;
         dispatch(resetAction(data));
     }
-	
-	// Server notify configuration
-	const [showNotify, setShowNotify] = useState(false);
-	
-	const handleAnimationEnd = () => {
-		setShowNotify(false);
-	};
 
 	return (
 		<>
@@ -102,11 +88,6 @@ const Reset = ({ history }) => {
 					</Button>
 				</form>
 			</div>
-			<ServerResponseNotify
-				handleAnimationEnd={handleAnimationEnd}
-				show={showNotify}
-				status={status}
-			/>
 		</>
 	);
 };

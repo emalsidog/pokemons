@@ -1,6 +1,9 @@
 // Constants
 import * as userTypes from "../constants/user-update-constants";
 
+// Actions
+import { addNotification } from "../actions/notification-actions";
+
 // Utils
 import { AxiosPostRequest, AxiosGetRequest } from "../utils/server-request";
 import { isUnauthorized } from "../utils/is-unauthorized";
@@ -16,9 +19,11 @@ export const getCurrentUserAction = () => {
 		dispatch({ type: userTypes.GET_CURRENT_USER_REQUEST });
 		try {
 			const { data } = await AxiosGetRequest("/users/current-user");
+			const { body } = data;
+
 			dispatch({
 				type: userTypes.GET_CURRENT_USER_SUCCESS,
-				response: data,
+				body,
 			});
 		} catch (error) {
 			if (isUnauthorized(error.response.status)) {
@@ -27,8 +32,8 @@ export const getCurrentUserAction = () => {
 
 			dispatch({
 				type: userTypes.GET_CURRENT_USER_FAILURE,
-				status: error.response.data.status,
 			});
+			dispatch(addNotification(error.response.status));
 		}
 	};
 };
@@ -42,16 +47,17 @@ export const updateName = (newUserName) => {
 				"/update/name",
 				newUserName
 			);
-			dispatch({ type: userTypes.UPDATE_NAME_SUCCESS, response: data });
+			const { status, body } = data;
+
+			dispatch({ type: userTypes.UPDATE_NAME_SUCCESS, body });
+			dispatch(addNotification(status));
 		} catch (error) {
 			if (isUnauthorized(error.response.status)) {
 				// Dispatch here redirect action
 			}
 
-			dispatch({
-				type: userTypes.UPDATE_NAME_FAILURE,
-				status: error.response.data.status,
-			});
+			dispatch({ type: userTypes.UPDATE_NAME_FAILURE });
+			dispatch(addNotification(error.response.status));
 		}
 	};
 };
@@ -65,16 +71,17 @@ export const updateEmail = (newUserEmail) => {
 				"/update/email",
 				newUserEmail
 			);
-			dispatch({ type: userTypes.UPDATE_EMAIL_SUCCESS, response: data });
+			const { status, body } = data;
+
+			dispatch({ type: userTypes.UPDATE_EMAIL_SUCCESS, body });
+			dispatch(addNotification(status));
 		} catch (error) {
 			if (isUnauthorized(error.response.status)) {
 				// ...
 			}
 
-			dispatch({
-				type: userTypes.UPDATE_EMAIL_FAILURE,
-				status: error.response.data.status,
-			});
+			dispatch({ type: userTypes.UPDATE_EMAIL_FAILURE });
+			dispatch(addNotification(error.response.status));
 		}
 	};
 };
@@ -88,19 +95,18 @@ export const updateUsername = (newUserUsername) => {
 				"/update/username",
 				newUserUsername
 			);
-			dispatch({
-				type: userTypes.UPDATE_USERNAME_SUCCESS,
-				response: data,
-			});
+
+			const { status, body } = data;
+
+			dispatch({ type: userTypes.UPDATE_USERNAME_SUCCESS, body });
+			dispatch(addNotification(status));
 		} catch (error) {
 			if (isUnauthorized(error.response.status)) {
 				// ...
 			}
 
-			dispatch({
-				type: userTypes.UPDATE_USERNAME_FAILURE,
-				status: error.response.data.status,
-			});
+			dispatch({ type: userTypes.UPDATE_USERNAME_FAILURE });
+			dispatch(addNotification(error.response.status));
 		}
 	};
 };
@@ -114,16 +120,18 @@ export const updatePhone = (newUserPhone) => {
 				"/update/phone",
 				newUserPhone
 			);
-			dispatch({ type: userTypes.UPDATE_PHONE_SUCCESS, response: data });
+
+			const { status, body } = data;
+
+			dispatch({ type: userTypes.UPDATE_PHONE_SUCCESS, body });
+			dispatch(addNotification(status));
 		} catch (error) {
 			if (isUnauthorized(error.response.status)) {
 				// ...
 			}
 
-			dispatch({
-				type: userTypes.UPDATE_PHONE_FAILURE,
-				status: error.response.data.status,
-			});
+			dispatch({ type: userTypes.UPDATE_PHONE_FAILURE });
+			dispatch(addNotification(error.response.status));
 		}
 	};
 };
@@ -133,19 +141,21 @@ export const updateWarParticipant = () => {
 		dispatch({ type: userTypes.UPDATE_WAR_PARTICIPANT_REQUEST });
 		try {
 			const { data } = await AxiosGetRequest("/update/war-participant");
+
+			const { status, body } = data;
+
 			dispatch({
 				type: userTypes.UPDATE_WAR_PARTICIPANT_SUCCESS,
-				response: data,
+				body,
 			});
+			dispatch(addNotification(status));
 		} catch (error) {
 			if (isUnauthorized(error.response.status)) {
 				// ...
 			}
 
-			dispatch({
-				type: userTypes.UPDATE_WAR_PARTICIPANT_FAILURE,
-				status: error.response.data.status,
-			});
+			dispatch({ type: userTypes.UPDATE_WAR_PARTICIPANT_FAILURE });
+			dispatch(addNotification(error.response.status));
 		}
 	};
 };

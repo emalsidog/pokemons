@@ -24,6 +24,7 @@ import Users from "../screens/users";
 import BattlesHistory from "../screens/battles-history";
 
 import Spinner from "../common/spinner";
+import Notification from "../common/notification";
 
 const App = () => {
 	// Redux
@@ -43,20 +44,23 @@ const App = () => {
 	}
 
 	return (
-		<Switch>
-			<Route exact path="/users/login" component={Login} />
-			<Route exact path="/users/register" component={Register} />
-			<Route exact path="/users/activate/:activationToken" component={Activate} />
-			<Route exact path="/users/reset/:resetToken" component={Reset} />
+		<div>
+			<Notification />
+			<Switch>
+				<Route exact path="/users/login" component={Login} />
+				<Route exact path="/users/register" component={Register} />
+				<Route exact path="/users/activate/:activationToken" component={Activate} />
+				<Route exact path="/users/reset/:resetToken" component={Reset} />
 
-			<ProtectedRoute exact path="/" component={Home} />
-			<ProtectedRoute exact path="/settings" component={Settings} />
-			<ProtectedRoute exact path="/team" component={MyTeam} />
-			<ProtectedRoute exact path="/users" component={Users} />
-			<ProtectedRoute exact path="/favourites" component={Favourites} />
-			<ProtectedRoute exact path="/pokemons" component={Pokemons} />
-			<ProtectedRoute exact path="/battles" component={BattlesHistory} />
-		</Switch>
+				<ProtectedRoute exact path="/" component={Home} />
+				<ProtectedRoute exact path="/settings" component={Settings} />
+				<ProtectedRoute exact path="/team" component={MyTeam} />
+				<ProtectedRoute exact path="/users" component={Users} />
+				<ProtectedRoute exact path="/favourites" component={Favourites} />
+				<ProtectedRoute exact path="/pokemons" component={Pokemons} />
+				<ProtectedRoute exact path="/battles" component={BattlesHistory} />
+			</Switch>
+		</div>
 	);
 };
 
