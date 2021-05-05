@@ -21,9 +21,7 @@ export const addToFavourite = (pokemonId) => {
 			dispatch({ type: types.ADD_TO_FAVOURITE_SUCCESS, body });
 			dispatch(addNotification(status));
 		} catch (error) {
-			if (isUnauthorized(error.response.status)) {
-				// ...
-			}
+			isUnauthorized(error.response.status);
 
 			dispatch({ type: types.ADD_TO_FAVOURITE_FAILURE });
 			dispatch(addNotification(error.response.data.status));
@@ -47,9 +45,7 @@ export const removeFromFavourite = (pokemonId) => {
 			dispatch({ type: types.REMOVE_FROM_FAVOURITE_SUCCESS, body });
 			dispatch(addNotification(status));
 		} catch (error) {
-			if (isUnauthorized(error.response.status)) {
-				// ...
-			}
+			isUnauthorized(error.response.status);
 
 			dispatch({ type: types.REMOVE_FROM_FAVOURITE_FAILURE });
 			dispatch(addNotification(error.response.data.status));

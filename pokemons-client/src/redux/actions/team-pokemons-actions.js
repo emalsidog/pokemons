@@ -21,9 +21,7 @@ export const addToTeam = (pokemonId) => {
 			dispatch({ type: types.ADD_TO_TEAM_SUCCESS, body });
 			dispatch(addNotification(status));
 		} catch (error) {
-			if (isUnauthorized(error.response.status)) {
-				// ...
-			}
+			isUnauthorized(error.response.status);
 
 			dispatch({ type: types.ADD_TO_TEAM_FAILURE });
 			dispatch(addNotification(error.response.data.status));
@@ -47,9 +45,7 @@ export const removeFromTeam = (pokemonId) => {
 			});
 			dispatch(addNotification(status));
 		} catch (error) {
-			if (isUnauthorized(error.response.status)) {
-				// ...
-			}
+			isUnauthorized(error.response.status);
 
 			dispatch({ type: types.REMOVE_FROM_TEAM_FAILURE });
 			dispatch(addNotification(error.response.data.status));

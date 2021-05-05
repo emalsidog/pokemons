@@ -5,6 +5,7 @@ const { validationResult } = require("express-validator");
 // Utils
 const sendMail = require("../utils/sendMail");
 const ErrorResponse = require("../utils/error-response");
+const transformName = require("../utils/transform-name");
 
 // Models
 const User = require("../models/User");
@@ -84,9 +85,9 @@ exports.activate = async (req, res, next) => {
 			);
 		}
 		const newUser = new User({
-			givenName,
-			familyName,
-			email,
+			givenName: transformName(givenName),
+			familyName: transformName(familyName),
+			email: email.toLowerCase(),
 			username,
 			password,
 		});
@@ -115,7 +116,7 @@ exports.login = async (req, res, next) => {
 	const { email, password } = req.body;
 
 	try {
-		const user = await User.findOne({ email });
+		const user = await User.findOne({ email: email.toLowerCase() });
 		if (!user) {
 			return next(new ErrorResponse("Email does not exist.", 400));
 		}

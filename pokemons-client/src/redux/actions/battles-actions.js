@@ -23,8 +23,7 @@ export const battle = () => {
 				},
 			});
 		} catch (error) {
-			if (isUnauthorized(error.response.status)) {
-			}
+			isUnauthorized(error.response.status);
 
 			dispatch({ type: battleTypes.BATTLE_FAILURE });
 			dispatch(addNotification(error.response.data.status));
@@ -38,7 +37,7 @@ export const getBattlesHistory = () => {
 			dispatch({ type: battleTypes.GET_BATTLES_HISTORY_REQUEST });
 
 			const { data } = await AxiosGetRequest("/battles/battles");
-            const { body } = data;
+			const { body } = data;
 
 			dispatch({
 				type: battleTypes.GET_BATTLES_HISTORY_SUCCESS,
@@ -47,11 +46,10 @@ export const getBattlesHistory = () => {
 				},
 			});
 		} catch (error) {
-			if (isUnauthorized(error.response.status)) {
-			}
+			isUnauthorized(error.response.status);
 
 			dispatch({ type: battleTypes.GET_BATTLES_HISTORY_FAILURE });
-            dispatch(addNotification(error.response.data.status));
+			dispatch(addNotification(error.response.data.status));
 		}
 	};
 };

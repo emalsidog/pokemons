@@ -26,9 +26,7 @@ export const getCurrentUserAction = () => {
 				body,
 			});
 		} catch (error) {
-			if (isUnauthorized(error.response.status)) {
-				// Dispatch here redirect action
-			}
+			isUnauthorized(error.response.status);
 
 			dispatch({
 				type: userTypes.GET_CURRENT_USER_FAILURE,
@@ -52,9 +50,7 @@ export const updateName = (newUserName) => {
 			dispatch({ type: userTypes.UPDATE_NAME_SUCCESS, body });
 			dispatch(addNotification(status));
 		} catch (error) {
-			if (isUnauthorized(error.response.status)) {
-				// Dispatch here redirect action
-			}
+			isUnauthorized(error.response.status);
 
 			dispatch({ type: userTypes.UPDATE_NAME_FAILURE });
 			dispatch(addNotification(error.response.data.status));
@@ -76,9 +72,7 @@ export const updateEmail = (newUserEmail) => {
 			dispatch({ type: userTypes.UPDATE_EMAIL_SUCCESS, body });
 			dispatch(addNotification(status));
 		} catch (error) {
-			if (isUnauthorized(error.response.status)) {
-				// ...
-			}
+			isUnauthorized(error.response.status);
 
 			dispatch({ type: userTypes.UPDATE_EMAIL_FAILURE });
 			dispatch(addNotification(error.response.data.status));
@@ -101,9 +95,7 @@ export const updateUsername = (newUserUsername) => {
 			dispatch({ type: userTypes.UPDATE_USERNAME_SUCCESS, body });
 			dispatch(addNotification(status));
 		} catch (error) {
-			if (isUnauthorized(error.response.status)) {
-				// ...
-			}
+			isUnauthorized(error.response.status);
 
 			dispatch({ type: userTypes.UPDATE_USERNAME_FAILURE });
 			dispatch(addNotification(error.response.data.status));
@@ -126,9 +118,7 @@ export const updatePhone = (newUserPhone) => {
 			dispatch({ type: userTypes.UPDATE_PHONE_SUCCESS, body });
 			dispatch(addNotification(status));
 		} catch (error) {
-			if (isUnauthorized(error.response.status)) {
-				// ...
-			}
+			isUnauthorized(error.response.status);
 
 			dispatch({ type: userTypes.UPDATE_PHONE_FAILURE });
 			dispatch(addNotification(error.response.data.status));
@@ -150,9 +140,7 @@ export const updateWarParticipant = () => {
 			});
 			dispatch(addNotification(status));
 		} catch (error) {
-			if (isUnauthorized(error.response.status)) {
-				// ...
-			}
+			isUnauthorized(error.response.status);
 
 			dispatch({ type: userTypes.UPDATE_WAR_PARTICIPANT_FAILURE });
 			dispatch(addNotification(error.response.data.status));

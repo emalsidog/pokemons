@@ -59,8 +59,7 @@ export const getUsers = (page = 1) => {
 				},
 			});
 		} catch (error) {
-			if (isUnauthorized(error.response.status)) {
-			}
+			isUnauthorized(error.response.status);
 
 			dispatch({ type: types.GET_USERS_FAILURE });
 			dispatch(addNotification(error.response.data.status));

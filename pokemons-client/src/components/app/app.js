@@ -30,7 +30,7 @@ const App = () => {
 	// Redux
 	const dispatch = useDispatch();
 	const { fetchingUser } = useSelector(state => state.user)
-
+	
 	useEffect(() => {
 		if (localStorage.getItem("accessToken")) {
 			dispatch(getCurrentUserAction());

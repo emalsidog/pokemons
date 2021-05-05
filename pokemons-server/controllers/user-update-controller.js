@@ -6,6 +6,7 @@ const User = require("../models/User");
 
 // Utils
 const ErrorResponse = require("../utils/error-response");
+const transformName = require("../utils/transform-name");
 
 // POST => update/name
 exports.updateName = async (req, res) => {
@@ -20,8 +21,8 @@ exports.updateName = async (req, res) => {
 		const user = await User.findByIdAndUpdate(
 			req.user._id,
 			{
-				givenName,
-				familyName,
+				givenName: transformName(givenName),
+				familyName: transformName(familyName),
 			},
 			{ new: true }
 		);
