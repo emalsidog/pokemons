@@ -7,25 +7,21 @@ import {
 	addToFavourite,
 	removeFromFavourite,
 } from "../../../redux/actions/favourite-pokemons-actions";
+
 import {
 	addToTeam,
 	removeFromTeam,
 } from "../../../redux/actions/team-pokemons-actions";
 
+// Utils
+import formatString from "../../utils/format-string";
+
 // Styles
 import "./card.css";
 
 const Card = (props) => {
-	const {
-		id,
-		name,
-		sprite,
-		types,
-		stats,
-		favouritePokemons,
-		teamPokemons,
-		cardType,
-	} = props;
+	const { id, name, sprite, types, stats, favouritePokemons, teamPokemons, cardType } = props;
+	let cardTotal = 0;
 
 	const dispatch = useDispatch();
 
@@ -44,14 +40,16 @@ const Card = (props) => {
 	const handleRemoveFromTeam = (id) => {
 		dispatch(removeFromTeam(id));
 	};
-	
-	const displayTypes = types.map((type, idx) => {		
-		let name = formatString(type.name);
+
+	const displayTypes = types.map((type, idx) => {
+		let name = formatString(type.type);
 
 		return <span key={idx}>{name}</span>;
 	});
 
 	const displayStats = stats.map(({ name, value }, idx) => {
+		cardTotal += value;
+
 		let displayName = name.replace(/-/, " ");
 		displayName = formatString(displayName);
 
@@ -68,7 +66,7 @@ const Card = (props) => {
 	switch (cardType) {
 		case "FAVOURITE": {
 			displayActionButtons = (
-				<>
+				<React.Fragment>
 					<button
 						onClick={() => handleAddToTeam(id)}
 						className="action-button add-team"
@@ -81,10 +79,11 @@ const Card = (props) => {
 					>
 						<i className="fas fa-heart-broken"></i>
 					</button>
-				</>
+				</React.Fragment>
 			);
 			break;
 		}
+
 		case "TEAM": {
 			displayActionButtons = (
 				<button
@@ -96,10 +95,13 @@ const Card = (props) => {
 			);
 			break;
 		}
+
 		case "BATTLE": {
 			displayActionButtons = null;
+			cardClassNames += "test";
 			break;
 		}
+
 		default: {
 			let isFavourite = false;
 			let isTeam = false;
@@ -115,17 +117,17 @@ const Card = (props) => {
 					isTeam = true;
 				}
 			}
-			
+
 			if (isTeam && isFavourite) {
 				cardClassNames += "team-favourite";
 			} else if (isFavourite) {
-				cardClassNames += "favourite"
+				cardClassNames += "favourite";
 			} else if (isTeam) {
 				cardClassNames += "team";
 			}
 
 			displayActionButtons = (
-				<>
+				<React.Fragment>
 					<button
 						onClick={() => handleAddToTeam(id)}
 						className="action-button add-team"
@@ -140,7 +142,7 @@ const Card = (props) => {
 					>
 						<i className="fas fa-heart"></i>
 					</button>
-				</>
+				</React.Fragment>
 			);
 		}
 	}
@@ -154,17 +156,21 @@ const Card = (props) => {
 
 			<div className="card-types">{displayTypes}</div>
 
-			<div className="card-stats">
-				<ul>{displayStats}</ul>
-			</div>
+			{cardType === "BATTLE" ? (
+				<div className="card-total">{cardTotal}</div>
+			) : (
+				<React.Fragment>
+					<div className="card-stats">
+						<ul>{displayStats}</ul>
+					</div>
 
-			<div className="actions-controller">{displayActionButtons}</div>
+					<div className="actions-controller">
+						{displayActionButtons}
+					</div>
+				</React.Fragment>
+			)}
 		</article>
 	);
-};
-
-const formatString = (string) => {
-	return string[0].toUpperCase() + string.slice(1);
 };
 
 export default Card;

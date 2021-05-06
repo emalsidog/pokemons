@@ -3,7 +3,7 @@ const Battle = require("../models/Battle");
 
 // Utils
 const createPlayer = require("../utils/battles-utils/create-player");
-const getParsedTeam = require("../utils/battles-utils/get-parsed-team");
+const getParsedTeam = require("../utils/get-parsed-team");
 const ErrorResponse = require("../utils/error-response");
 
 exports.getUserBattles = async (req, res, next) => {
@@ -77,11 +77,14 @@ exports.battle = async (req, res, next) => {
 		}
 
 		// Parse team
-		const [opponentTeam, opponentTeamTotal] = await getParsedTeam(
-			randomUser.teamPokemons
-		);
+		const [
+			opponentTeam,
+			opponentTeamTotal,
+		] = await getParsedTeam(randomUser.teamPokemons, { withTotal: true });
+
 		const [currentUserTeam, currentUserTeamTotal] = await getParsedTeam(
-			req.user.teamPokemons
+			req.user.teamPokemons,
+			{ withTotal: true }
 		);
 
 		// Create clear player objects (to compare and send to client)
@@ -118,8 +121,14 @@ exports.battle = async (req, res, next) => {
 			await battle.save();
 
 			res.status(200).json({
-				winner: currentUser,
-				loser: opponent,
+				status: {
+					isError: false,
+					message: `Battle ended. The winner is ${currentUser.username}`,
+				},
+				body: {
+					winner: currentUser,
+					loser: opponent,
+				},
 			});
 		} else if (currentUser.teamTotal < opponent.teamTotal) {
 			const battle = new Battle({
@@ -136,10 +145,16 @@ exports.battle = async (req, res, next) => {
 			await randomUser.save();
 			await req.user.save();
 			await battle.save();
-
+			
 			res.status(200).json({
-				winner: opponent,
-				loser: currentUser,
+				status: {
+					isError: false,
+					message: `Battle ended. The winner is ${opponent.username}`,
+				},
+				body: {
+					winner: opponent,
+					loser: currentUser,
+				},
 			});
 		} else if (currentUser.teamTotal === opponent.teamTotal) {
 			const battle = new Battle({
@@ -159,8 +174,14 @@ exports.battle = async (req, res, next) => {
 			await battle.save();
 
 			res.status(200).json({
-				winner: opponent,
-				loser: currentUser,
+				status: {
+					isError: false,
+					message: `Battle ended. Tie!`,
+				},
+				body: {
+					winner: opponent,
+					loser: currentUser,
+				},
 			});
 		}
 	} catch (error) {

@@ -2,10 +2,15 @@
 const got = require("got");
 
 // Utils
-const randomizeTeamTotal = require("./randomize-team-total");
+const randomizeTeamTotal = require("./battles-utils/randomize-team-total");
 
-const getParsedTeam = async (teamPokemons) => {
+const getParsedTeam = async (teamPokemons, options) => {
+	const { bodyHasUrl = false, withTotal = true } = options;
+
 	let promises = teamPokemons.map((pokemon) => {
+		if (bodyHasUrl) {
+			return got(pokemon.url);
+		}
 		return got(`https://pokeapi.co/api/v2/pokemon/${pokemon.pokemonId}`);
 	});
 
@@ -26,9 +31,8 @@ const getParsedTeam = async (teamPokemons) => {
 
 		// Parse types
 		const types = parsedBody.types.map(({ type }) => ({
-			type: type.name
-		}))
-		
+			type: type.name,
+		}));
 
 		// Count team total
 		const result = stats.reduce((sum, current) => {
@@ -41,13 +45,16 @@ const getParsedTeam = async (teamPokemons) => {
 			name: parsedBody.name,
 			sprite: parsedBody.sprites.front_default,
 			stats,
-			types
+			types,
 		};
 	});
 
-	const randomizedTeamTotal = randomizeTeamTotal(teamTotal);
+	if (withTotal) {
+		const randomizedTeamTotal = randomizeTeamTotal(teamTotal);
+		return [parsedTeam, randomizedTeamTotal];
+	}
 
-	return [parsedTeam, randomizedTeamTotal];
+	return parsedTeam;
 };
 
 module.exports = getParsedTeam;

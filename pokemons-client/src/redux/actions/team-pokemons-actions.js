@@ -5,8 +5,29 @@ import * as types from "../constants/team-pokemons-constants";
 import { addNotification } from "../actions/notification-actions";
 
 // Utils
-import { AxiosPostRequest } from "../utils/server-request";
+import { AxiosPostRequest, AxiosGetRequest } from "../utils/server-request";
 import { isUnauthorized } from "../utils/is-unauthorized";
+
+// GET => Team pokemons
+export const getTeamPokemons = () => {
+	return async (dispatch) => {
+		dispatch({ type: types.GET_TEAM_POKEMONS_REQUEST });
+		try {
+			const { data } = await AxiosGetRequest("/pokemons/team");
+			const { body } = data;
+
+			dispatch({
+				type: types.GET_TEAM_POKEMONS_SUCCESS,
+				teamPokemons: body.teamPokemons,
+			});
+		} catch (error) {
+			isUnauthorized(error.response.status);
+
+			dispatch({ type: types.GET_TEAM_POKEMONS_FAILURE });
+			dispatch(addNotification(error.response.data.status));
+		}
+	};
+};
 
 export const addToTeam = (pokemonId) => {
 	return async (dispatch) => {

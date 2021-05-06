@@ -7,6 +7,24 @@
 	margin-bottom: 20px;
 }
 
+.card.test {
+    width: 19%;
+    margin: 0;
+}
+
+.card-total {
+    width: 75%;
+    margin: 15px auto;
+    padding-top: 10px;
+
+    font-family: "NCS Rogueland";
+	font-size: 1.1rem;
+	font-style: italic;
+    text-align: center;
+
+    border-top: 1px solid rgb(145, 145, 145);
+}
+
 .card.favourite {
     border: 1px solid rgb(255, 0, 0);
 }

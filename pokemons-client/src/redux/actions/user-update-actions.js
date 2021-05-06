@@ -132,7 +132,7 @@ export const updateWarParticipant = () => {
 			const { data } = await AxiosGetRequest("/update/war-participant");
 
 			const { status, body } = data;
-
+			
 			dispatch({
 				type: userTypes.UPDATE_WAR_PARTICIPANT_SUCCESS,
 				body,

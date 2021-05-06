@@ -1,5 +1,5 @@
 // Utils
-import { AxiosPostRequest } from "../utils/server-request";
+import { AxiosPostRequest, AxiosGetRequest } from "../utils/server-request";
 import { isUnauthorized } from "../utils/is-unauthorized";
 
 // Actions
@@ -7,6 +7,29 @@ import { addNotification } from "../actions/notification-actions";
 
 // Constants
 import * as types from "../constants/favourite-pokemons-constants";
+
+
+// GET => Favourite pokemons
+export const getFavouritePokemons = () => {
+	return async (dispatch) => {
+		dispatch({ type: types.GET_FAVOURITE_POKEMONS_REQUEST });
+		try {
+			const { data } = await AxiosGetRequest("/pokemons/favourite");
+			const { body } = data;
+
+			dispatch({
+				type: types.GET_FAVOURITE_POKEMONS_SUCCESS,
+				favouritePokemons: body.favouritePokemons,
+			});
+		} catch (error) {
+			isUnauthorized(error.response.status);
+
+			dispatch({ type: types.GET_FAVOURITE_POKEMONS_FAILURE });
+			dispatch(addNotification(error.response.data.status));
+		}
+	};
+};
+
 
 export const addToFavourite = (pokemonId) => {
 	return async (dispatch) => {
@@ -41,6 +64,7 @@ export const removeFromFavourite = (pokemonId) => {
 			);
 
 			const { body, status } = data;
+			console.log(body);
 
 			dispatch({ type: types.REMOVE_FROM_FAVOURITE_SUCCESS, body });
 			dispatch(addNotification(status));

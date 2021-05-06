@@ -137,7 +137,7 @@ const Settings = () => {
 								)}
 							</div>
 
-							<button className="btn" disabled={isLoading}>
+							<button className="btn btn-primary" disabled={isLoading}>
 								{isLoading ? "Loading..." : "Submit"}
 							</button>
 						</form>
@@ -145,7 +145,7 @@ const Settings = () => {
 				</div>
 
 				<div className="settings-row-action">
-					<button onClick={handleShowChangeEmailForm} className="btn">
+					<button onClick={handleShowChangeEmailForm} className="btn btn-primary">
 						{showChangeEmailForm ? "Cancel" : "Change"}
 					</button>
 				</div>
@@ -194,7 +194,7 @@ const Settings = () => {
 									</span>
 								)}
 							</div>
-							<button className="btn" disabled={isLoading}>
+							<button className="btn btn-primary" disabled={isLoading}>
 								{isLoading ? "Loading..." : "Submit"}
 							</button>
 						</form>
@@ -204,7 +204,7 @@ const Settings = () => {
 				<div className="settings-row-action">
 					<button
 						onClick={handleShowChangeUsernameForm}
-						className="btn"
+						className="btn btn-primary"
 					>
 						{showChangeUsernameForm ? "Cancel" : "Change"}
 					</button>
@@ -245,7 +245,7 @@ const Settings = () => {
 									</div>
 								)}
 							</div>
-							<button className="btn" disabled={isLoading}>
+							<button className="btn btn-primary" disabled={isLoading}>
 								{isLoading ? "Loading..." : "Submit"}
 							</button>
 						</form>
@@ -253,7 +253,7 @@ const Settings = () => {
 				</div>
 
 				<div className="settings-row-action">
-					<button className="btn" onClick={handleShowChangePhoneForm}>
+					<button className="btn btn-primary" onClick={handleShowChangePhoneForm}>
 						{showChangePhoneForm ? "Cancel" : "Change"}
 					</button>
 				</div>
@@ -333,7 +333,7 @@ const Settings = () => {
 									</div>
 								)}
 							</div>
-							<button className="btn" disabled={isLoading}>
+							<button className="btn btn-primary" disabled={isLoading}>
 								{isLoading ? "Loading..." : "Submit"}
 							</button>
 						</form>
@@ -341,7 +341,7 @@ const Settings = () => {
 				</div>
 
 				<div className="settings-row-action">
-					<button onClick={handleShowChangeNameForm} className="btn">
+					<button onClick={handleShowChangeNameForm} className="btn btn-primary">
 						{showChangeNameForm ? "Cancel" : "Change"}
 					</button>
 				</div>

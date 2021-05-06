@@ -1,0 +1,8 @@
+.team-total {
+	writing-mode: tb-rl;
+
+    font-family: "NCS Rogueland";
+	font-size: 1.1rem;
+
+	transform: rotate(360deg);
+}

@@ -62,6 +62,14 @@ const battles = (state = initialState, action) => {
             }
         }
 
+        // Clear battle result
+        case battleTypes.CLEAR_BATTLE_RESULT: {
+            return {
+                ...state,
+                battleResult: []
+            }
+        }
+
         default: {
             return {
                 ...state

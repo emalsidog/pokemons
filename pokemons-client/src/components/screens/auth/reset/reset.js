@@ -7,6 +7,9 @@ import { useParams } from "react-router-dom";
 // Actions
 import { resetAction } from "../../../../redux/actions/auth-actions";
 
+// Selectors
+import { selectIsLoading, selectAuthStatus } from "../../../../redux/selectors/auth-selectors";
+
 // Styles
 import "../index.css";
 
@@ -15,7 +18,8 @@ import { Input, Button } from "antd";
 
 const Reset = ({ history }) => {
 	// Redux
-	const { isLoading, status } = useSelector(({ auth }) => auth);
+	const isLoading = useSelector(selectIsLoading);
+	const status = useSelector(selectAuthStatus);
 	const dispatch = useDispatch();
 
 	// Getting token

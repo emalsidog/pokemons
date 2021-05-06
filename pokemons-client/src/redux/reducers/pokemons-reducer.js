@@ -1,74 +1,90 @@
 // Constants
-import * as types from "../constants/pokemons-constants";
+import * as pokemonsTypes from "../constants/pokemons-constants";
+import * as favouritePokemonsTypes from "../constants/favourite-pokemons-constants";
+import * as teamPokemonsTypes from "../constants/team-pokemons-constants";
 
 const initialState = {
-    pokemons: [],
-    favouritePokemons: [],
-    teamPokemons: [],
+	pokemons: [],
+	favouritePokemons: [],
+	teamPokemons: [],
 
-    totalCount: 0,
+	totalCount: 0,
 
-    isLoading: false
-}
+	isLoading: false,
+};
 
 const pokemons = (state = initialState, action) => {
-    switch (action.type) {
-        case types.GET_POKEMONS_SUCCESS: {
-            return {
-                ...state, 
-                pokemons: [...action.pokemonsData.pokemons],
-                totalCount: action.pokemonsData.totalCount
-            }
-        }
+	switch (action.type) {
+		case pokemonsTypes.GET_POKEMONS_REQUEST: {
+			return {
+				...state,
+				isLoading: true,
+			};
+		}
+		case pokemonsTypes.GET_POKEMONS_SUCCESS: {
+			const { pokemons, totalCount } = action.data;
+			return {
+				...state,
+				pokemons,
+				totalCount,
+				isLoading: false,
+			};
+		}
+		case pokemonsTypes.GET_POKEMONS_FAILURE: {
+			return {
+				...state,
+				isLaoding: false,
+			};
+		}
 
-        // GET FAVOURITE POKEMONS
-        case types.GET_FAVOURITE_POKEMONS_REQUEST: {
-            return {
-                ...state,
-                isLoading: true
-            }
-        }
-        case types.GET_FAVOURITE_POKEMONS_SUCCESS: {
-            return {
-                ...state,
-                isLoading: false,
-                favouritePokemons: [...action.favouritePokemons]
-            }
-        }
-        case types.GET_FAVOURITE_POKEMONS_FAILURE: {
-            return {
-                ...state,
-                isLoading: false,
-            }
-        }
+		// GET FAVOURITE POKEMONS
+		case favouritePokemonsTypes.GET_FAVOURITE_POKEMONS_REQUEST: {
+			return {
+				...state,
+				isLoading: true,
+			};
+		}
+		case favouritePokemonsTypes.GET_FAVOURITE_POKEMONS_SUCCESS: {
+			return {
+				...state,
+				isLoading: false,
+				favouritePokemons: [...action.favouritePokemons],
+			};
+		}
+		case favouritePokemonsTypes.GET_FAVOURITE_POKEMONS_FAILURE: {
+			return {
+				...state,
+				isLoading: false,
+			};
+		}
 
-        // GET TEAM POKEMONS
-        case types.GET_TEAM_POKEMONS_REQUEST: {
-            return {
-                ...state,
-                isLoading: true
-            }
-        }
-        case types.GET_TEAM_POKEMONS_SUCCESS: {
-            return {
-                ...state,
-                isLoading: false,
-                teamPokemons: [...action.teamPokemons]
-            }
-        }
-        case types.GET_TEAM_POKEMONS_FAILURE: {
-            return {
-                ...state,
-                isLoading: false,
-            }
-        }
+		// GET TEAM POKEMONS
+		case teamPokemonsTypes.GET_TEAM_POKEMONS_REQUEST: {
+			return {
+				...state,
+				isLoading: true,
+			};
+		}
+		case teamPokemonsTypes.GET_TEAM_POKEMONS_SUCCESS: {
+			return {
+				...state,
+				isLoading: false,
+				teamPokemons: [...action.teamPokemons],
+			};
+		}
+		case teamPokemonsTypes.GET_TEAM_POKEMONS_FAILURE: {
+			return {
+				...state,
+				isLoading: false,
+			};
+		}
 
-        default: {
-            return {
-                ...state
-            }
-        }
-    }
-}
+		default: {
+			return {
+				...state,
+			};
+		}
+	}
+};
 
 export default pokemons;

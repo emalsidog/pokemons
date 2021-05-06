@@ -7,6 +7,9 @@ const TeamPokemons = require("../controllers/team-pokemons-controller");
 // Middleware 
 const authenticate = require("../middleware/authenticate");
 
+// GET => /pokemons/team
+router.get("/", authenticate, TeamPokemons.get);
+
 // POST => /pokemons/team/add
 router.post("/add", authenticate, TeamPokemons.add);
 

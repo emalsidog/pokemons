@@ -177,7 +177,7 @@ exports.updateWarParticipant = async (req, res, next) => {
 		if (user.teamPokemons.length < 5) {
 			return next(new ErrorResponse("You need to have full team to be war participant!", 400));
 		}
-
+		
 		user.warParticipant = !user.warParticipant;
 		await user.save();
 

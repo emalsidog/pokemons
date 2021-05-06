@@ -162,13 +162,13 @@ const user = (state = initialState, action) => {
 			};
 		}
 		case updateTypes.UPDATE_WAR_PARTICIPANT_SUCCESS: {
-			const { body } = action;
+			const { warParticipant } = action.body.user;
 			return {
 				...state,
 				isLoading: false,
 				user: {
 					...state.user,
-					warParticipant: body.warParticipant,
+					warParticipant,
 				},
 			};
 		}
@@ -217,6 +217,7 @@ const user = (state = initialState, action) => {
 		}
 		case favouritePokemonsTypes.REMOVE_FROM_FAVOURITE_SUCCESS: {
 			const { body } = action;
+			console.log(state);
 			return {
 				...state,
 				isLoading: false,

@@ -39,10 +39,10 @@ const Navigation = () => {
 					<i className="fas fa-bars"></i>
 				</div>
 				<nav className={classNames}>
-					<Link to="/pokemons" className="nav-link">List</Link>
+					<Link to="/pokemons?page=1" className="nav-link">List</Link>
 					<Link to="/favourites" className="nav-link">Favourites</Link>
 					<Link to="/team" className="nav-link">My team</Link>
-					<Link to="/users" className="nav-link">Users</Link>
+					<Link to="/users?page=1" className="nav-link">Users</Link>
 					<Link to="/battles" className="nav-link">Battles history</Link>
 					<Link to="/settings" className="nav-link">Settings</Link>
 					<div onClick={handleLogout} className="nav-link">Logout</div>

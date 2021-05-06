@@ -1,15 +1,18 @@
 // Dependencies
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
+import queryString from "query-string";
 
 // Actions
 import { getPokemonsAction } from "../../../redux/actions/pokemons-actions";
 
 // Selectors
 import { selectUser } from "../../../redux/selectors/user-selectors";
-
-// Pagination
-import Pagination from "react-js-pagination";
+import {
+	selectPokemons,
+	selectIsLoading,
+} from "../../../redux/selectors/pokemons-selectors";
 
 // Styles
 import "./pokemons.css";
@@ -18,24 +21,29 @@ import "./pokemons.css";
 import Layout from "../../layout";
 import Card from "../../common/card";
 import Heading from "../../common/heading";
+import PaginationProvider from "../../common/pagination";
+import Spinner from "../../common/spinner";
 
 const Pokemons = () => {
-	// Pagination config
-	const [limit] = useState(12);
-	const [page, setPage] = useState(1);
+	// History
+	const history = useHistory();
 
 	// Redux
 	const dispatch = useDispatch();
 	const user = useSelector(selectUser);
-	const { pokemons, totalCount } = useSelector((state) => state.pokemons);
+	const { pokemons, totalCount } = useSelector(selectPokemons);
+	const isLoading = useSelector(selectIsLoading);
 
 	// Get array of pokemons
+	const values = queryString.parse(history.location.search);
+	const { page, limit } = values;
+
 	useEffect(() => {
-		dispatch(getPokemonsAction({ offset: (page - 1) * limit, limit }));
-	}, [dispatch, limit, page]);
+		dispatch(getPokemonsAction({ page, limit }));
+	}, [dispatch, page, limit]);
 
 	const handlePageChange = (page) => {
-		setPage(page);
+		history.push(`/pokemons?page=${page}`);
 	};
 
 	// Render array of cards
@@ -62,24 +70,20 @@ const Pokemons = () => {
 				description="List of all existing Pokémon."
 			/>
 
-			<section className="cards">{main}</section>
+			{isLoading ? (
+				<Spinner />
+			) : (
+				<React.Fragment>
+					<section className="cards">{main}</section>
 
-			<Pagination
-				hideFirstLastPages
-				prevPageText={<i className="fas fa-angle-left"></i>}
-				nextPageText={<i className="fas fa-angle-right"></i>}
-				firstPageText={<i className="fas fa-angle-double-left"></i>}
-				lastPageText={<i className="fas fa-angle-double-right"></i>}
-				activePage={page}
-				itemsCountPerPage={limit}
-				totalItemsCount={totalCount}
-				pageRangeDisplayed={5}
-				onChange={handlePageChange}
-				innerClass="innerClass"
-				activeClass="activeClass"
-				itemClass="itemClass"
-				linkClass="linkClass"
-			/>
+					<PaginationProvider
+						activePage={page}
+						itemsCountPerPage={+limit || 12}
+						totalItemsCount={totalCount}
+						onChange={handlePageChange}
+					/>
+				</React.Fragment>
+			)}
 		</Layout>
 	);
 };

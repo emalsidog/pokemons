@@ -1,0 +1,8 @@
+.battle-controllers {
+	display: flex;
+	margin-top: 10px;
+}
+
+.battle-controllers div {
+	margin-right: 5px;
+}

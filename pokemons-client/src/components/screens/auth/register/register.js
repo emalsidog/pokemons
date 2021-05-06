@@ -11,14 +11,14 @@ import "../index.css";
 import { registerAction } from "../../../../redux/actions/auth-actions";
 
 // Selectors
-import { getIsLoading } from "../../../../redux/selectors/auth-selectors";
+import { selectIsLoading } from "../../../../redux/selectors/auth-selectors";
 
 // Antd components
 import { Input, Button } from "antd";
 
 const Register = ({ history }) => {
 	// Redux
-	const isLoading = useSelector(getIsLoading);
+	const isLoading = useSelector(selectIsLoading);
 	const dispatch = useDispatch();
 
 	// Redirect if token exists
@@ -70,6 +70,7 @@ const Register = ({ history }) => {
 							type="text"
 							placeholder="Given name"
 							autoFocus
+							disabled={isLoading}
 						/>
 						{errors.givenName && (
 							<span className="error-message">
@@ -98,6 +99,7 @@ const Register = ({ history }) => {
 							})}
 							type="text"
 							placeholder="Family name"
+							disabled={isLoading}
 						/>
 						{errors.familyName && (
 							<span className="error-message">
@@ -118,6 +120,7 @@ const Register = ({ history }) => {
 							})}
 							type="text"
 							placeholder="Email"
+							disabled={isLoading}
 						/>
 						{errors.email && (
 							<span className="error-message">
@@ -147,6 +150,7 @@ const Register = ({ history }) => {
 							})}
 							type="text"
 							placeholder="Username"
+							disabled={isLoading}
 						/>
 						{errors.username && (
 							<span className="error-message">
@@ -171,6 +175,7 @@ const Register = ({ history }) => {
 							})}
 							type="password"
 							placeholder="Password"
+							disabled={isLoading}
 						/>
 						{errors.password && (
 							<span className="error-message">
@@ -191,6 +196,7 @@ const Register = ({ history }) => {
 							})}
 							type="password"
 							placeholder="Confirm password"
+							disabled={isLoading}
 						/>
 						{errors.confirmPassword && (
 							<span className="error-message">

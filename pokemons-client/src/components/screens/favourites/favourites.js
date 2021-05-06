@@ -3,19 +3,21 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 // Actions
-import { getFavouritePokemons } from "../../../redux/actions/pokemons-actions";
+import { getFavouritePokemons } from "../../../redux/actions/favourite-pokemons-actions";
 
 // Selectors
 import { selectUser } from "../../../redux/selectors/user-selectors";
-
-// Styles
-import "./favourites.css";
+import {
+	selectFavouritePokemons,
+	selectIsLoading,
+} from "../../../redux/selectors/pokemons-selectors";
 
 // Components
 import Layout from "../../layout";
 import Heading from "../../common/heading";
 import SearchPanel from "./favourite-components/search-panel";
 import Card from "../../common/card";
+import Spinner from "../../common/spinner";
 
 const Favourites = () => {
 	const [searchValue, setSearchValue] = useState("");
@@ -24,10 +26,11 @@ const Favourites = () => {
 	// Redux
 	const dispatch = useDispatch();
 	const user = useSelector(selectUser);
-	const { favouritePokemons } = useSelector((state) => state.pokemons);
+	const favouritePokemons = useSelector(selectFavouritePokemons);
+	const isLoading = useSelector(selectIsLoading);
 
 	useEffect(() => {
-		dispatch(getFavouritePokemons(user.favouritePokemons));
+		dispatch(getFavouritePokemons());
 	}, [dispatch, user.favouritePokemons]);
 
 	const handleSearchChange = (e) => {
@@ -81,7 +84,11 @@ const Favourites = () => {
 				/>
 			</Heading>
 
-			<section className="cards">{main}</section>
+			{isLoading ? (
+				<Spinner />
+			) : (
+				<section className="cards">{main}</section>
+			)}
 		</Layout>
 	);
 };

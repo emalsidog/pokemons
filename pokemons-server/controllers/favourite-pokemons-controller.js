@@ -3,6 +3,33 @@ const User = require("../models/User");
 
 // Utils
 const ErrorResponse = require("../utils/error-response");
+const getParsedTeam = require("../utils/get-parsed-team");
+
+// GET => /pokemons/favourite
+exports.get = async (req, res, next) => {
+	try {
+		const user = await User.findById(req.user._id);
+		if (!user) {
+			return next(new ErrorResponse("Unauthorized.", 401));
+		}
+
+		const parsedTeam = await getParsedTeam(user.favouritePokemons, {
+			withTotal: false
+		});
+		
+		res.status(200).json({
+			status: {
+				isError: false,
+				message: "Done.",
+			},
+			body: {
+				favouritePokemons: parsedTeam,
+			},
+		});
+	} catch (error) {
+		next(error);
+	}
+}
 
 // POST => /pokemons/favourite/add
 exports.add = async (req, res, next) => {

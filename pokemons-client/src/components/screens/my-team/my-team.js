@@ -3,25 +3,31 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 // Actions
-import { getTeamPokemons } from "../../../redux/actions/pokemons-actions";
+import { getTeamPokemons } from "../../../redux/actions/team-pokemons-actions";
 
 // Selectors
 import { selectUser } from "../../../redux/selectors/user-selectors";
+import {
+	selectTeamPokemons,
+	selectIsLoading,
+} from "../../../redux/selectors/pokemons-selectors";
 
 // Components
 import Layout from "../../layout";
 import Heading from "../../common/heading";
 import Card from "../../common/card";
+import Spinner from "../../common/spinner";
 
 const MyTeam = () => {
 	// Redux
 	const dispatch = useDispatch();
 	const user = useSelector(selectUser);
-	const { teamPokemons } = useSelector(state => state.pokemons)
+	const teamPokemons = useSelector(selectTeamPokemons);
+	const isLoading = useSelector(selectIsLoading);
 
 	useEffect(() => {
-		dispatch(getTeamPokemons(user.teamPokemons));
-	}, [dispatch, user.teamPokemons])
+		dispatch(getTeamPokemons());
+	}, [dispatch, user.teamPokemons]);
 
 	// Render array of cards
 	const main = teamPokemons.map((pokemon) => {
@@ -34,7 +40,6 @@ const MyTeam = () => {
 				name={name}
 				types={types}
 				stats={stats}
-
 				cardType="TEAM"
 			/>
 		);
@@ -47,7 +52,11 @@ const MyTeam = () => {
 				description="Wow. Are these guys your team?"
 			/>
 
-			<section className="cards">{main}</section>
+			{isLoading ? (
+				<Spinner />
+			) : (
+				<section className="cards">{main}</section>
+			)}
 		</Layout>
 	);
 };

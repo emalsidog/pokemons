@@ -6,13 +6,17 @@ import { useParams, Link } from "react-router-dom";
 // Actions
 import { activateAccountAction } from "../../../../redux/actions/auth-actions";
 
+// Selectors
+import { selectAuthStatus } from "../../../../redux/selectors/auth-selectors";
+
 // Styles
 import styles from "./activate.module.css";
 
 const Activate = () => {
 	const dispatch = useDispatch();
+	const status = useSelector(selectAuthStatus);
+	
 	const { activationToken } = useParams();
-	const { status } = useSelector(({ auth }) => auth);
 
 	useEffect(() => {
 		dispatch(activateAccountAction(activationToken));

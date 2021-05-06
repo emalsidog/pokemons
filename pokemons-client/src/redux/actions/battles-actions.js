@@ -14,15 +14,16 @@ export const battle = () => {
 			dispatch({ type: battleTypes.BATTLE_REQUEST });
 
 			const { data } = await AxiosGetRequest("/battles/battle");
+			const { status, body } = data;
 
 			dispatch({
 				type: battleTypes.BATTLE_SUCCESS,
 				response: {
-					winner: data.winner,
-					loser: data.loser,
+					winner: body.winner,
+					loser: body.loser,
 				},
 			});
-			dispatch(addNotification({ isError: false, message: "battles actions temp notify" }));
+			dispatch(addNotification(status));
 		} catch (error) {
 			isUnauthorized(error.response.status);
 
@@ -36,8 +37,10 @@ export const getBattlesHistory = (sort = "time-descending") => {
 	return async (dispatch) => {
 		try {
 			dispatch({ type: battleTypes.GET_BATTLES_HISTORY_REQUEST });
-			console.log(sort);
-			const { data } = await AxiosGetRequest(`/battles/battles?sort=${sort}`);
+
+			const { data } = await AxiosGetRequest(
+				`/battles/battles?sort=${sort}`
+			);
 			const { body } = data;
 
 			dispatch({
@@ -54,3 +57,7 @@ export const getBattlesHistory = (sort = "time-descending") => {
 		}
 	};
 };
+
+export const clearBattleResult = () => ({
+	type: battleTypes.CLEAR_BATTLE_RESULT,
+});

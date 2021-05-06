@@ -1,11 +1,14 @@
 // Dependencies
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import queryString from "query-string";
 
 // Actions
 import { getBattlesHistory } from "../../../redux/actions/battles-actions";
+
+// Selectors
+import { selectIsLoading, selectBattlesHistory } from "../../../redux/selectors/battles-selectors";
 
 // Styles
 import "./battle-history.css";
@@ -14,6 +17,7 @@ import "./battle-history.css";
 import Layout from "../../layout";
 import Heading from "../../common/heading";
 import BattleContainer from "./battles-history-components/battle-container";
+import Spinner from "../../common/spinner";
 
 const BattlesHistory = () => {
 	// History
@@ -21,7 +25,8 @@ const BattlesHistory = () => {
 
 	// Redux
 	const dispatch = useDispatch();
-	const { battlesHistory } = useSelector((state) => state.battles);
+	const battlesHistory = useSelector(selectBattlesHistory);
+	const isLoading = useSelector(selectIsLoading);
 
 	const handleSelectChange = (e) => {
 		history.push(`/battles?sort=${e.target.value.toLowerCase()}`);
@@ -53,8 +58,8 @@ const BattlesHistory = () => {
 					</select>
 				</div>
 			</Heading>
-
-			{main}
+			
+			{isLoading ? <Spinner /> : main}
 		</Layout>
 	);
 };

@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import "../index.css";
 
 // Selectors
-import { getIsLoading } from "../../../../redux/selectors/auth-selectors";
+import { selectIsLoading } from "../../../../redux/selectors/auth-selectors";
 
 // Actions
 import {
@@ -25,7 +25,7 @@ const Login = ({ history }) => {
 
 	// Redux
 	const dispatch = useDispatch();
-	const isLoading = useSelector(getIsLoading);
+	const isLoading = useSelector(selectIsLoading);
 
 	// Redirect if token exists
 	useEffect(() => {
@@ -88,6 +88,7 @@ const Login = ({ history }) => {
 							type="text"
 							placeholder="Email"
 							autoFocus
+							disabled={isLoading}
 						/>
 						{errors.email && (
 							<span className="error-message">
@@ -112,6 +113,7 @@ const Login = ({ history }) => {
 							})}
 							type="password"
 							placeholder="Password"
+							disabled={isLoading}
 						/>
 						{errors.password && (
 							<span className="error-message">
@@ -184,6 +186,7 @@ const Login = ({ history }) => {
 							})}
 							type="text"
 							placeholder="Email"
+							disabled={isLoading}
 							autoFocus
 						/>
 						{forgotErrors.email && (

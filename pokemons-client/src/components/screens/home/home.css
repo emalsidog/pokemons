@@ -1,12 +1,14 @@
-.home-heading {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-
-    text-align: center;
+.home-container-heading {
+	font-size: 1.3rem;
+	margin: 10px 0;
 }
 
-.home-heading h1 {
-    margin-bottom: 15px;
+.home-container-heading span {
+	font-weight: 600;
+}
+
+.home-container-results {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
 }

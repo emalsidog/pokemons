@@ -7,14 +7,15 @@ import queryString from "query-string";
 // Actions
 import { getUsers } from "../../../redux/actions/users-actions";
 
-// Pagination
-import Pagination from "react-js-pagination";
+// Selectors
+import { selectIsLoading, selectUsersAndTotalCount } from "../../../redux/selectors/users-selectors";
 
 // Components
 import Layout from "../../layout";
 import Heading from "../../common/heading";
 import Table from "./users-components/table";
 import Spinner from "../../common/spinner";
+import PaginationProvider from "../../common/pagination";
 
 const Users = () => {
 	// History
@@ -22,15 +23,16 @@ const Users = () => {
 
 	// Redux
 	const dispatch = useDispatch();
-	const { users, totalCount, limit, isLoading } = useSelector(
-		(state) => state.users
-	);
+	const { users, totalCount } = useSelector(selectUsersAndTotalCount);
+	const isLoading = useSelector(selectIsLoading);
 
+	// Pagination
 	const values = queryString.parse(history.location.search);
-		console.log(history);
+	const { page } = values;
+
 	useEffect(() => {
-		dispatch(getUsers(values.page));
-	}, [dispatch, values.page]);
+		dispatch(getUsers(page));
+	}, [dispatch, page]);
 
 	const handlePageChange = (page) => {
 		history.push({
@@ -45,29 +47,16 @@ const Users = () => {
 			{isLoading ? (
 				<Spinner />
 			) : (
-				<>
+				<React.Fragment>
 					<Table users={users} />
 
-					<Pagination
-						hideFirstLastPages
-
-						prevPageText={<i className="fas fa-angle-left"></i>}
-						nextPageText={<i className="fas fa-angle-right"></i>}
-						firstPageText={<i className="fas fa-angle-double-left"></i>}
-						lastPageText={<i className="fas fa-angle-double-right"></i>}
-
-						activePage={+values.page}
-						itemsCountPerPage={limit}
+					<PaginationProvider
+						activePage={+page}
+						itemsCountPerPage={10}
 						totalItemsCount={totalCount}
-						pageRangeDisplayed={5}
 						onChange={handlePageChange}
-						
-						innerClass="innerClass"
-						activeClass="activeClass"
-						itemClass="itemClass"
-						linkClass="linkClass"
 					/>
-				</>
+				</React.Fragment>
 			)}
 		</Layout>
 	);
