@@ -4,6 +4,7 @@ import * as userTypes from "../constants/user-update-constants";
 
 // Actions
 import { addNotification } from "../actions/notification-actions";
+import { GET_FAVOURITE_POKEMONS_SUCCESS, GET_TEAM_POKEMONS_SUCCESS } from "../constants/pokemons-constants";
 
 // Utils
 import { AxiosPostRequest } from "../utils/server-request";
@@ -64,6 +65,10 @@ export const loginAction = (userLoginData) => {
 
 			dispatch({ type: authTypes.LOGIN_SUCCESS });
 			dispatch({ type: userTypes.SET_USER, user: data.body.user });
+			
+			dispatch({ type: GET_FAVOURITE_POKEMONS_SUCCESS, favouritePokemons: data.body.favouritePokemons });
+			dispatch({ type: GET_TEAM_POKEMONS_SUCCESS, teamPokemons: data.body.teamPokemons });
+
 		} catch (error) {
 			dispatch({ type: authTypes.LOGIN_FAILURE });
 			dispatch(addNotification(error.response.data.status));

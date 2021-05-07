@@ -66,6 +66,14 @@ body {
 
 /* Buttons */
 /* Main */
+.btn-close {
+	background: transparent;
+	outline: none;
+	border: 0;
+	font-size: 18px;
+	cursor: pointer;
+}
+
 .btn {
 	border: none;
 	padding: 5px 10px;
@@ -149,7 +157,7 @@ body {
 	border: none;
 	background-color: #fafafa;
 
-	border-bottom: 1px solid rgb(148, 148, 148);
+	border-bottom: 1px solid #D7D7D7;
 }
 
 .inp:focus {
@@ -174,7 +182,6 @@ body {
 	margin: 15px 0;
 }
 
-
 /* Divider */
 .divider {
 	display: flex;
@@ -182,7 +189,7 @@ body {
 
 	overflow: hidden;
 	align-items: center;
-	
+
 	font-family: "NCS Rogueland";
 	font-size: 1.3rem;
 	font-style: italic;
@@ -199,7 +206,7 @@ body {
 	content: "";
 	flex: 1;
 
-	background: #FAFAFA;
+	background: #fafafa;
 	padding: 50px 0;
 	height: 0;
 	transform: rotate(135deg);
@@ -209,7 +216,7 @@ body {
 	content: "";
 	flex: 1;
 
-	background: #FAFAFA;
+	background: #fafafa;
 	padding: 50px 0;
 	height: 0;
 	transform: rotate(135deg);
@@ -217,7 +224,7 @@ body {
 
 @media screen and (max-width: 1000px) {
 	.divider {
-		background-color: #FAFAFA;
+		background-color: #fafafa;
 		overflow: visible;
 		justify-content: center;
 	}

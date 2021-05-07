@@ -38,3 +38,7 @@
 .forgot-password-button:focus {
 	outline: none;
 }
+
+.inp {
+	background-color: #fff;
+}

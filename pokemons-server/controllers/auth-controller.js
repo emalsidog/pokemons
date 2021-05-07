@@ -6,6 +6,7 @@ const { validationResult } = require("express-validator");
 const sendMail = require("../utils/sendMail");
 const ErrorResponse = require("../utils/error-response");
 const transformName = require("../utils/transform-name");
+const getParsedTeam = require("../utils/get-parsed-team");
 
 // Models
 const User = require("../models/User");
@@ -132,6 +133,13 @@ exports.login = async (req, res, next) => {
 			"7d"
 		);
 
+		const parsedTeamPokemons = await getParsedTeam(user.teamPokemons, {
+			withTotal: false,
+		});
+		const parsedFavouritePokemons = await getParsedTeam(user.favouritePokemons, {
+			withTotal: false,
+		});
+
 		res.status(200).json({
 			status: {
 				message: "Successfully logged in.",
@@ -146,9 +154,9 @@ exports.login = async (req, res, next) => {
 					username: user.username,
 					phone: user.phone,
 					warParticipant: user.warParticipant,
-					favouritePokemons: user.favouritePokemons,
-					teamPokemons: user.teamPokemons,
 				},
+				favouritePokemons: parsedFavouritePokemons,
+				teamPokemons: parsedTeamPokemons,
 			},
 		});
 	} catch (error) {
@@ -258,8 +266,6 @@ exports.getCurrentUser = (req, res) => {
 					username: req.user.username,
 					phone: req.user.phone,
 					warParticipant: req.user.warParticipant,
-					favouritePokemons: req.user.favouritePokemons,
-					teamPokemons: req.user.teamPokemons,
 				},
 			},
 		});
