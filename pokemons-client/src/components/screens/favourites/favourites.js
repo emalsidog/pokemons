@@ -1,6 +1,8 @@
 // Dependencies
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
+import queryString from "query-string";
 
 // Actions
 import { getFavouritePokemons } from "../../../redux/actions/favourite-pokemons-actions";
@@ -21,7 +23,9 @@ import Spinner from "../../common/spinner";
 
 const Favourites = () => {
 	const [searchValue, setSearchValue] = useState("");
-	const [sortValue, setSortValue] = useState("A-Z");
+
+	// History
+	const history = useHistory();
 
 	// Redux
 	const dispatch = useDispatch();
@@ -29,16 +33,21 @@ const Favourites = () => {
 	const favouritePokemons = useSelector(selectFavouritePokemons);
 	const isLoading = useSelector(selectIsLoading);
 
+	const values = queryString.parse(history.location.search);
+	const { sort } = values;
+
 	useEffect(() => {
-		dispatch(getFavouritePokemons());
-	}, [dispatch, user.favouritePokemons]);
+		dispatch(getFavouritePokemons(sort));
+	}, [dispatch, user.favouritePokemons, sort]);
 
 	const handleSearchChange = (e) => {
 		setSearchValue(e.target.value);
 	};
 
 	const handleSelectChange = (e) => {
-		setSortValue(e.target.value);
+		history.push({
+			search: `?sort=${e.target.value}`,
+		});
 	};
 
 	// Render array of cards
@@ -53,8 +62,6 @@ const Favourites = () => {
 	} else {
 		searchedPokemons = favouritePokemons;
 	}
-
-	searchedPokemons = sortArray(searchedPokemons, sortValue);
 
 	const main = searchedPokemons.map((pokemon) => {
 		const { id, sprite, name, types, stats } = pokemon;
@@ -81,9 +88,10 @@ const Favourites = () => {
 					handleSearchChange={handleSearchChange}
 					handleSelectChange={handleSelectChange}
 					searchValue={searchValue}
+					defaultValue={sort}
 				/>
 			</Heading>
-
+			
 			{isLoading ? (
 				<Spinner />
 			) : (
@@ -91,50 +99,6 @@ const Favourites = () => {
 			)}
 		</Layout>
 	);
-};
-
-const sortArray = (searchedPokemons, sortValue) => {
-	if (sortValue === "A-Z") {
-		return searchedPokemons.sort((a, b) => {
-			let aName = a.name.toLowerCase(),
-				bName = b.name.toLowerCase();
-			if (aName < bName) return -1;
-			if (aName > bName) return 1;
-			return 0;
-		});
-	} else if (sortValue === "Z-A") {
-		return searchedPokemons.sort((a, b) => {
-			let aName = a.name.toLowerCase(),
-				bName = b.name.toLowerCase();
-			if (aName > bName) return -1;
-			if (aName < bName) return 1;
-			return 0;
-		});
-	} else if (sortValue === "BY_HEALTH") {
-		return searchedPokemons.sort(
-			(a, b) => a.stats[0].value - b.stats[0].value
-		);
-	} else if (sortValue === "BY_ATTACK") {
-		return searchedPokemons.sort(
-			(a, b) => a.stats[1].value - b.stats[1].value
-		);
-	} else if (sortValue === "BY_DEFENSE") {
-		return searchedPokemons.sort(
-			(a, b) => a.stats[2].value - b.stats[2].value
-		);
-	} else if (sortValue === "BY_SPECIAL_ATTACK") {
-		return searchedPokemons.sort(
-			(a, b) => a.stats[3].value - b.stats[3].value
-		);
-	} else if (sortValue === "BY_SPECIAL_DEFENSE") {
-		return searchedPokemons.sort(
-			(a, b) => a.stats[4].value - b.stats[4].value
-		);
-	} else if (sortValue === "BY_SPEED") {
-		return searchedPokemons.sort(
-			(a, b) => a.stats[5].value - b.stats[5].value
-		);
-	}
 };
 
 export default Favourites;

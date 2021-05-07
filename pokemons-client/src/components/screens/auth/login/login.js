@@ -19,6 +19,10 @@ import {
 // Antd components
 import { Input, Button, Modal } from "antd";
 
+// Components
+// import Form from "../../../common/form";
+// import Input from "../../../common/form/input";
+
 const Login = ({ history }) => {
 	// States
 	const [isModalVisible, setIsModalVisible] = useState(false);
@@ -67,7 +71,23 @@ const Login = ({ history }) => {
 	};
 
 	return (
-		<>
+	// 	<Form onSubmit={handleLoginSubmit}>
+	// 		<Input
+	// 			{...register("email", {
+	// 				required: "Email is a required field",
+	// 				pattern: {
+	// 					value: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+	// 					message: "Email is invalid",
+	// 				},
+	// 			})}
+	// 			type="text"
+	// 			placeholder="Email"
+	// 			autoFocus
+	// 			disabled={isLoading}
+	// 		/>
+	// 	</Form>
+	// );
+		<React.Fragment>
 			<div className="container">
 				<form
 					className="wrapper"
@@ -197,7 +217,7 @@ const Login = ({ history }) => {
 					</div>
 				</form>
 			</Modal>
-		</>
+		</React.Fragment>
 	);
 };
 

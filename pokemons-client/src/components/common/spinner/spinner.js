@@ -2,15 +2,17 @@
 import React from "react";
 
 // Styles
-import styles from "./spinner.module.css";
+import "./spinner.css";
 
 const Spinner = () => {
 	return (
-		<div className={styles.spinner}>
-			<div></div>
-			<div></div>
-			<div></div>
-			<div></div>
+		<div className="content-blocker">
+			<div className="spinner">
+				<div></div>
+				<div></div>
+				<div></div>
+				<div></div>
+			</div>
 		</div>
 	);
 };

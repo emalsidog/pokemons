@@ -10,11 +10,11 @@ import * as types from "../constants/favourite-pokemons-constants";
 
 
 // GET => Favourite pokemons
-export const getFavouritePokemons = () => {
+export const getFavouritePokemons = (sort = "a-z") => {
 	return async (dispatch) => {
 		dispatch({ type: types.GET_FAVOURITE_POKEMONS_REQUEST });
 		try {
-			const { data } = await AxiosGetRequest("/pokemons/favourite");
+			const { data } = await AxiosGetRequest(`/pokemons/favourite?sort=${sort}`);
 			const { body } = data;
 
 			dispatch({

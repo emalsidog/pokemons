@@ -217,7 +217,7 @@ const user = (state = initialState, action) => {
 		}
 		case favouritePokemonsTypes.REMOVE_FROM_FAVOURITE_SUCCESS: {
 			const { body } = action;
-			console.log(state);
+			
 			return {
 				...state,
 				isLoading: false,

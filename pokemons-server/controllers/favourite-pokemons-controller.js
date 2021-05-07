@@ -4,10 +4,13 @@ const User = require("../models/User");
 // Utils
 const ErrorResponse = require("../utils/error-response");
 const getParsedTeam = require("../utils/get-parsed-team");
+const sortPokemons = require("../utils/sort-pokemons");
 
 // GET => /pokemons/favourite
 exports.get = async (req, res, next) => {
-	try {
+	const { sort = "a-z" } = req.query;
+	
+	try {	
 		const user = await User.findById(req.user._id);
 		if (!user) {
 			return next(new ErrorResponse("Unauthorized.", 401));
@@ -16,7 +19,9 @@ exports.get = async (req, res, next) => {
 		const parsedTeam = await getParsedTeam(user.favouritePokemons, {
 			withTotal: false
 		});
-		
+
+		sortPokemons(parsedTeam, sort.toLowerCase());
+
 		res.status(200).json({
 			status: {
 				isError: false,
@@ -106,3 +111,4 @@ exports.remove = async (req, res, next) => {
 		next(error);
 	}
 };
+

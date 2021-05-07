@@ -5,7 +5,7 @@ import React from "react";
 import "./search-panel.css";
 
 const SearchPanel = (props) => {
-	const { searchValue, handleSearchChange, handleSelectChange } = props;
+	const { searchValue, handleSearchChange, handleSelectChange, defaultValue } = props;
 
 	return (
 		<div className="search-panel">
@@ -15,15 +15,15 @@ const SearchPanel = (props) => {
 				className="inp"
 				placeholder="Search by name..."
 			/>
-			<select onChange={handleSelectChange} defaultValue="A-Z">
-				<option value="A-Z">A-Z</option>
-				<option value="Z-A">Z-A</option>
-				<option value="BY_HEALTH">By health</option>
-				<option value="BY_ATTACK">By attack</option>
-				<option value="BY_DEFENSE">By defense</option>
-				<option value="BY_SPECIAL_ATTACK">By special attack</option>
-				<option value="BY_SPECIAL_DEFENSE">By special defense</option>
-				<option value="BY_SPEED">By speed</option>
+			<select onChange={handleSelectChange} defaultValue={defaultValue}>
+				<option value="a-z">A-Z</option>
+				<option value="z-a">Z-A</option>
+				<option value="health">By health</option>
+				<option value="attack">By attack</option>
+				<option value="defense">By defense</option>
+				<option value="special_attack">By special attack</option>
+				<option value="special_defense">By special defense</option>
+				<option value="speed">By speed</option>
 			</select>
 		</div>
 	);

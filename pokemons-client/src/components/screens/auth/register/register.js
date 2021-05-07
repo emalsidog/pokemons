@@ -135,8 +135,8 @@ const Register = ({ history }) => {
 							{...register("username", {
 								required: "Username is a required field",
 								minLength: {
-									value: 2,
-									message: "Minimal length is 2",
+									value: 6,
+									message: "Minimal length is 6",
 								},
 								maxLength: {
 									value: 32,
