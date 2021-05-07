@@ -7,3 +7,10 @@
     margin-top: 10px;
     padding: 2px 10px;
 }
+
+@media screen and (max-width: 768px) {
+    .sort-selection {
+        margin-top: 15px;
+        width: 100%;
+    }
+}

@@ -5,13 +5,12 @@ import { useHistory } from "react-router-dom";
 import queryString from "query-string";
 
 // Actions
-import { getFavouritePokemons } from "../../../redux/actions/favourite-pokemons-actions";
+import { getFavouritePokemons } from "../../../redux/actions/pokemons-actions";
 
 // Selectors
-import { selectUser } from "../../../redux/selectors/user-selectors";
 import {
 	selectFavouritePokemons,
-	selectIsLoading,
+	selectIsFetchingData,
 } from "../../../redux/selectors/pokemons-selectors";
 
 // Components
@@ -29,16 +28,15 @@ const Favourites = () => {
 
 	// Redux
 	const dispatch = useDispatch();
-	const user = useSelector(selectUser);
 	const favouritePokemons = useSelector(selectFavouritePokemons);
-	const isLoading = useSelector(selectIsLoading);
+	const isFetchingData = useSelector(selectIsFetchingData);
 
 	const values = queryString.parse(history.location.search);
 	const { sort } = values;
 
 	useEffect(() => {
 		dispatch(getFavouritePokemons(sort));
-	}, [dispatch, user.favouritePokemons, sort]);
+	}, [dispatch, sort]);
 
 	const handleSearchChange = (e) => {
 		setSearchValue(e.target.value);
@@ -92,7 +90,7 @@ const Favourites = () => {
 				/>
 			</Heading>
 			
-			{isLoading ? (
+			{isFetchingData ? (
 				<Spinner />
 			) : (
 				<section className="cards">{main}</section>

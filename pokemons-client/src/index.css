@@ -85,11 +85,6 @@ body {
 	cursor: not-allowed;
 }
 
-.btn:focus {
-	transform: scale(1.08);
-}
-
-
 /* Primary */
 .btn-primary {
 	background-color: var(--primary);
@@ -218,4 +213,26 @@ body {
 	padding: 50px 0;
 	height: 0;
 	transform: rotate(135deg);
+}
+
+@media screen and (max-width: 1000px) {
+	.divider {
+		background-color: #FAFAFA;
+		overflow: visible;
+		justify-content: center;
+	}
+
+	.divider::before {
+		flex: 0;
+	}
+
+	.divider::after {
+		flex: 0;
+	}
+}
+
+@media screen and (max-width: 400px) {
+	.divider {
+		font-size: 1rem;
+	}
 }

@@ -23,13 +23,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 // Routes
-app.use("/users", require("./routes/auth-routes"));
-app.use("/update", require("./routes/user-update-routes"));
-app.use("/pokemons/favourite", require("./routes/favourite-pokemons-routes"));
-app.use("/pokemons/team", require("./routes/team-pokemons-routes"));
-app.use("/users", require("./routes/users-routes"));
-app.use("/battles", require("./routes/battles-routes"));
-app.use("/pokemons", require("./routes/pokemons-routes"));
+require("./routes")(app);
 
 // Error handler
 app.use(require("./middleware/error-handler"));

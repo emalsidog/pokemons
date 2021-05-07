@@ -9,7 +9,7 @@ const ErrorResponse = require("../utils/error-response");
 const transformName = require("../utils/transform-name");
 
 // POST => update/name
-exports.updateName = async (req, res) => {
+exports.updateName = async (req, res, next) => {
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
 		res.status(422).json({ errors: errors.array() });
@@ -33,10 +33,8 @@ exports.updateName = async (req, res) => {
 				message: "Saved.",
 			},
 			body: {
-				user: {
-					givenName: user.givenName,
-					familyName: user.familyName,
-				},
+				givenName: user.givenName,
+				familyName: user.familyName,
 			},
 		});
 	} catch (error) {
@@ -78,9 +76,7 @@ exports.updateEmail = async (req, res, next) => {
 				message: "Saved.",
 			},
 			body: {
-				user: {
-					email: user.email,
-				},
+				email: user.email,
 			},
 		});
 	} catch (error) {
@@ -89,7 +85,7 @@ exports.updateEmail = async (req, res, next) => {
 };
 
 // POST => /update/username
-exports.updateUsername = async (req, res) => {
+exports.updateUsername = async (req, res, next) => {
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
 		res.status(422).json({ errors: errors.array() });
@@ -120,9 +116,7 @@ exports.updateUsername = async (req, res) => {
 				message: "Saved.",
 			},
 			body: {
-				user: {
-					username: user.username,
-				},
+				username: user.username,
 			},
 		});
 	} catch (error) {
@@ -131,7 +125,7 @@ exports.updateUsername = async (req, res) => {
 };
 
 // POST => /update/phone
-exports.updatePhone = async (req, res) => {
+exports.updatePhone = async (req, res, next) => {
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
 		res.status(422).json({ errors: errors.array() });
@@ -156,9 +150,7 @@ exports.updatePhone = async (req, res) => {
 				message: "Saved.",
 			},
 			body: {
-				user: {
-					phone: user.phone,
-				},
+				phone: user.phone,
 			},
 		});
 	} catch (error) {
@@ -175,9 +167,14 @@ exports.updateWarParticipant = async (req, res, next) => {
 		}
 
 		if (user.teamPokemons.length < 5) {
-			return next(new ErrorResponse("You need to have full team to be war participant!", 400));
+			return next(
+				new ErrorResponse(
+					"You need to have full team to be war participant!",
+					400
+				)
+			);
 		}
-		
+
 		user.warParticipant = !user.warParticipant;
 		await user.save();
 
@@ -187,13 +184,10 @@ exports.updateWarParticipant = async (req, res, next) => {
 				message: "Saved.",
 			},
 			body: {
-				user: {
-					warParticipant: user.warParticipant,
-				},
+				warParticipant: user.warParticipant,
 			},
-		})
-
+		});
 	} catch (error) {
 		next(error);
 	}
-}
+};

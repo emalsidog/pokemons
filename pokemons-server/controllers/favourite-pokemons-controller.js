@@ -58,13 +58,17 @@ exports.add = async (req, res, next) => {
 			{ new: true }
 		);
 
+		const parsedTeam = await getParsedTeam(user?.favouritePokemons, {
+			withTotal: false
+		});
+
 		res.status(200).json({
 			status: {
 				isError: false,
 				message: "Added.",
 			},
 			body: {
-				favouritePokemons: user?.favouritePokemons,
+				favouritePokemons: parsedTeam,
 			},
 		});
 	} catch (error) {
@@ -98,13 +102,17 @@ exports.remove = async (req, res, next) => {
 			}
 		);
 
+		const parsedTeam = await getParsedTeam(user.favouritePokemons, {
+			withTotal: false
+		});
+
 		res.status(200).json({
 			status: {
 				isError: false,
 				message: "Removed.",
 			},
 			body: {
-				favouritePokemons: user.favouritePokemons,
+				favouritePokemons: parsedTeam,
 			},
 		});
 	} catch (error) {

@@ -6,3 +6,9 @@
 .battle-controllers div {
 	margin-right: 5px;
 }
+
+@media screen and (max-width: 1000px) {
+	.battle-controllers {
+		padding-bottom: 20px;
+	}
+}

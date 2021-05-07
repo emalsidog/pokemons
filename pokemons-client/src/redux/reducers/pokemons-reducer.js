@@ -1,7 +1,5 @@
 // Constants
-import * as pokemonsTypes from "../constants/pokemons-constants";
-import * as favouritePokemonsTypes from "../constants/favourite-pokemons-constants";
-import * as teamPokemonsTypes from "../constants/team-pokemons-constants";
+import * as types from "../constants/pokemons-constants";
 
 const initialState = {
 	pokemons: [],
@@ -10,72 +8,166 @@ const initialState = {
 
 	totalCount: 0,
 
-	isLoading: false,
+	isFetchingData: false,
+	inInAction: false
 };
 
 const pokemons = (state = initialState, action) => {
 	switch (action.type) {
-		case pokemonsTypes.GET_POKEMONS_REQUEST: {
+		// GET POKEMONS
+		case types.GET_POKEMONS_REQUEST: {
 			return {
 				...state,
-				isLoading: true,
+				isFetchingData: true,
 			};
 		}
-		case pokemonsTypes.GET_POKEMONS_SUCCESS: {
+		case types.GET_POKEMONS_SUCCESS: {
 			const { pokemons, totalCount } = action.data;
 			return {
 				...state,
 				pokemons,
 				totalCount,
-				isLoading: false,
+				isFetchingData: false,
 			};
 		}
-		case pokemonsTypes.GET_POKEMONS_FAILURE: {
+		case types.GET_POKEMONS_FAILURE: {
 			return {
 				...state,
-				isLaoding: false,
+				isFetchingData: false,
 			};
 		}
 
 		// GET FAVOURITE POKEMONS
-		case favouritePokemonsTypes.GET_FAVOURITE_POKEMONS_REQUEST: {
+		case types.GET_FAVOURITE_POKEMONS_REQUEST: {
 			return {
 				...state,
-				isLoading: true,
+				isFetchingData: true,
 			};
 		}
-		case favouritePokemonsTypes.GET_FAVOURITE_POKEMONS_SUCCESS: {
+		case types.GET_FAVOURITE_POKEMONS_SUCCESS: {
 			return {
 				...state,
-				isLoading: false,
+				isFetchingData: false,
 				favouritePokemons: [...action.favouritePokemons],
 			};
 		}
-		case favouritePokemonsTypes.GET_FAVOURITE_POKEMONS_FAILURE: {
+		case types.GET_FAVOURITE_POKEMONS_FAILURE: {
 			return {
 				...state,
-				isLoading: false,
+				isFetchingData: false,
 			};
 		}
 
 		// GET TEAM POKEMONS
-		case teamPokemonsTypes.GET_TEAM_POKEMONS_REQUEST: {
+		case types.GET_TEAM_POKEMONS_REQUEST: {
 			return {
 				...state,
-				isLoading: true,
+				isFetchingData: true,
 			};
 		}
-		case teamPokemonsTypes.GET_TEAM_POKEMONS_SUCCESS: {
+		case types.GET_TEAM_POKEMONS_SUCCESS: {
 			return {
 				...state,
-				isLoading: false,
+				isFetchingData: false,
 				teamPokemons: [...action.teamPokemons],
 			};
 		}
-		case teamPokemonsTypes.GET_TEAM_POKEMONS_FAILURE: {
+		case types.GET_TEAM_POKEMONS_FAILURE: {
 			return {
 				...state,
-				isLoading: false,
+				isFetchingData: false,
+			};
+		}
+
+		// ADD TO FAVOURITE
+		case types.ADD_TO_FAVOURITE_REQUEST: {
+			return {
+				...state,
+				inInAction: true,
+			};
+		}
+		case types.ADD_TO_FAVOURITE_SUCCESS: {
+			const { body } = action;
+			const newFavouritePokemons = body.favouritePokemons
+				? [...body.favouritePokemons]
+				: [...state.user.favouritePokemons];
+
+			return {
+				...state,
+				inInAction: false,
+				favouritePokemons: newFavouritePokemons,
+			};
+		}
+		case types.ADD_TO_FAVOURITE_FAILURE: {
+			return {
+				...state,
+				inInAction: false,
+			};
+		}
+
+		// REMOVE FROM FAVOURITE
+		case types.REMOVE_FROM_FAVOURITE_REQUEST: {
+			return {
+				...state,
+				inInAction: true,
+			};
+		}
+		case types.REMOVE_FROM_FAVOURITE_SUCCESS: {
+			const { favouritePokemons } = action.body;
+			return {
+				...state,
+				inInAction: false,
+				favouritePokemons,
+			};
+		}
+		case types.REMOVE_FROM_FAVOURITE_FAILURE: {
+			return {
+				...state,
+				inInAction: false,
+			};
+		}
+
+		// ADD TO TEAM
+		case types.ADD_TO_TEAM_REQUEST: {
+			return {
+				...state,
+				inInAction: true,
+			};
+		}
+		case types.ADD_TO_TEAM_SUCCESS: {
+			const { teamPokemons } = action;
+			return {
+				...state,
+				inInAction: false,
+				teamPokemons,
+			};
+		}
+		case types.ADD_TO_TEAM_FAILURE: {
+			return {
+				...state,
+				inInAction: false,
+			};
+		}
+
+		// REMOVE FROM TEAM
+		case types.REMOVE_FROM_TEAM_REQUEST: {
+			return {
+				...state,
+				inInAction: true,
+			};
+		}
+		case types.REMOVE_FROM_TEAM_SUCCESS: {
+			const { teamPokemons } = action;
+			return {
+				...state,
+				inInAction: false,
+				teamPokemons,
+			};
+		}
+		case types.REMOVE_FROM_TEAM_FAILURE: {
+			return {
+				...state,
+				inInAction: false,
 			};
 		}
 

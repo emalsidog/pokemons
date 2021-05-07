@@ -25,3 +25,9 @@
 .battle-points-info span {
     font-weight: 700;
 }
+
+@media screen and (max-width: 768px) {
+    .battle-info {
+        flex-direction: column;
+    }
+}

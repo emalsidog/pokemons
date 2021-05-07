@@ -1,18 +1,18 @@
 // Select pokemons
-export const selectPokemons = (state) => {
+export const selectPokemons = state => {
 	const { totalCount, pokemons } = state.pokemons;
-	return {
-		totalCount,
-		pokemons,
-	};
+	return { totalCount, pokemons };
 };
 
 // Select favourite pokemons
-export const selectFavouritePokemons = (state) =>
+export const selectFavouritePokemons = state =>
 	state.pokemons.favouritePokemons;
 
 // Select team pokemons
-export const selectTeamPokemons = (state) => state.pokemons.teamPokemons;
+export const selectTeamPokemons = state => state.pokemons.teamPokemons;
 
-// Select isLoading
-export const selectIsLoading = (state) => state.pokemons.isLoading;
+// Select isFetchingData
+export const selectIsFetchingData = state => state.pokemons.isFetchingData;
+
+// Select isInAction
+export const selectIsInAction = state => state.pokemons.isInAction;

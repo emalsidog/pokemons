@@ -271,27 +271,6 @@ exports.getCurrentUser = (req, res) => {
 	}
 };
 
-// Creating activation token
-const createActivationToken = (newUser) => {
-	return jwt.sign(newUser, process.env.ACTIVATION_TOKEN_SECRET, {
-		expiresIn: "1h",
-	});
-};
-
-// Creating access token
-const createAccessToken = (id) => {
-	return jwt.sign({ id }, process.env.ACCESS_TOKEN_SECRET, {
-		expiresIn: "7d",
-	});
-};
-
-// Creating password reset token
-const createResetToken = (id) => {
-	return jwt.sign({ id }, process.env.RESET_TOKEN_SECRET, {
-		expiresIn: "15m",
-	});
-};
-
 const createToken = (payload, secretKey, expireTime) => {
 	return jwt.sign(payload, secretKey, {
 		expiresIn: expireTime,

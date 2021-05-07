@@ -7,7 +7,7 @@
 	margin-bottom: 20px;
 }
 
-.card.test {
+.card.battle {
     width: 19%;
     margin: 0;
 }
@@ -124,10 +124,20 @@
 	.card {
 		width: 48%;
 	}
+
+    .card.battle {
+        width: 32%;
+        margin-bottom: 10px; 
+    }
 }
 
 @media screen and (max-width: 620px) {
 	.card {
 		width: 100%;
 	}
+
+    .card.battle {
+        width: 100%;  
+        margin-bottom: 10px; 
+    }
 }

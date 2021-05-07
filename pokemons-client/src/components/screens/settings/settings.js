@@ -11,6 +11,7 @@ import {
 	selectUser,
 	selectIsLoading,
 } from "../../../redux/selectors/user-selectors";
+import { selectTeamPokemons } from "../../../redux/selectors/pokemons-selectors";
 
 // Components
 import Layout from "../../layout";
@@ -29,6 +30,7 @@ const Settings = () => {
 	const dispatch = useDispatch();
 	const user = useSelector(selectUser);
 	const isLoading = useSelector(selectIsLoading);
+	const teamPokemons = useSelector(selectTeamPokemons);
 
 	const {
 		register: changeEmailRegister,
@@ -94,6 +96,7 @@ const Settings = () => {
 		dispatch(updateActions.updateWarParticipant());
 	};
 
+
 	return (
 		<Layout>
 			<Heading
@@ -137,7 +140,10 @@ const Settings = () => {
 								)}
 							</div>
 
-							<button className="btn btn-primary" disabled={isLoading}>
+							<button
+								className="btn btn-primary"
+								disabled={isLoading}
+							>
 								{isLoading ? "Loading..." : "Submit"}
 							</button>
 						</form>
@@ -145,7 +151,10 @@ const Settings = () => {
 				</div>
 
 				<div className="settings-row-action">
-					<button onClick={handleShowChangeEmailForm} className="btn btn-primary">
+					<button
+						onClick={handleShowChangeEmailForm}
+						className="btn btn-primary"
+					>
 						{showChangeEmailForm ? "Cancel" : "Change"}
 					</button>
 				</div>
@@ -194,7 +203,10 @@ const Settings = () => {
 									</span>
 								)}
 							</div>
-							<button className="btn btn-primary" disabled={isLoading}>
+							<button
+								className="btn btn-primary"
+								disabled={isLoading}
+							>
 								{isLoading ? "Loading..." : "Submit"}
 							</button>
 						</form>
@@ -245,7 +257,10 @@ const Settings = () => {
 									</div>
 								)}
 							</div>
-							<button className="btn btn-primary" disabled={isLoading}>
+							<button
+								className="btn btn-primary"
+								disabled={isLoading}
+							>
 								{isLoading ? "Loading..." : "Submit"}
 							</button>
 						</form>
@@ -253,7 +268,10 @@ const Settings = () => {
 				</div>
 
 				<div className="settings-row-action">
-					<button className="btn btn-primary" onClick={handleShowChangePhoneForm}>
+					<button
+						className="btn btn-primary"
+						onClick={handleShowChangePhoneForm}
+					>
 						{showChangePhoneForm ? "Cancel" : "Change"}
 					</button>
 				</div>
@@ -333,7 +351,10 @@ const Settings = () => {
 									</div>
 								)}
 							</div>
-							<button className="btn btn-primary" disabled={isLoading}>
+							<button
+								className="btn btn-primary"
+								disabled={isLoading}
+							>
 								{isLoading ? "Loading..." : "Submit"}
 							</button>
 						</form>
@@ -341,7 +362,10 @@ const Settings = () => {
 				</div>
 
 				<div className="settings-row-action">
-					<button onClick={handleShowChangeNameForm} className="btn btn-primary">
+					<button
+						onClick={handleShowChangeNameForm}
+						className="btn btn-primary"
+					>
 						{showChangeNameForm ? "Cancel" : "Change"}
 					</button>
 				</div>
@@ -353,7 +377,7 @@ const Settings = () => {
 					<input
 						onChange={handleWarParticipantChange}
 						type="checkbox"
-						disabled={user.teamPokemons.length < 5}
+						disabled={teamPokemons.length < 5}
 						defaultChecked={user.warParticipant}
 					/>
 				</div>

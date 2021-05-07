@@ -3,9 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 // Actions
-import {
-	clearBattleResult,
-} from "../../../redux/actions/battles-actions";
+import { clearBattleResult } from "../../../redux/actions/battles-actions";
 
 // Selectors
 import {

@@ -67,13 +67,18 @@ exports.add = async (req, res, next) => {
 		}
         await user.save();
 
+		
+		const parsedTeam = await getParsedTeam(user?.teamPokemons, {
+			withTotal: false
+		});
+
 		res.status(200).json({
 			status: {
 				isError: false,
 				message: "Added.",
 			},
 			body: {
-				teamPokemons: user?.teamPokemons,
+				teamPokemons: parsedTeam,
 				warParticipant: user.warParticipant
 			},
 		});
@@ -116,13 +121,17 @@ exports.remove = async (req, res, next) => {
 
 		await user.save();
 
+		const parsedTeam = await getParsedTeam(user.teamPokemons, {
+			withTotal: false
+		});
+
 		res.status(200).json({
 			status: {
 				isError: false,
 				message: "Removed.",
 			},
 			body: {
-				teamPokemons: user.teamPokemons,
+				teamPokemons: parsedTeam,
 				warParticipant: user.warParticipant
 			},
 		});

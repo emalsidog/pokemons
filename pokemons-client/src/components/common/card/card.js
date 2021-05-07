@@ -1,17 +1,17 @@
 // Dependencies
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 // Actions
 import {
 	addToFavourite,
 	removeFromFavourite,
-} from "../../../redux/actions/favourite-pokemons-actions";
-
-import {
 	addToTeam,
 	removeFromTeam,
-} from "../../../redux/actions/team-pokemons-actions";
+} from "../../../redux/actions/pokemons-actions";
+
+// Selectors
+import { selectFavouritePokemons, selectTeamPokemons } from "../../../redux/selectors/pokemons-selectors";
 
 // Utils
 import formatString from "../../utils/format-string";
@@ -20,10 +20,12 @@ import formatString from "../../utils/format-string";
 import "./card.css";
 
 const Card = (props) => {
-	const { id, name, sprite, types, stats, favouritePokemons, teamPokemons, cardType } = props;
+	const { id, name, sprite, types, stats, cardType } = props;
 	let cardTotal = 0;
 
 	const dispatch = useDispatch();
+	const favouritePokemons = useSelector(selectFavouritePokemons);
+	const teamPokemons = useSelector(selectTeamPokemons);
 
 	const handleAddToFavourite = (id) => {
 		dispatch(addToFavourite(id));
@@ -98,7 +100,7 @@ const Card = (props) => {
 
 		case "BATTLE": {
 			displayActionButtons = null;
-			cardClassNames += "test";
+			cardClassNames += "battle";
 			break;
 		}
 
@@ -107,13 +109,13 @@ const Card = (props) => {
 			let isTeam = false;
 
 			for (let pokemon of favouritePokemons) {
-				if (pokemon.pokemonId === id) {
+				if (pokemon.id === id) {
 					isFavourite = true;
 				}
 			}
 
 			for (let pokemon of teamPokemons) {
-				if (pokemon.pokemonId === id) {
+				if (pokemon.id === id) {
 					isTeam = true;
 				}
 			}

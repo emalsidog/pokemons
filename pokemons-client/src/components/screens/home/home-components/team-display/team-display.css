@@ -1,8 +1,24 @@
-.team-total {
-	writing-mode: tb-rl;
-
-    font-family: "NCS Rogueland";
+.total {
+	font-family: "NCS Rogueland";
 	font-size: 1.1rem;
+}
 
+.total.team-total {
+	writing-mode: vertical-rl;
 	transform: rotate(360deg);
+}
+
+.total.team-total-upper {
+	display: none;
+}
+
+@media screen and (max-width: 1000px) {
+	.total.team-total {
+		writing-mode: horizontal-tb;
+		display: none;
+	}
+
+	.total.team-total-upper {
+		display: block;
+	}
 }

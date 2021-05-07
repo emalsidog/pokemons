@@ -8,10 +8,9 @@ import queryString from "query-string";
 import { getPokemonsAction } from "../../../redux/actions/pokemons-actions";
 
 // Selectors
-import { selectUser } from "../../../redux/selectors/user-selectors";
 import {
 	selectPokemons,
-	selectIsLoading,
+	selectIsFetchingData,
 } from "../../../redux/selectors/pokemons-selectors";
 
 // Styles
@@ -30,9 +29,8 @@ const Pokemons = () => {
 
 	// Redux
 	const dispatch = useDispatch();
-	const user = useSelector(selectUser);
 	const { pokemons, totalCount } = useSelector(selectPokemons);
-	const isLoading = useSelector(selectIsLoading);
+	const isFetchingData = useSelector(selectIsFetchingData);
 
 	// Get array of pokemons
 	const values = queryString.parse(history.location.search);
@@ -57,8 +55,6 @@ const Pokemons = () => {
 				name={name}
 				types={types}
 				stats={stats}
-				favouritePokemons={user.favouritePokemons}
-				teamPokemons={user.teamPokemons}
 			/>
 		);
 	});
@@ -70,7 +66,7 @@ const Pokemons = () => {
 				description="List of all existing Pokémon."
 			/>
 
-			{isLoading ? (
+			{isFetchingData ? (
 				<Spinner />
 			) : (
 				<React.Fragment>

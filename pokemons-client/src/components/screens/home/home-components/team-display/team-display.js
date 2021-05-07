@@ -26,10 +26,14 @@ const TeamDisplay = ({ player }) => {
 	});
 
 	return (
-		<section className="cards">
-			{main}
-			<div className="team-total">Team total: {teamTotal}</div>
-		</section>
+		<React.Fragment>
+			<div className="total team-total-upper">Team total: {teamTotal}</div>
+			
+			<section className="cards">
+				{main}
+				<div className="total team-total">Team total: {teamTotal}</div>
+			</section>
+		</React.Fragment>
 	);
 };
 
