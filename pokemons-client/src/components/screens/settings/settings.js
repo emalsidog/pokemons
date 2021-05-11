@@ -20,6 +20,10 @@ import Heading from "../../common/heading";
 // Styles
 import "./settings.css";
 
+
+
+import { updateEmailRequest } from "../../../redux/actions/user-update-actions";
+
 const Settings = () => {
 	const [showChangeEmailForm, setShowChangeEmailForm] = useState(false);
 	const [showChangeUsernameForm, setShowChangeUsernameForm] = useState(false);
@@ -57,7 +61,8 @@ const Settings = () => {
 	} = useForm();
 
 	const changeEmailOnSubmit = (data) => {
-		dispatch(updateActions.updateEmail(data));
+		// dispatch(updateActions.updateEmail(data));
+		dispatch(updateEmailRequest(data));
 		setShowChangeEmailForm(false);
 	};
 

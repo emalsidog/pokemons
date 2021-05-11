@@ -13,6 +13,27 @@ export const stopFetchingUser = () => ({
 	type: userTypes.STOP_FETCHING_USER,
 });
 
+
+
+export const updateEmailRequest = (data) => ({
+    type: userTypes.UPDATE_EMAIL_REQUEST,
+	email: data.email
+})
+
+export const updateEmailSuccess = (body) => ({
+    type: userTypes.UPDATE_EMAIL_SUCCESS,
+	body
+})
+
+export const updateEmailFailure = (status) => ({
+    type: userTypes.UPDATE_EMAIL_FAILURE,
+	status
+})
+
+
+
+
+
 // GET => /users/current-user
 export const getCurrentUserAction = () => {
 	return async (dispatch) => {
