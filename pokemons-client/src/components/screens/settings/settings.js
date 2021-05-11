@@ -4,25 +4,29 @@ import { useSelector, useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 
 // Actions
-import * as updateActions from "../../../redux/actions/user-update-actions";
+import {
+	updateEmailRequest,
+	updateUsernameRequest,
+	updatePhoneRequest,
+	updateNameRequest,
+	updateWarParticipantRequest,
+} from "../../../redux/actions/user-update-actions";
 
 // Selectors
 import {
 	selectUser,
 	selectIsLoading,
 } from "../../../redux/selectors/user-selectors";
+
 import { selectTeamPokemons } from "../../../redux/selectors/pokemons-selectors";
 
 // Components
 import Layout from "../../layout";
 import Heading from "../../common/heading";
+import ShowError from "../auth/common/show-error";
 
 // Styles
 import "./settings.css";
-
-
-
-import { updateEmailRequest, updateUsernameRequest, updatePhoneRequest } from "../../../redux/actions/user-update-actions";
 
 const Settings = () => {
 	const [showChangeEmailForm, setShowChangeEmailForm] = useState(false);
@@ -61,25 +65,22 @@ const Settings = () => {
 	} = useForm();
 
 	const changeEmailOnSubmit = (data) => {
-		// dispatch(updateActions.updateEmail(data));
 		dispatch(updateEmailRequest(data));
 		setShowChangeEmailForm(false);
 	};
 
 	const changeUsernameOnSubmit = (data) => {
-		// dispatch(updateActions.updateUsername(data));
 		dispatch(updateUsernameRequest(data));
 		setShowChangeUsernameForm(false);
 	};
 
 	const changePhoneOnSubmit = (data) => {
-		// dispatch(updateActions.updatePhone(data));
 		dispatch(updatePhoneRequest(data));
 		setShowChangePhoneForm(false);
 	};
 
 	const changeNameOnSubmit = (data) => {
-		dispatch(updateActions.updateName(data));
+		dispatch(updateNameRequest(data));
 		setShowChangeNameForm(false);
 	};
 
@@ -100,9 +101,8 @@ const Settings = () => {
 	};
 
 	const handleWarParticipantChange = () => {
-		dispatch(updateActions.updateWarParticipant());
+		dispatch(updateWarParticipantRequest());
 	};
-
 
 	return (
 		<Layout>

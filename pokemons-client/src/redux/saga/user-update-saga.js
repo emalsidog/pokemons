@@ -10,16 +10,19 @@ import * as types from "../constants/user-update-constants";
 
 // Utils
 import { isUnauthorized } from "../utils/is-unauthorized";
-import { AxiosPostRequest } from "../utils/server-request";
+import { AxiosPostRequest, AxiosGetRequest } from "../utils/server-request";
 
 // Watcher
 export function* userUpdateWatcher() {
 	yield takeEvery(types.UPDATE_EMAIL_REQUEST, updateEmail);
     yield takeEvery(types.UPDATE_USERNAME_REQUEST, updateUsername);
     yield takeEvery(types.UPDATE_PHONE_REQUEST, updatePhone);
+    yield takeEvery(types.UPDATE_NAME_REQUEST, updateName);
+    yield takeEvery(types.UPDATE_WAR_PARTICIPANT_REQUEST, updateWarParticipant);
+    yield takeEvery(types.GET_CURRENT_USER_REQUEST, getCurrentUser);
 }
 
-// Update email
+// UPDATE EMAIL
 function* updateEmail({ email }) {
 	try {
 		const { data } = yield call(() => AxiosPostRequest("/update/email", { email }));
@@ -35,7 +38,7 @@ function* updateEmail({ email }) {
 	}
 }
 
-// Update username
+// UPDATE USERNAME
 function* updateUsername({ username }) {
     try {
         const { data } = yield call(() => AxiosPostRequest("/update/username", { username }));
@@ -52,7 +55,7 @@ function* updateUsername({ username }) {
     }
 }
 
-// Update phone 
+// UPDATE PHONE
 function* updatePhone({ phone }) {
     try {
         const { data } = yield call(() => AxiosPostRequest("/update/phone", { phone }));
@@ -65,5 +68,51 @@ function* updatePhone({ phone }) {
 
         yield put(actions.updatePhoneFailure());
         yield put(addNotification(error.response.data.status));
+    }
+}
+
+// UPDATE NAME
+function* updateName({ name }) {
+    try {
+        const { data } = yield call(() => AxiosPostRequest("/update/name", name));
+        const { body, status } = data;
+
+        yield put(actions.updateNameSuccess(body));
+        yield put(addNotification(status));
+    } catch (error) {
+        isUnauthorized(error.response.status);
+
+        yield put(actions.updateNameFailure());
+        yield put(addNotification(error.response.data.status));
+    }
+}
+
+// UPDATE WAR PARTICIPANT
+function* updateWarParticipant() {
+    try {
+        const { data } = yield call(() => AxiosGetRequest("/update/war-participant"));
+        const { body, status } = data;
+
+        yield put(actions.updateWarParticipantSuccess(body));
+        yield put(addNotification(status));
+    } catch (error) {
+        isUnauthorized(error.response.status);
+
+        yield put(actions.updateWarParticipantFailure);
+        yield put(addNotification(error.response.data.status))
+    }
+}
+
+// GET CURRENT USER
+function* getCurrentUser() {
+    try {
+        const { data } = yield call(() => AxiosGetRequest("/users/current-user"));
+        const { body } = data;
+
+        yield put(actions.getCurrentUserSuccess(body));
+    } catch (error) {
+        isUnauthorized(error.response.status);
+
+        yield put(actions.getCurrentUserFailure());
     }
 }

@@ -4,7 +4,7 @@ import { Switch, Route } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 // Actions
-import { getCurrentUserAction, stopFetchingUser } from "../../redux/actions/user-update-actions";
+import { getCurrentUserRequest, stopFetchingUser } from "../../redux/actions/user-update-actions";
 import { getTeamPokemons, getFavouritePokemons } from "../../redux/actions/pokemons-actions";
 
 // Hocs
@@ -34,7 +34,7 @@ const App = () => {
 	
 	useEffect(() => {
 		if (localStorage.getItem("accessToken")) {
-			dispatch(getCurrentUserAction());
+			dispatch(getCurrentUserRequest());
 			dispatch(getTeamPokemons());
 			dispatch(getFavouritePokemons());
 		} else {
