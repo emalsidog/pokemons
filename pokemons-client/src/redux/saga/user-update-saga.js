@@ -1,5 +1,4 @@
 // Dependencies
-import axios from "axios";
 import { put, call, takeEvery } from "redux-saga/effects";
 
 // Actions
@@ -11,16 +10,18 @@ import * as types from "../constants/user-update-constants";
 
 // Utils
 import { isUnauthorized } from "../utils/is-unauthorized";
+import { AxiosPostRequest } from "../utils/server-request";
 
 // Watcher
 export function* userUpdateWatcher() {
 	yield takeEvery(types.UPDATE_EMAIL_REQUEST, updateEmail);
+    yield takeEvery(types.UPDATE_USERNAME_REQUEST, updateUsername);
 }
 
-// Update email request
+// Update email
 function* updateEmail({ email }) {
 	try {
-		const { data } = yield call(() => request("/update/email", {email}));
+		const { data } = yield call(() => AxiosPostRequest("/update/email", { email }));
         const { body, status } = data;
 
 		yield put(actions.updateEmailSuccess(body));
@@ -33,13 +34,20 @@ function* updateEmail({ email }) {
 	}
 }
 
+// Update username
+function* updateUsername({ username }) {
+    try {
+        const { data } = yield call(() => AxiosPostRequest("/update/username", { username }));
+        const { body, status } = data;
 
+        yield put(actions.updateUsernameSuccess(body));
+        yield put(addNotification(status));
+    } catch (error) {
+        console.log(error);
+        isUnauthorized(error.response.status);
 
-const request = (url, payload) => {
-    console.log(payload);
-	return axios.post(`http://localhost:4000${url}`, payload, {
-		headers: {
-			Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-		},
-	});
-};
+        yield put(actions.updateUsernameFailure());
+        yield put(addNotification(error.response.data.status));
+    }
+}
+

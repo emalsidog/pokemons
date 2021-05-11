@@ -22,7 +22,7 @@ import "./settings.css";
 
 
 
-import { updateEmailRequest } from "../../../redux/actions/user-update-actions";
+import { updateEmailRequest, updateUsernameRequest } from "../../../redux/actions/user-update-actions";
 
 const Settings = () => {
 	const [showChangeEmailForm, setShowChangeEmailForm] = useState(false);
@@ -67,7 +67,8 @@ const Settings = () => {
 	};
 
 	const changeUsernameOnSubmit = (data) => {
-		dispatch(updateActions.updateUsername(data));
+		// dispatch(updateActions.updateUsername(data));
+		dispatch(updateUsernameRequest(data));
 		setShowChangeUsernameForm(false);
 	};
 

@@ -15,20 +15,42 @@ export const stopFetchingUser = () => ({
 
 
 
+
 export const updateEmailRequest = (data) => ({
-    type: userTypes.UPDATE_EMAIL_REQUEST,
-	email: data.email
-})
+	type: userTypes.UPDATE_EMAIL_REQUEST,
+	email: data.email,
+});
 
 export const updateEmailSuccess = (body) => ({
-    type: userTypes.UPDATE_EMAIL_SUCCESS,
-	body
-})
+	type: userTypes.UPDATE_EMAIL_SUCCESS,
+	body,
+});
 
-export const updateEmailFailure = (status) => ({
-    type: userTypes.UPDATE_EMAIL_FAILURE,
-	status
-})
+export const updateEmailFailure = () => ({
+	type: userTypes.UPDATE_EMAIL_FAILURE,
+});
+
+
+
+
+
+export const updateUsernameRequest = (data) => ({
+	type: userTypes.UPDATE_USERNAME_REQUEST,
+	username: data.username,
+});
+
+export const updateUsernameSuccess = (body) => ({
+	type: userTypes.UPDATE_USERNAME_SUCCESS,
+	body
+});
+
+export const updateUsernameFailure = () => ({
+	type: userTypes.UPDATE_USERNAME_FAILURE,
+});
+
+
+
+
 
 
 
@@ -153,7 +175,7 @@ export const updateWarParticipant = () => {
 			const { data } = await AxiosGetRequest("/update/war-participant");
 
 			const { status, body } = data;
-			
+
 			dispatch({
 				type: userTypes.UPDATE_WAR_PARTICIPANT_SUCCESS,
 				body,
