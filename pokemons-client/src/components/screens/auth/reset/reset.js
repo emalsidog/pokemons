@@ -16,8 +16,8 @@ import {
 // Styles
 import "../index.css";
 
-// Antd components
-import { Input, Button } from "antd";
+// Componetns
+import ShowError from "../common/show-error";
 
 const Reset = ({ history }) => {
 	// Redux
@@ -58,7 +58,7 @@ const Reset = ({ history }) => {
 			>
 				<h2>Reset password</h2>
 				<div className="form-group">
-					<Input
+					<input
 						{...register("password", {
 							required: "Password is a required field",
 							minLength: {
@@ -71,39 +71,32 @@ const Reset = ({ history }) => {
 							},
 						})}
 						type="password"
+						className="inp"
+						disabled={isLoading}
 						placeholder="Password"
 					/>
-					{errors.password && (
-						<span className="error-message">
-							{errors.password.message}
-						</span>
-					)}
+					{errors.password && <ShowError message={errors.password.message} />}
 				</div>
 				<div className="form-group">
-					<Input
+					<input
 						{...register("confirmPassword", {
 							required: "Confirm password is a required field",
 							validate: (value) =>
 								value === password.current ||
 								"Password do not match",
 						})}
+						className="inp"
+						disabled={isLoading}
 						type="password"
 						placeholder="Confirm password"
 					/>
-					{errors.confirmPassword && (
-						<span className="error-message">
-							{errors.confirmPassword.message}
-						</span>
-					)}
+					{errors.confirmPassword && <ShowError message={errors.confirmPassword.message} />}
 				</div>
-				<Button
-					block
-					type="primary"
-					htmlType="submit"
-					loading={isLoading}
-				>
+
+				<button disabled={isLoading} className="btn btn-primary" style={{ width: "100%" }}>
 					{isLoading ? "Reseting..." : "Reset"}
-				</Button>
+				</button>
+
 			</form>
 		</div>
 	);

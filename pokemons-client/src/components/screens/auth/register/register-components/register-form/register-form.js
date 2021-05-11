@@ -78,7 +78,7 @@ const RegisterForm = ({ isLoading }) => {
 				className="btn btn-primary"
 				style={{ width: "100%" }}
 				type="submit"
-				loading={isLoading}
+				disabled={isLoading}
 			>
 				{isLoading ? "Registration..." : "Register"}
 			</button>

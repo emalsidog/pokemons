@@ -52,7 +52,7 @@ const Login = ({ history }) => {
 				onClose={onClose}
 				form="resetForm"
 			>
-				<ResetForm isLoading={isLoading} setIsModalVisible={setIsModalVisible} />
+				<ResetForm isLoading={isLoading} setIsModalVisible={setIsModalVisible} isModalVisible={isModalVisible} />
 			</Modal>
 		</React.Fragment>
 	);

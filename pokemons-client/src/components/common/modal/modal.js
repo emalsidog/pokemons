@@ -5,21 +5,9 @@ import ReactDOM from "react-dom";
 // Styles
 import styles from "./modal.module.css";
 
-// Types
-// interface ModalProps {
-//   children: React.ReactNode;
-
-//   isVisible: boolean;
-//   title: string;
-//   isStatic?: boolean;
-
-//   onClose: () => void;
-//   onOk: () => void;
-// }
-
 const Modal = (props) => {
 	const {
-		onOk,
+		onOk = null,
 		onClose,
 		isVisible,
 
@@ -85,7 +73,7 @@ const Modal = (props) => {
 						className="btn btn-primary"
 						onClick={onOk}
 					>
-						Save
+						Reset!
 					</button>
 				</div>
 			</div>

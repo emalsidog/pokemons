@@ -70,6 +70,11 @@ exports.battle = async (req, res, next) => {
 			},
 			{ $sample: { size: 1 } },
 		]).exec();
+
+		if (randomArray.length <= 0) {
+			return next(new ErrorResponse("Could not find opponent.", 400));
+		}
+
 		const randomUser = await User.findById(randomArray[0]._id);
 
 		if (!randomUser) {

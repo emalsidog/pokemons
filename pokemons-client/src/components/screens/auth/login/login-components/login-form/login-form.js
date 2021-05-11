@@ -53,7 +53,7 @@ const LoginForm = (props) => {
 
 			{loginFields}
 
-			<button className="btn btn-primary" style={{ width: "100%" }}>
+			<button disabled={isLoading} className="btn btn-primary" style={{ width: "100%" }}>
 				{isLoading ? "Logging you in..." : "Log in"}
 			</button>
 

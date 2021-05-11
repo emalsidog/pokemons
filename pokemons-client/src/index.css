@@ -86,7 +86,7 @@ body {
 }
 
 .btn:disabled {
-	background-color: #91def3;
+	background-color: #91def393;
 }
 
 .btn:disabled:hover {
@@ -105,6 +105,10 @@ body {
 .btn-primary:focus {
 	outline: none;
 	background-color: #3f93e2;
+}
+
+.btn-primary:disabled {
+	background-color: #91def3;
 }
 
 .btn-primary:disabled:hover {
@@ -152,6 +156,8 @@ body {
 	display: block;
 	width: 100%;
 
+	padding: 5px 5px;
+
 	box-sizing: border-box;
 
 	border: none;
@@ -179,7 +185,7 @@ body {
 
 /* Forms */
 .form-group {
-	margin: 15px 0;
+	margin: 10px 0;
 }
 
 /* Divider */
