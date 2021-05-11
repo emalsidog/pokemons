@@ -16,6 +16,7 @@ import { AxiosPostRequest } from "../utils/server-request";
 export function* userUpdateWatcher() {
 	yield takeEvery(types.UPDATE_EMAIL_REQUEST, updateEmail);
     yield takeEvery(types.UPDATE_USERNAME_REQUEST, updateUsername);
+    yield takeEvery(types.UPDATE_PHONE_REQUEST, updatePhone);
 }
 
 // Update email
@@ -51,3 +52,18 @@ function* updateUsername({ username }) {
     }
 }
 
+// Update phone 
+function* updatePhone({ phone }) {
+    try {
+        const { data } = yield call(() => AxiosPostRequest("/update/phone", { phone }));
+        const { body, status } = data;
+
+        yield put(actions.updatePhoneSuccess(body));
+        yield put(addNotification(status));
+    } catch (error) {
+        isUnauthorized(error.response.status);
+
+        yield put(actions.updatePhoneFailure());
+        yield put(addNotification(error.response.data.status));
+    }
+}

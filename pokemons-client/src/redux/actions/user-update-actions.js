@@ -16,6 +16,8 @@ export const stopFetchingUser = () => ({
 
 
 
+
+
 export const updateEmailRequest = (data) => ({
 	type: userTypes.UPDATE_EMAIL_REQUEST,
 	email: data.email,
@@ -34,6 +36,8 @@ export const updateEmailFailure = () => ({
 
 
 
+
+
 export const updateUsernameRequest = (data) => ({
 	type: userTypes.UPDATE_USERNAME_REQUEST,
 	username: data.username,
@@ -41,7 +45,7 @@ export const updateUsernameRequest = (data) => ({
 
 export const updateUsernameSuccess = (body) => ({
 	type: userTypes.UPDATE_USERNAME_SUCCESS,
-	body
+	body,
 });
 
 export const updateUsernameFailure = () => ({
@@ -49,6 +53,24 @@ export const updateUsernameFailure = () => ({
 });
 
 
+
+
+
+
+
+export const updatePhoneRequest = (data) => ({
+	type: userTypes.UPDATE_PHONE_REQUEST,
+	phone: data.phone,
+});
+
+export const updatePhoneSuccess = (body) => ({
+	type: userTypes.UPDATE_PHONE_SUCCESS,
+	body,
+});
+
+export const updatePhoneFailure = () => ({
+	type: userTypes.UPDATE_PHONE_FAILURE,
+});
 
 
 

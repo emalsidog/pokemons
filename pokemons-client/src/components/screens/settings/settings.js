@@ -22,7 +22,7 @@ import "./settings.css";
 
 
 
-import { updateEmailRequest, updateUsernameRequest } from "../../../redux/actions/user-update-actions";
+import { updateEmailRequest, updateUsernameRequest, updatePhoneRequest } from "../../../redux/actions/user-update-actions";
 
 const Settings = () => {
 	const [showChangeEmailForm, setShowChangeEmailForm] = useState(false);
@@ -73,7 +73,8 @@ const Settings = () => {
 	};
 
 	const changePhoneOnSubmit = (data) => {
-		dispatch(updateActions.updatePhone(data));
+		// dispatch(updateActions.updatePhone(data));
+		dispatch(updatePhoneRequest(data));
 		setShowChangePhoneForm(false);
 	};
 
