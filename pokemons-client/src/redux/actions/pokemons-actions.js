@@ -1,179 +1,115 @@
 // Constants
 import * as types from "../constants/pokemons-constants";
-import { UPDATE_WAR_PARTICIPANT_SUCCESS } from "../constants/user-update-constants";
-
-// Actions
-import { addNotification } from "../actions/notification-actions";
-
-// Utils
-import { AxiosGetRequest, AxiosPostRequest } from "../utils/server-request";
-import { isUnauthorized } from "../utils/is-unauthorized";
 
 // GET POKEMONS
-export const getPokemonsAction = ({ page, limit = 12 }) => {
-	return async (dispatch) => {
-		dispatch({ type: types.GET_POKEMONS_REQUEST });
-		try {
-			const { data } = await AxiosGetRequest(
-				`/pokemons?page=${page}&limit=${limit}`
-			);
-			dispatch({ type: types.GET_POKEMONS_SUCCESS, data: data.body });
-		} catch (error) {
-			isUnauthorized(error.response.status);
 
-			dispatch({ type: types.GET_POKEMONS_FAILURE });
-			dispatch(addNotification(error.response.data.status));
-		}
-	};
-};
+export const getPokemonsRequest = ({ page, limit }) => ({
+	type: types.GET_POKEMONS_REQUEST,
+	data: {
+		page,
+		limit,
+	},
+});
 
-// GET FAVOURITE POKEMONS
-export const getFavouritePokemons = (sort = "a-z") => {
-	return async (dispatch) => {
-		dispatch({ type: types.GET_FAVOURITE_POKEMONS_REQUEST });
-		try {
-			const { data } = await AxiosGetRequest(
-				`/pokemons/favourite?sort=${sort}`
-			);
-			const { body } = data;
+export const getPokemonsSuccess = (data) => ({
+	type: types.GET_POKEMONS_SUCCESS,
+	data
+});
 
-			dispatch({
-				type: types.GET_FAVOURITE_POKEMONS_SUCCESS,
-				favouritePokemons: body.favouritePokemons,
-			});
-		} catch (error) {
-			isUnauthorized(error.response.status);
+export const getPokemonsFailure = () => ({
+	type: types.GET_POKEMONS_FAILURE,
+});
 
-			dispatch({ type: types.GET_FAVOURITE_POKEMONS_FAILURE });
-			dispatch(addNotification(error.response.data.status));
-		}
-	};
-};
+// GET FAVOURITE
 
-// ADD FAVOURITE POKEMONS
-export const addToFavourite = (pokemonId) => {
-	return async (dispatch) => {
-		dispatch({ type: types.ADD_TO_FAVOURITE_REQUEST });
-		try {
-			const { data } = await AxiosPostRequest("/pokemons/favourite/add", {
-				pokemonId,
-			});
+export const getFavouritePokemonsRequest = (sort) => ({
+	type: types.GET_FAVOURITE_POKEMONS_REQUEST,
+	sort
+});
 
-			const { body, status } = data;
+export const getFavouritePokemonsSuccess = (favouritePokemons) => ({
+	type: types.GET_FAVOURITE_POKEMONS_SUCCESS,
+	favouritePokemons
+});
 
-			dispatch({ type: types.ADD_TO_FAVOURITE_SUCCESS, body });
-			dispatch(addNotification(status));
-		} catch (error) {
-			isUnauthorized(error.response.status);
+export const getFavouritePokemonsFailure = () => ({
+	type: types.GET_FAVOURITE_POKEMONS_FAILURE
+});
 
-			dispatch({ type: types.ADD_TO_FAVOURITE_FAILURE });
-			dispatch(addNotification(error.response.data.status));
-		}
-	};
-};
+// ADD TO FAVOURITE
 
-// REMOVE FAVOURITE POKEMONS
-export const removeFromFavourite = (pokemonId) => {
-	return async (dispatch) => {
-		dispatch({ type: types.REMOVE_FROM_FAVOURITE_REQUEST });
-		try {
-			const { data } = await AxiosPostRequest(
-				"/pokemons/favourite/remove",
-				{
-					pokemonId,
-				}
-			);
+export const addToFavouriteRequest = (pokemonId) => ({
+	type: types.ADD_TO_FAVOURITE_REQUEST,
+	pokemonId
+});
 
-			const { body, status } = data;
+export const addToFavouriteSuccess = (body) => ({
+	type: types.ADD_TO_FAVOURITE_SUCCESS,
+	body
+});
 
-			dispatch({ type: types.REMOVE_FROM_FAVOURITE_SUCCESS, body });
-			dispatch(addNotification(status));
-		} catch (error) {
-			isUnauthorized(error.response.status);
+export const addToFavouriteFailure = () => ({
+	type: types.ADD_TO_FAVOURITE_FAILURE
+})
 
-			dispatch({ type: types.REMOVE_FROM_FAVOURITE_FAILURE });
-			dispatch(addNotification(error.response.data.status));
-		}
-	};
-};
+// REMOVE FROM FAVOURITE
 
-// GET TEAM POKEMONS
-export const getTeamPokemons = () => {
-	return async (dispatch) => {
-		dispatch({ type: types.GET_TEAM_POKEMONS_REQUEST });
-		try {
-			const { data } = await AxiosGetRequest("/pokemons/team");
-			const { body } = data;
+export const removeFromFavouriteRequest = (pokemonId) => ({
+	type: types.REMOVE_FROM_FAVOURITE_REQUEST,
+	pokemonId
+});
 
-			dispatch({
-				type: types.GET_TEAM_POKEMONS_SUCCESS,
-				teamPokemons: body.teamPokemons,
-			});
-		} catch (error) {
-			isUnauthorized(error.response.status);
+export const removeFromFavouriteSuccess = (body) => ({
+	type: types.REMOVE_FROM_FAVOURITE_SUCCESS,
+	body
+});
 
-			dispatch({ type: types.GET_TEAM_POKEMONS_FAILURE });
-			dispatch(addNotification(error.response.data.status));
-		}
-	};
-};
+export const removeFromFavouriteFailure = () => ({
+	type: types.REMOVE_FROM_FAVOURITE_FAILURE
+})
+
+// GET TEAM
+
+export const getTeamPokemonsRequest = () => ({
+	type: types.GET_TEAM_POKEMONS_REQUEST
+});
+
+export const getTeamPokemonsSuccess = (teamPokemons) => ({
+	type: types.GET_TEAM_POKEMONS_SUCCESS,
+	teamPokemons
+});
+
+export const getTeamPokemonsFailure = () => ({
+	type: types.GET_TEAM_POKEMONS_FAILURE
+});
 
 // ADD TO TEAM
-export const addToTeam = (pokemonId) => {
-	return async (dispatch) => {
-		dispatch({ type: types.ADD_TO_TEAM_REQUEST });
-		try {
-			const { data } = await AxiosPostRequest("/pokemons/team/add", {
-				pokemonId,
-			});
+export const addToTeamRequest = (pokemonId) => ({
+	type: types.ADD_TO_TEAM_REQUEST,
+	pokemonId
+});
 
-			const { body, status } = data;
+export const addToTeamSuccess = (teamPokemons) => ({
+	type: types.ADD_TO_TEAM_SUCCESS,
+	teamPokemons
+});
 
-			dispatch({
-				type: types.ADD_TO_TEAM_SUCCESS,
-				teamPokemons: body.teamPokemons,
-			});
-			dispatch({
-				type: UPDATE_WAR_PARTICIPANT_SUCCESS,
-				body: { warParticipant: body.warParticipant },
-			});
-
-			dispatch(addNotification(status));
-		} catch (error) {
-			isUnauthorized(error.response.status);
-
-			dispatch({ type: types.ADD_TO_TEAM_FAILURE });
-			dispatch(addNotification(error.response.data.status));
-		}
-	};
-};
+export const addToTeamFailure = () => ({
+	type: types.ADD_TO_TEAM_FAILURE
+});
 
 // REMOVE FROM TEAM
-export const removeFromTeam = (pokemonId) => {
-	return async (dispatch) => {
-		dispatch({ type: types.REMOVE_FROM_TEAM_REQUEST });
-		try {
-			const { data } = await AxiosPostRequest("/pokemons/team/remove", {
-				pokemonId,
-			});
 
-			const { body, status } = data;
+export const removeFromTeamRequest = (pokemonId) => ({
+	type: types.REMOVE_FROM_TEAM_REQUEST,
+	pokemonId
+});
 
-			dispatch({
-				type: types.REMOVE_FROM_TEAM_SUCCESS,
-				teamPokemons: body.teamPokemons,
-			});
-			dispatch({
-				type: UPDATE_WAR_PARTICIPANT_SUCCESS,
-				body: { warParticipant: body.warParticipant },
-			});
+export const removeFromTeamSuccess = (teamPokemons) => ({
+	type: types.REMOVE_FROM_TEAM_SUCCESS,
+	teamPokemons
+});
 
-			dispatch(addNotification(status));
-		} catch (error) {
-			isUnauthorized(error.response.status);
-
-			dispatch({ type: types.REMOVE_FROM_TEAM_FAILURE });
-			dispatch(addNotification(error.response.data.status));
-		}
-	};
-};
+export const removeFromTeamFailure = () => ({
+	type: types.REMOVE_FROM_TEAM_FAILURE
+});

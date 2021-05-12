@@ -5,7 +5,7 @@ import { useHistory } from "react-router-dom";
 import queryString from "query-string";
 
 // Actions
-import { getPokemonsAction } from "../../../redux/actions/pokemons-actions";
+import { getPokemonsRequest } from "../../../redux/actions/pokemons-actions";
 
 // Selectors
 import {
@@ -37,7 +37,7 @@ const Pokemons = () => {
 	const { page, limit } = values;
 
 	useEffect(() => {
-		dispatch(getPokemonsAction({ page, limit }));
+		dispatch(getPokemonsRequest({ page, limit }));
 	}, [dispatch, page, limit]);
 
 	const handlePageChange = (page) => {
