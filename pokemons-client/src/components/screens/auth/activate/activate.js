@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams, Link } from "react-router-dom";
 
 // Actions
-import { activateAccountAction } from "../../../../redux/actions/auth-actions";
+import { activateRequest } from "../../../../redux/actions/auth-actions";
 
 // Selectors
 import { selectAuthStatus } from "../../../../redux/selectors/auth-selectors";
@@ -19,7 +19,7 @@ const Activate = () => {
 	const { activationToken } = useParams();
 
 	useEffect(() => {
-		dispatch(activateAccountAction(activationToken));
+		dispatch(activateRequest(activationToken));
 	}, [dispatch, activationToken]);
 
 	const { message, isError } = status;

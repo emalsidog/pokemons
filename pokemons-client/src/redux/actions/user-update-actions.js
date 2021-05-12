@@ -102,3 +102,10 @@ export const getCurrentUserSuccess = (body) => ({
 export const getCurrentUserFailure = () => ({
 	type: userTypes.GET_CURRENT_USER_FAILURE,
 });
+
+// SET CURRENT USER
+
+export const setUser = (user) => ({
+	type: userTypes.SET_USER,
+	user
+});

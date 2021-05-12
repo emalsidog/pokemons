@@ -11,7 +11,7 @@ import { selectIsLoading } from "../../../../redux/selectors/auth-selectors";
 
 // Components
 import LoginForm from "./login-components/login-form";
-import ResetForm from "./login-components/reset-form";
+import ForgotForm from "./login-components/forgot-form";
 import Modal from "../../../common/modal";
 
 const Login = ({ history }) => {
@@ -52,7 +52,11 @@ const Login = ({ history }) => {
 				onClose={onClose}
 				form="resetForm"
 			>
-				<ResetForm isLoading={isLoading} setIsModalVisible={setIsModalVisible} isModalVisible={isModalVisible} />
+				<ForgotForm
+					isLoading={isLoading}
+					setIsModalVisible={setIsModalVisible}
+					isModalVisible={isModalVisible}
+				/>
 			</Modal>
 		</React.Fragment>
 	);

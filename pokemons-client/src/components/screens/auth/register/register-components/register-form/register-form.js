@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 
 // Actions
-import { registerAction } from "../../../../../../redux/actions/auth-actions";
+import { registerRequest } from "../../../../../../redux/actions/auth-actions";
 
 // Utils
 import formatString from "../../../../../utils/format-string";
@@ -29,7 +29,7 @@ const RegisterForm = ({ isLoading }) => {
 	password.current = watch("password", "");
 
 	const onSubmit = (data) => {
-		dispatch(registerAction(data));
+		dispatch(registerRequest(data));
 	};
 
     const registerFields = registerOptions.map((prop) => {

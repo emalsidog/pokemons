@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 
 // Actions
 import {
-	forgotAction,
+	forgotRequest,
 } from "../../../../../../redux/actions/auth-actions";
 
 // Utils
@@ -17,7 +17,7 @@ import { emailOptions } from "../../../options";
 // Components
 import ShowError from "../../../common/show-error";
 
-const ResetForm = (props) => {
+const ForgotForm = (props) => {
     const { isLoading, setIsModalVisible } = props;
 
     const dispatch = useDispatch();
@@ -29,7 +29,7 @@ const ResetForm = (props) => {
 	} = useForm();
 
 	const handleForgotSubmit = (data) => {
-		dispatch(forgotAction(data));
+		dispatch(forgotRequest(data));
 		setIsModalVisible(false);
 	};
 
@@ -52,4 +52,4 @@ const ResetForm = (props) => {
 	);
 };
 
-export default ResetForm;
+export default ForgotForm;
