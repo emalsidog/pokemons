@@ -48,7 +48,7 @@ const battles = (state = initialState, action) => {
             }
         }
         case battleTypes.GET_BATTLES_HISTORY_SUCCESS: {
-            const { battles } = action.response;
+            const { battles } = action;
             return {
                 ...state,
                 isLoading: false,

@@ -5,7 +5,7 @@ import { useHistory } from "react-router-dom";
 import queryString from "query-string";
 
 // Actions
-import { getBattlesHistory } from "../../../redux/actions/battles-actions";
+import { getBattlesHistoryRequest } from "../../../redux/actions/battles-actions";
 
 // Selectors
 import { selectIsLoading, selectBattlesHistory } from "../../../redux/selectors/battles-selectors";
@@ -36,7 +36,7 @@ const BattlesHistory = () => {
 
 	// Get battles history
 	useEffect(() => {
-		dispatch(getBattlesHistory(values.sort));
+		dispatch(getBattlesHistoryRequest(values.sort));
 	}, [dispatch, values.sort]);
 
 	const main = battlesHistory.map((battle) => {

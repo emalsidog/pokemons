@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 
 // Actions
-import { loginAction } from "../../../../../../redux/actions/auth-actions";
+import { loginRequest } from "../../../../../../redux/actions/auth-actions";
 
 // Utils
 import formatString from "../../../../../utils/format-string";
@@ -27,7 +27,7 @@ const LoginForm = (props) => {
 	} = useForm();
 
 	const handleLoginSubmit = (data) => {
-		dispatch(loginAction(data));
+		dispatch(loginRequest(data));
 	};
 
     const loginFields = emailAndPasswordOptions.map((prop) => {

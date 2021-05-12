@@ -5,7 +5,7 @@ import { useHistory } from "react-router-dom";
 import queryString from "query-string";
 
 // Actions
-import { getFavouritePokemons } from "../../../redux/actions/pokemons-actions";
+import { getFavouritePokemonsRequest } from "../../../redux/actions/pokemons-actions";
 
 // Selectors
 import {
@@ -35,7 +35,7 @@ const Favourites = () => {
 	const { sort } = values;
 
 	useEffect(() => {
-		dispatch(getFavouritePokemons(sort));
+		dispatch(getFavouritePokemonsRequest(sort));
 	}, [dispatch, sort]);
 
 	const handleSearchChange = (e) => {

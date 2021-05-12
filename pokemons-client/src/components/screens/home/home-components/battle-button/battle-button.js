@@ -3,7 +3,7 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 // Actions
-import { battle } from "../../../../../redux/actions/battles-actions";
+import { battleRequest } from "../../../../../redux/actions/battles-actions";
 
 // Selectors
 import { selectUser } from "../../../../../redux/selectors/user-selectors";
@@ -17,7 +17,8 @@ const BattleButton = ({ seconds = null, isMain }) => {
 	const teamPokemons = useSelector(selectTeamPokemons);
 
 	const handleBattleClick = () => {
-		dispatch(battle());
+		// dispatch(battle());
+		dispatch(battleRequest());
 	};
 
 	let text;

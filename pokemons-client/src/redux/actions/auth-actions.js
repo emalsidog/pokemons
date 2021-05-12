@@ -1,126 +1,85 @@
 // Constants
 import * as authTypes from "../constants/auth-constants";
-import * as userTypes from "../constants/user-update-constants";
 
-// Actions
-import { addNotification } from "../actions/notification-actions";
-import { GET_FAVOURITE_POKEMONS_SUCCESS, GET_TEAM_POKEMONS_SUCCESS } from "../constants/pokemons-constants";
+// REGISTER
 
-// Utils
-import { AxiosPostRequest } from "../utils/server-request";
+export const registerRequest = (userRegisterData) => ({
+	type: authTypes.REGISTER_REQUEST,
+	userRegisterData,
+});
 
-// POST => /users/register
-export const registerAction = (userRegisterData) => {
-	return async (dispatch) => {
-		dispatch({ type: authTypes.REGISTER_REQUEST });
-		try {
-			const { data } = await AxiosPostRequest(
-				"/users/register",
-				userRegisterData
-			);
+export const registerSuccess = () => ({
+	type: authTypes.REGISTER_SUCCESS,
+});
 
-			dispatch({ type: authTypes.REGISTER_SUCCESS });
-			dispatch(addNotification(data.status));
-		} catch (error) {
-			dispatch({ type: authTypes.REGISTER_FAILURE });
-			dispatch(addNotification(error.response.data.status));
-		}
-	};
-};
+export const registerFailure = () => ({
+	type: authTypes.REGISTER_FAILURE,
+});
 
-// POST => /users/activate
-export const activateAccountAction = (activationToken) => {
-	return async (dispatch) => {
-		dispatch({ type: authTypes.ACTIVATE_ACCOUNT_REQUEST });
-		try {
-			const { data } = await AxiosPostRequest("/users/activate", {
-				activationToken,
-			});
+// ACTIVATE
 
-			dispatch({
-				type: authTypes.ACTIVATE_ACCOUNT_SUCCESS,
-				activationStatus: data.status,
-			});
-			dispatch(addNotification(data.status));
-		} catch (error) {
-			dispatch({
-				type: authTypes.ACTIVATE_ACCOUNT_FAILURE,
-				activationStatus: error.response.data.status,
-			});
-			dispatch(addNotification(error.response.data.status));
-		}
-	};
-};
+export const activateRequest = (activationToken) => ({
+	type: authTypes.ACTIVATE_ACCOUNT_REQUEST,
+	activationToken,
+});
 
-// POST => /users/login
-export const loginAction = (userLoginData) => {
-	return async (dispatch) => {
-		dispatch({ type: authTypes.LOGIN_REQUEST });
-		try {
-			const { data } = await AxiosPostRequest(
-				"/users/login",
-				userLoginData
-			);
-			localStorage.setItem("accessToken", data.body.accessToken);
+export const activateSuccess = (activationStatus) => ({
+	type: authTypes.ACTIVATE_ACCOUNT_SUCCESS,
+	activationStatus,
+});
 
-			dispatch({ type: authTypes.LOGIN_SUCCESS });
-			dispatch({ type: userTypes.SET_USER, user: data.body.user });
-			
-			dispatch({ type: GET_FAVOURITE_POKEMONS_SUCCESS, favouritePokemons: data.body.favouritePokemons });
-			dispatch({ type: GET_TEAM_POKEMONS_SUCCESS, teamPokemons: data.body.teamPokemons });
+export const activateFailure = (activationStatus) => ({
+	type: authTypes.ACTIVATE_ACCOUNT_FAILURE,
+	activationStatus,
+});
 
-		} catch (error) {
-			dispatch({ type: authTypes.LOGIN_FAILURE });
-			dispatch(addNotification(error.response.data.status));
-		}
-	};
-};
+// LOGIN
+export const loginRequest = (userLoginData) => ({
+	type: authTypes.LOGIN_REQUEST,
+	userLoginData,
+});
 
-// POST => /users/forgot
-export const forgotAction = (email) => {
-	return async (dispatch) => {
-		dispatch({ type: authTypes.FORGOT_PASSWORD_REQUEST });
-		try {
-			const { data } = await AxiosPostRequest("/users/forgot", email);
+export const loginSuccess = (user) => ({
+	type: authTypes.LOGIN_SUCCESS,
+	user,
+});
 
-			dispatch({ type: authTypes.FORGOT_PASSWORD_SUCCESS });
-			dispatch(addNotification(data.status));
-		} catch (error) {
-			dispatch({ type: authTypes.FORGOT_PASSWORD_FAILURE });
-			dispatch(addNotification(error.response.data.status));
-		}
-	};
-};
+export const loginFailure = () => ({
+	type: authTypes.LOGIN_FAILURE,
+});
 
-// POST => /users/reset
-export const resetAction = (userResetData) => {
-	return async (dispatch) => {
-		dispatch({ type: authTypes.RESET_PASSWORD_REQUEST });
-		try {
-			const { data } = await AxiosPostRequest(
-				"/users/reset",
-				userResetData
-			);
+// FORGOT
+export const forgotRequest = (email) => ({
+	type: authTypes.FORGOT_PASSWORD_REQUEST,
+	email,
+});
 
-			dispatch({
-				type: authTypes.RESET_PASSWORD_SUCCESS,
-				resetStatus: data.status,
-			});
-			dispatch(addNotification(data.status));
-		} catch (error) {
-			dispatch({
-				type: authTypes.RESET_PASSWORD_FAILURE,
-				resetStatus: error.response.data.status,
-			});
-			dispatch(addNotification(error.response.data.status));
-		}
-	};
-};
+export const forgotSuccess = () => ({
+	type: authTypes.FORGOT_PASSWORD_SUCCESS,
+});
 
-// Logout
-export const logoutAction = () => {
-	return (dispatch) => {
-		localStorage.removeItem("accessToken");
-		dispatch({ type: authTypes.LOGOUT });
-	};
-};
+export const forgotFailure = () => ({
+	type: authTypes.FORGOT_PASSWORD_FAILURE,
+});
+
+// RESET
+export const resetRequest = (userResetData) => ({
+	type: authTypes.RESET_PASSWORD_REQUEST,
+	userResetData,
+});
+
+export const resetSuccess = (resetStatus) => ({
+	type: authTypes.RESET_PASSWORD_SUCCESS,
+	resetStatus,
+});
+
+export const resetFailure = (resetStatus) => ({
+	type: authTypes.RESET_PASSWORD_FAILURE,
+	resetStatus,
+});
+
+// LOGOUT
+
+export const logoutRequest = () => ({
+	type: authTypes.LOGOUT,
+});

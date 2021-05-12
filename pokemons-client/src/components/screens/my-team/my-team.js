@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 // Actions
-import { getTeamPokemons } from "../../../redux/actions/pokemons-actions";
+import { getTeamPokemonsRequest } from "../../../redux/actions/pokemons-actions";
 
 // Selectors
 import {
@@ -24,7 +24,7 @@ const MyTeam = () => {
 	const isFetchingData = useSelector(selectIsFetchingData);
 
 	useEffect(() => {
-		dispatch(getTeamPokemons());
+		dispatch(getTeamPokemonsRequest());
 	}, [dispatch]);
 	
 	// Render array of cards

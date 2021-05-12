@@ -4,7 +4,7 @@ import { Link, useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
 // Actions
-import { logoutAction } from "../../../redux/actions/auth-actions";
+import { logoutRequest } from "../../../redux/actions/auth-actions";
 
 // Styles
 import "./navigation.css";
@@ -20,7 +20,7 @@ const Navigation = () => {
 
 	// Handle logout
 	const handleLogout = () => {
-		dispatch(logoutAction());
+		dispatch(logoutRequest());
 		history.push("/users/login");
 	};
 

@@ -4,10 +4,10 @@ import { useDispatch, useSelector } from "react-redux";
 
 // Actions
 import {
-	addToFavourite,
-	removeFromFavourite,
-	addToTeam,
-	removeFromTeam,
+	addToFavouriteRequest,
+	removeFromFavouriteRequest,
+	addToTeamRequest,
+	removeFromTeamRequest,
 } from "../../../redux/actions/pokemons-actions";
 
 // Selectors
@@ -28,19 +28,19 @@ const Card = (props) => {
 	const teamPokemons = useSelector(selectTeamPokemons);
 
 	const handleAddToFavourite = (id) => {
-		dispatch(addToFavourite(id));
+		dispatch(addToFavouriteRequest(id));
 	};
 
 	const handleRemoveFromFavourite = (id) => {
-		dispatch(removeFromFavourite(id));
+		dispatch(removeFromFavouriteRequest(id));
 	};
 
 	const handleAddToTeam = (id) => {
-		dispatch(addToTeam(id));
+		dispatch(addToTeamRequest(id));
 	};
 
 	const handleRemoveFromTeam = (id) => {
-		dispatch(removeFromTeam(id));
+		dispatch(removeFromTeamRequest(id));
 	};
 
 	const displayTypes = types.map((type, idx) => {

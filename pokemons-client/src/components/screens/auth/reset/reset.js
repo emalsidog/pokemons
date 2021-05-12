@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 
 // Actions
-import { resetAction } from "../../../../redux/actions/auth-actions";
+import { resetRequest } from "../../../../redux/actions/auth-actions";
 
 // Selectors
 import {
@@ -50,7 +50,7 @@ const Reset = ({ history }) => {
 
 	const handleResetSubmit = (data) => {
 		data.resetToken = resetToken;
-		dispatch(resetAction(data));
+		dispatch(resetRequest(data));
 	};
 
 	return (
