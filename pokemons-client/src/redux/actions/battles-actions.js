@@ -1,62 +1,36 @@
 // Constants
 import * as battleTypes from "../constants/battles-constants";
 
-// Actions
-import { addNotification } from "../actions/notification-actions";
+// BATTLE
+export const battleRequest = () => ({
+	type: battleTypes.BATTLE_REQUEST,
+});
 
-// Utils
-import { AxiosGetRequest } from "../utils/server-request";
-import { isUnauthorized } from "../utils/is-unauthorized";
+export const battleSuccess = (response) => ({
+	type: battleTypes.BATTLE_SUCCESS,
+	response,
+});
 
-export const battle = () => {
-	return async (dispatch) => {
-		try {
-			dispatch({ type: battleTypes.BATTLE_REQUEST });
+export const battleFailure = () => ({
+	type: battleTypes.BATTLE_FAILURE,
+});
 
-			const { data } = await AxiosGetRequest("/battles/battle");
-			const { status, body } = data;
+// GET BATTLES HISTORY
+export const getBattlesHistoryRequest = (sort) => ({
+	type: battleTypes.GET_BATTLES_HISTORY_REQUEST,
+	sort
+});
 
-			dispatch({
-				type: battleTypes.BATTLE_SUCCESS,
-				response: {
-					winner: body.winner,
-					loser: body.loser,
-				},
-			});
-			dispatch(addNotification(status));
-		} catch (error) {
-			isUnauthorized(error.response.status);
+export const getBattlesHistroySuccess = (battles) => ({
+	type: battleTypes.GET_BATTLES_HISTORY_SUCCESS,
+	battles
+});
 
-			dispatch({ type: battleTypes.BATTLE_FAILURE });
-			dispatch(addNotification(error.response.data.status));
-		}
-	};
-};
+export const getBattlesHistoryFailure = () => ({
+	type: battleTypes.GET_BATTLES_HISTORY_FAILURE,
+});
 
-export const getBattlesHistory = (sort = "time-descending") => {
-	return async (dispatch) => {
-		try {
-			dispatch({ type: battleTypes.GET_BATTLES_HISTORY_REQUEST });
-
-			const { data } = await AxiosGetRequest(
-				`/battles/battles?sort=${sort}`
-			);
-			const { body } = data;
-
-			dispatch({
-				type: battleTypes.GET_BATTLES_HISTORY_SUCCESS,
-				response: {
-					battles: body.battles,
-				},
-			});
-		} catch (error) {
-			isUnauthorized(error.response.status);
-
-			dispatch({ type: battleTypes.GET_BATTLES_HISTORY_FAILURE });
-			dispatch(addNotification(error.response.data.status));
-		}
-	};
-};
+// CLEAR BATTLE RESULT
 
 export const clearBattleResult = () => ({
 	type: battleTypes.CLEAR_BATTLE_RESULT,

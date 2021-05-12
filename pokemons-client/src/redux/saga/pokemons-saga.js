@@ -1,5 +1,5 @@
 // Dependencies
-import { put, takeEvery, call, take } from "redux-saga/effects";
+import { put, takeEvery, call } from "redux-saga/effects";
 
 // Actions
 import * as actions from "../actions/pokemons-actions";
