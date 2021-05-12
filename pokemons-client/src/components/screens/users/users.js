@@ -5,7 +5,7 @@ import { useHistory } from "react-router-dom";
 import queryString from "query-string";
 
 // Actions
-import { getUsers } from "../../../redux/actions/users-actions";
+import { getUsersRequest } from "../../../redux/actions/users-actions";
 
 // Selectors
 import { selectIsLoading, selectUsersAndTotalCount } from "../../../redux/selectors/users-selectors";
@@ -31,7 +31,7 @@ const Users = () => {
 	const { page } = values;
 
 	useEffect(() => {
-		dispatch(getUsers(page));
+		dispatch(getUsersRequest(page));
 	}, [dispatch, page]);
 
 	const handlePageChange = (page) => {

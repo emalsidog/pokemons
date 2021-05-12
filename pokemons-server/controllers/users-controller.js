@@ -1,6 +1,9 @@
 // Models
 const User = require("../models/User");
 
+// Utils
+const getParsedTeam = require("../utils/get-parsed-team");
+
 exports.getUsers = async (req, res, next) => {
 	const { page = 1 } = req.query;
 	const limit = 5;
@@ -13,14 +16,17 @@ exports.getUsers = async (req, res, next) => {
 
 		const totalCount = await User.countDocuments();
 
-		const users = dbUsers.map((user) => {
-			return {
-				id: user._id,
-				username: user.username,
-				teamPokemons: user.teamPokemons,
-				warPoints: user.warPoints,
-			};
-		});
+		const parsedUsers = await Promise.all(
+			dbUsers.map(async (user) => {
+				const parsedTeam = await getParsedTeam(user.teamPokemons, { withTotal: false });
+				return {
+					id: user._id,
+					username: user.username,
+					teamPokemons: parsedTeam,
+					warPoints: user.warPoints,
+				};
+			})
+		)
 
 		res.status(200).json({
 			status: {
@@ -28,7 +34,7 @@ exports.getUsers = async (req, res, next) => {
 				isError: false,
 			},
 			body: {
-				users,
+				users: parsedUsers,
 				totalCount,
 				limit,
 			},

@@ -1,68 +1,18 @@
-// Dependencies
-import axios from "axios";
-
 // Constatns
 import * as types from "../constants/users-constants";
 
-// Actions
-import { addNotification } from "../actions/notification-actions";
+// GET USERS
 
-// Utils
-import { AxiosGetRequest } from "../utils/server-request";
-import { isUnauthorized } from "../utils/is-unauthorized";
+export const getUsersRequest = (page) => ({
+	type: types.GET_USERS_REQUEST,
+	page
+});
 
-// pokeapi url
-const _pokeapiURL = "https://pokeapi.co/api/v2";
+export const getUsersSuccess = (payload) => ({
+	type: types.GET_USERS_SUCCESS,
+	payload
+});
 
-export const getUsers = (page = 1) => {
-	return async (dispatch) => {
-		dispatch({
-			type: types.GET_USERS_REQUEST,
-		});
-
-		try {
-			const { data } = await AxiosGetRequest(`/users?page=${page}`);
-			const { users, totalCount, limit } = data.body;
-
-			let parsedUsers = await Promise.all(
-				users.map(async (user) => {
-					const dbTeamPokemons = user.teamPokemons.map((pokemon) => {
-						return axios.get(
-							`${_pokeapiURL}/pokemon/${pokemon.pokemonId}`
-						);
-					});
-
-					const pokemonsData = await Promise.all(dbTeamPokemons);
-
-					const parsedPokemonsData = pokemonsData.map(({ data }) => {
-						const { id, sprites } = data;
-						return {
-							id,
-							sprite: sprites.front_default,
-						};
-					});
-
-					return {
-						...user,
-						teamPokemons: parsedPokemonsData,
-					};
-				})
-			);
-
-			dispatch({
-				type: types.GET_USERS_SUCCESS,
-				response: {
-					status: data.status,
-					users: parsedUsers,
-					totalCount: totalCount,
-					limit,
-				},
-			});
-		} catch (error) {
-			isUnauthorized(error.response.status);
-
-			dispatch({ type: types.GET_USERS_FAILURE });
-			dispatch(addNotification(error.response.data.status));
-		}
-	};
-};
+export const getUsersFailure = () => ({
+	type: types.GET_USERS_FAILURE
+});
