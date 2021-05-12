@@ -12,10 +12,10 @@ import {
 import formatString from "../../../../../utils/format-string";
 
 // Options
-import { emailOptions } from "../../../options";
+import { emailOptions } from "../../../../../common/options";
 
 // Components
-import ShowError from "../../../common/show-error";
+import ShowError from "../../../../../common/show-error";
 
 const ResetForm = (props) => {
     const { isLoading, setIsModalVisible } = props;

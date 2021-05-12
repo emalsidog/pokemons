@@ -10,10 +10,10 @@ import { registerAction } from "../../../../../../redux/actions/auth-actions";
 import formatString from "../../../../../utils/format-string";
 
 // Components
-import ShowError from "../../../common/show-error";
+import ShowError from "../../../../../common/show-error";
 
 // Options
-import { registerOptions } from "../../../options";
+import { registerOptions } from "../../../../../common/options";
 
 const RegisterForm = ({ isLoading }) => {
 	const dispatch = useDispatch();

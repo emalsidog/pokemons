@@ -10,10 +10,10 @@ import { loginAction } from "../../../../../../redux/actions/auth-actions";
 import formatString from "../../../../../utils/format-string";
 
 // Options
-import { emailAndPasswordOptions } from "../../../options";
+import { emailAndPasswordOptions } from "../../../../../common/options";
 
 // Components
-import ShowError from "../../../common/show-error";
+import ShowError from "../../../../../common/show-error";
 
 const LoginForm = (props) => {
     const { isLoading, showModal } = props;

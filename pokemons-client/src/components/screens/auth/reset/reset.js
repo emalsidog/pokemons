@@ -13,11 +13,14 @@ import {
 	selectAuthStatus,
 } from "../../../../redux/selectors/auth-selectors";
 
+// Options
+import { passwordOptions } from "../../../common/options";
+
 // Styles
 import "../index.css";
 
 // Componetns
-import ShowError from "../common/show-error";
+import ShowError from "../../../common/show-error";
 
 const Reset = ({ history }) => {
 	// Redux
@@ -59,17 +62,7 @@ const Reset = ({ history }) => {
 				<h2>Reset password</h2>
 				<div className="form-group">
 					<input
-						{...register("password", {
-							required: "Password is a required field",
-							minLength: {
-								value: 6,
-								message: "Minimal length is 6",
-							},
-							maxLength: {
-								value: 32,
-								message: "Maximal length is 32",
-							},
-						})}
+						{...register(passwordOptions.name, passwordOptions.options)}
 						type="password"
 						className="inp"
 						disabled={isLoading}
