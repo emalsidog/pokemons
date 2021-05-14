@@ -42,7 +42,7 @@ validateAuth = (method) => {
 					.isLength({ min: 6, max: 32 })
 					.withMessage("Password should be between 6 and 32 characters long.")
 					.matches(/^[A-Za-z0-9\-\_]*$/)
-					.withMessage("Password should contain only letters, numbers special characters (_, -)"),
+					.withMessage("Password should contain only letters, numbers and special characters (_, -)"),
 				check("confirmPassword")
 					.not()
 					.isEmpty()
@@ -64,7 +64,7 @@ validateAuth = (method) => {
 					.isLength({ min: 6, max: 32 })
 					.withMessage("Password should be between 6 and 32 characters long.")
 					.matches(/^[A-Za-z0-9\-\_]*$/)
-					.withMessage("Password should contain only letters, numbers special characters (_, -)"),
+					.withMessage("Password should contain only letters, numbers and special characters (_, -)"),
 			];
 		}
 		case "forgot": {

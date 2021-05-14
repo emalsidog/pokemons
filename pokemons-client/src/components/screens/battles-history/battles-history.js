@@ -8,7 +8,10 @@ import queryString from "query-string";
 import { getBattlesHistoryRequest } from "../../../redux/actions/battles-actions";
 
 // Selectors
-import { selectIsLoading, selectBattlesHistory } from "../../../redux/selectors/battles-selectors";
+import {
+	selectIsLoading,
+	selectBattlesHistory,
+} from "../../../redux/selectors/battles-selectors";
 
 // Styles
 import "./battle-history.css";
@@ -18,6 +21,8 @@ import Layout from "../../layout";
 import Heading from "../../common/heading";
 import BattleContainer from "./battles-history-components/battle-container";
 import Spinner from "../../common/spinner";
+import SearchPanel from "../../common/search-panel/search-panel";
+import NothingHere from "../../common/nothing-here";
 
 const BattlesHistory = () => {
 	// History
@@ -30,7 +35,7 @@ const BattlesHistory = () => {
 
 	const handleSelectChange = (e) => {
 		history.push(`/battles?sort=${e.target.value.toLowerCase()}`);
-	}
+	};
 
 	const values = queryString.parse(history.location.search);
 
@@ -43,23 +48,28 @@ const BattlesHistory = () => {
 		return <BattleContainer key={battle._id} battle={battle} />;
 	});
 
+	const listOptions = [
+		{ name: "Time ascending", value: "time-ascending" },
+		{ name: "Time descending", value: "time-descending" },
+		{ name: "Points ascending", value: "points-ascending" },
+		{ name: "Points descending", value: "points-descending" },
+	];
+
 	return (
 		<Layout>
 			<Heading
 				title="Battles history"
 				description="Just battles history."
 			>
-				<div className="sort-selection">
-					<select onChange={handleSelectChange} defaultValue="time-descending">
-						<option value="time-ascending">Time ascending</option>
-						<option value="time-descending">Time descending</option>
-						<option value="points-ascending">Points ascending</option>
-						<option value="points-descending">Points descending</option>
-					</select>
-				</div>
+				<SearchPanel
+					withInput={false}
+					handleSelectChange={handleSelectChange}
+					defaultValue={values.sort || "time-descending"}
+					listOptions={listOptions}
+				/>
 			</Heading>
-			
-			{isLoading ? <Spinner /> : main}
+
+			{isLoading ? <Spinner /> : main.length > 0 ? main : <NothingHere message="Peace!" />}
 		</Layout>
 	);
 };

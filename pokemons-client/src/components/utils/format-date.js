@@ -3,8 +3,8 @@ const formatDate = (createdAt) => {
 
 	const parsedWeekDay = date.getDay();
 	const parsedMonth = date.getMonth();
-    const parsedHours = date.getHours();
-    const parsedMinutes = date.getMinutes();
+	const parsedHours = date.getHours();
+	const parsedMinutes = date.getMinutes();
 
 	const weekDay = formatDay(parsedWeekDay);
 	const month = formatMonth(parsedMonth);
@@ -28,70 +28,26 @@ const formatTime = (time) => {
 };
 
 const formatDay = (day) => {
-	switch (day) {
-		case 0: {
-			return "Sun";
-		}
-		case 1: {
-			return "Mon";
-		}
-		case 2: {
-			return "Tue";
-		}
-		case 3: {
-			return "Wed";
-		}
-		case 4: {
-			return "Thu";
-		}
-		case 5: {
-			return "Fri";
-		}
-		case 6: {
-			return "Sat";
-		}
-	}
+	const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+	return days[day];
 };
 
 const formatMonth = (month) => {
-	switch (month) {
-		case 0: {
-			return "January";
-		}
-		case 1: {
-			return "February";
-		}
-		case 2: {
-			return "March";
-		}
-		case 3: {
-			return "April";
-		}
-		case 4: {
-			return "May";
-		}
-		case 5: {
-			return "June";
-		}
-		case 6: {
-			return "July";
-		}
-		case 7: {
-			return "August";
-		}
-		case 8: {
-			return "September";
-		}
-		case 9: {
-			return "October";
-		}
-		case 10: {
-			return "November";
-		}
-		case 11: {
-			return "December";
-		}
-	}
+	const months = [
+		"January",
+		"February",
+		"March",
+		"April",
+		"May",
+		"June",
+		"July",
+		"August",
+		"September",
+		"October",
+		"November",
+		"December",
+	];
+	return months[month];
 };
 
 export default formatDate;

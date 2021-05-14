@@ -44,7 +44,7 @@ function* getPokemons({ data }) {
 }
 
 // GET FAVOURITE POKEMONS
-function* getFavouritePokemons({ sort }) {
+function* getFavouritePokemons({ sort = "a-z" }) {
 	try {
 		const { data } = yield call(() =>
 			AxiosGetRequest(`/pokemons/favourite?sort=${sort}`)

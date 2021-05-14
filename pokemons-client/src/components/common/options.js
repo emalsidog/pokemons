@@ -23,6 +23,10 @@ export const passwordOptions = {
 			value: 32,
 			message: "Maximal length is 32",
 		},
+		pattern: {
+			value: /^[A-z0-9\-_]*$/,
+			message: "Password should contain only letters, numbers and special characters (- and _)",
+		},
 	},
 };
 
@@ -80,7 +84,7 @@ export const usernameOptions = {
 			message: "Maximal length is 32",
 		},
 		pattern: {
-			value: /^[A-z0-9_]*$/,
+			value: /^[A-z0-9_]+$/,
 			message: "Username should contain only numbers, letters and _",
 		},
 	},

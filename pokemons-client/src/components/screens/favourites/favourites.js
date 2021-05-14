@@ -16,9 +16,10 @@ import {
 // Components
 import Layout from "../../layout";
 import Heading from "../../common/heading";
-import SearchPanel from "./favourite-components/search-panel";
+import SearchPanel from "../../common/search-panel/search-panel";
 import Card from "../../common/card";
 import Spinner from "../../common/spinner";
+import NothingHere from "../../common/nothing-here";
 
 const Favourites = () => {
 	const [searchValue, setSearchValue] = useState("");
@@ -43,9 +44,7 @@ const Favourites = () => {
 	};
 
 	const handleSelectChange = (e) => {
-		history.push({
-			search: `?sort=${e.target.value}`,
-		});
+		history.push(`/favourites?sort=${e.target.value.toLowerCase()}`);
 	};
 
 	// Render array of cards
@@ -61,7 +60,18 @@ const Favourites = () => {
 		searchedPokemons = favouritePokemons;
 	}
 
-	const main = searchedPokemons.map((pokemon) => {
+	const listOptions = [
+		{ name: "A-Z", value: "a-z" },
+		{ name: "Z-A", value: "z-a" },
+		{ name: "By health", value: "health" },
+		{ name: "By attack", value: "attack" },
+		{ name: "By defense", value: "defense" },
+		{ name: "By special attack", value: "special_attack" },
+		{ name: "By special defense", value: "special_defense" },
+		{ name: "By speed", value: "speed" },
+	];
+
+	const cards = searchedPokemons.map((pokemon) => {
 		const { id, sprite, name, types, stats } = pokemon;
 		return (
 			<Card
@@ -76,6 +86,25 @@ const Favourites = () => {
 		);
 	});
 
+
+	let main;
+	if (isFetchingData) {
+		main = <Spinner />;
+	} else {
+		if (cards.length > 0) {
+			main = <section className="cards">{cards}</section>;
+		} else {
+			main = (
+				<NothingHere
+					message="How on Earth is empty here?"
+					withLink
+					linkTo="/pokemons"
+					linkTitle="Add favourite pokemons!"
+				/>
+			);
+		}
+	}
+
 	return (
 		<Layout>
 			<Heading
@@ -87,14 +116,12 @@ const Favourites = () => {
 					handleSelectChange={handleSelectChange}
 					searchValue={searchValue}
 					defaultValue={sort}
+					withInput
+					listOptions={listOptions}
 				/>
 			</Heading>
-			
-			{isFetchingData ? (
-				<Spinner />
-			) : (
-				<section className="cards">{main}</section>
-			)}
+
+			{main}
 		</Layout>
 	);
 };

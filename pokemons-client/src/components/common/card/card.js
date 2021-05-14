@@ -27,19 +27,19 @@ const Card = (props) => {
 	const favouritePokemons = useSelector(selectFavouritePokemons);
 	const teamPokemons = useSelector(selectTeamPokemons);
 
-	const handleAddToFavourite = (id) => {
+	const handleAddToFavourite = () => {
 		dispatch(addToFavouriteRequest(id));
 	};
 
-	const handleRemoveFromFavourite = (id) => {
+	const handleRemoveFromFavourite = () => {
 		dispatch(removeFromFavouriteRequest(id));
 	};
 
-	const handleAddToTeam = (id) => {
+	const handleAddToTeam = () => {
 		dispatch(addToTeamRequest(id));
 	};
 
-	const handleRemoveFromTeam = (id) => {
+	const handleRemoveFromTeam = () => {
 		dispatch(removeFromTeamRequest(id));
 	};
 
@@ -70,13 +70,13 @@ const Card = (props) => {
 			displayActionButtons = (
 				<React.Fragment>
 					<button
-						onClick={() => handleAddToTeam(id)}
+						onClick={handleAddToTeam}
 						className="action-button add-team"
 					>
 						<i className="fas fa-plus"></i>
 					</button>
 					<button
-						onClick={() => handleRemoveFromFavourite(id)}
+						onClick={handleRemoveFromFavourite}
 						className="action-button add-favorite"
 					>
 						<i className="fas fa-heart-broken"></i>
@@ -89,7 +89,7 @@ const Card = (props) => {
 		case "TEAM": {
 			displayActionButtons = (
 				<button
-					onClick={() => handleRemoveFromTeam(id)}
+					onClick={handleRemoveFromTeam}
 					className="action-button add-favorite"
 				>
 					<i className="fas fa-minus-square"></i>
@@ -131,14 +131,14 @@ const Card = (props) => {
 			displayActionButtons = (
 				<React.Fragment>
 					<button
-						onClick={() => handleAddToTeam(id)}
+						onClick={handleAddToTeam}
 						className="action-button add-team"
 						disabled={isTeam}
 					>
 						<i className="fas fa-plus"></i>
 					</button>
 					<button
-						onClick={() => handleAddToFavourite(id)}
+						onClick={handleAddToFavourite}
 						className="action-button add-favorite"
 						disabled={isFavourite}
 					>

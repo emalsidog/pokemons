@@ -11,7 +11,7 @@ validateUser = (method) => {
 					.withMessage("Given name can not be empty")
 					.isLength({ min: 2, max: 32 })
 					.withMessage("Given name should be between 2 and 32 characters long")
-					.matches(/^[A-zА-я\s]+$/)
+					.matches(/^[A-zА-я]+$/)
 					.withMessage("Given name must be alphabetic."),
 				check("familyName")
 					.not()
@@ -29,7 +29,7 @@ validateUser = (method) => {
 					.not()
 					.isEmpty()
 					.withMessage("Email can not be empty")
-					.isEmail()
+					.matches(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
 					.withMessage("Email is invalid"),
 			]
 		}
@@ -39,6 +39,8 @@ validateUser = (method) => {
 					.not()
 					.isEmpty()
 					.withMessage("Username can not be empty")
+					.isLength({ min: 6, max: 16 })
+					.withMessage("Username should be between 6 and 16 characters long")
 					.matches(/^[A-z0-9_]*$/)
 					.withMessage("Username should contain only letters, numbers and _"),
 			]

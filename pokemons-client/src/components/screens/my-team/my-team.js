@@ -16,6 +16,7 @@ import Layout from "../../layout";
 import Heading from "../../common/heading";
 import Card from "../../common/card";
 import Spinner from "../../common/spinner";
+import NothingHere from "../../common/nothing-here";
 
 const MyTeam = () => {
 	// Redux
@@ -26,9 +27,9 @@ const MyTeam = () => {
 	useEffect(() => {
 		dispatch(getTeamPokemonsRequest());
 	}, [dispatch]);
-	
+
 	// Render array of cards
-	const main = teamPokemons.map((pokemon) => {
+	const cards = teamPokemons.map((pokemon) => {
 		const { id, sprite, name, types, stats } = pokemon;
 		return (
 			<Card
@@ -43,6 +44,24 @@ const MyTeam = () => {
 		);
 	});
 
+	let main;
+	if (isFetchingData) {
+		main = <Spinner />;
+	} else {
+		if (cards.length > 0) {
+			main = <section className="cards">{cards}</section>;
+		} else {
+			main = (
+				<NothingHere
+					message="Is your team on vacation?"
+					withLink
+					linkTo="/pokemons"
+					linkTitle="Find some pokemons!"
+				/>
+			);
+		}
+	}
+
 	return (
 		<Layout>
 			<Heading
@@ -50,11 +69,7 @@ const MyTeam = () => {
 				description="Wow. Are these guys your team?"
 			/>
 
-			{isFetchingData ? (
-				<Spinner />
-			) : (
-				<section className="cards">{main}</section>
-			)}
+			{main}
 		</Layout>
 	);
 };

@@ -1,0 +1,35 @@
+// // Dependenices
+// const router = require("express").Router();
+// const got = require("got");
+
+// const Pokemon = require("../models/Pokemon");
+
+// router.get("/download", async (req, res) => {
+// 	for (let i = 0; i < 1118; i = i + 50) {
+// 		const { body } = await got(
+// 			`https://pokeapi.co/api/v2/pokemon?offset=${i}&limit=50`
+// 		);
+
+// 		const parsedBody = JSON.parse(body);
+// 		const array = parsedBody.results;
+
+// 		const promises = array.map((prop) => {
+// 			return got(prop.url);
+// 		});
+
+// 		const pokemonsData = await Promise.all(promises);
+
+// 		const parsedPokemonsData = pokemonsData.map(({ body }) => {
+// 			return JSON.parse(body);
+// 		});
+
+// 		Promise.all(
+// 			parsedPokemonsData.map(async (pokemon) => {
+// 				await Pokemon.create(pokemon);
+// 			})
+// 		);
+// 	}
+// 	res.json({ done: "done" });
+// });
+
+// module.exports = router;

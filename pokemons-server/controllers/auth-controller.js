@@ -15,8 +15,8 @@ const User = require("../models/User");
 exports.register = async (req, res, next) => {
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
-		res.status(422).json({ errors: errors.array() });
-		return;
+		const message = errors.array()[0].msg
+		return next(new ErrorResponse(message, 422));
 	}
 
 	const {
@@ -110,8 +110,8 @@ exports.activate = async (req, res, next) => {
 exports.login = async (req, res, next) => {
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
-		res.status(422).json({ errors: errors.array() });
-		return;
+		const message = errors.array()[0].msg
+		return next(new ErrorResponse(message, 422));
 	}
 
 	const { email, password } = req.body;
@@ -168,8 +168,8 @@ exports.login = async (req, res, next) => {
 exports.forgot = async (req, res, next) => {
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
-		res.status(422).json({ errors: errors.array() });
-		return;
+		const message = errors.array()[0].msg
+		return next(new ErrorResponse(message, 422));
 	}
 
 	const { email } = req.body;
@@ -180,11 +180,16 @@ exports.forgot = async (req, res, next) => {
 			return next(new ErrorResponse("Email does not exist.", 400));
 		}
 
+		const payload = {
+			id: user._id,
+			hash: user.password.substr(6, 13)
+		}
+
 		const resetToken = createToken(
-			{ id: user._id },
+			payload,
 			process.env.RESET_TOKEN_SECRET,
 			"15m"
-		);
+		);	
 
 		const url = `${process.env.CLIENT_URL}/users/reset/${resetToken}`;
 		const subject = "Pokemons | Reset your password";
@@ -206,11 +211,11 @@ exports.forgot = async (req, res, next) => {
 };
 
 // POST => /users/reset
-exports.reset = async (req, res, error) => {
+exports.reset = async (req, res, next) => {
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
-		res.status(422).json({ errors: errors.array() });
-		return;
+		const message = errors.array()[0].msg
+		return next(new ErrorResponse(message, 422));
 	}
 	const { password, confirmPassword, resetToken } = req.body;
 
@@ -219,7 +224,7 @@ exports.reset = async (req, res, error) => {
 	}
 
 	try {
-		const { id } = jwt.verify(resetToken, process.env.RESET_TOKEN_SECRET);
+		const { id, hash } = jwt.verify(resetToken, process.env.RESET_TOKEN_SECRET);
 
 		const user = await User.findById(id);
 		if (!user) {
@@ -229,6 +234,13 @@ exports.reset = async (req, res, error) => {
 					400
 				)
 			);
+		}
+		
+		console.log(hash);
+		console.log(user.password.substr(6, 13));
+
+		if (hash !== user.password.substr(6, 13)) {
+			return next(new ErrorResponse("Token has been already used.", 400));
 		}
 
 		user.password = password;

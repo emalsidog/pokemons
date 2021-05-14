@@ -12,8 +12,8 @@ const transformName = require("../utils/transform-name");
 exports.updateName = async (req, res, next) => {
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
-		res.status(422).json({ errors: errors.array() });
-		return;
+		const message = errors.array()[0].msg
+		return next(new ErrorResponse(message, 422));
 	}
 	const { givenName, familyName } = req.body;
 
@@ -48,8 +48,8 @@ exports.updateName = async (req, res, next) => {
 exports.updateEmail = async (req, res, next) => {
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
-		res.status(422).json({ errors: errors.array() });
-		return;
+		const message = errors.array()[0].msg
+		return next(new ErrorResponse(message, 422));
 	}
 
 	const { email } = req.body;
@@ -88,8 +88,8 @@ exports.updateEmail = async (req, res, next) => {
 exports.updateUsername = async (req, res, next) => {
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
-		res.status(422).json({ errors: errors.array() });
-		return;
+		const message = errors.array()[0].msg
+		return next(new ErrorResponse(message, 422));
 	}
 
 	const { username } = req.body;
@@ -128,8 +128,8 @@ exports.updateUsername = async (req, res, next) => {
 exports.updatePhone = async (req, res, next) => {
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
-		res.status(422).json({ errors: errors.array() });
-		return;
+		const message = errors.array()[0].msg
+		return next(new ErrorResponse(message, 422));
 	}
 
 	const { phone } = req.body;
