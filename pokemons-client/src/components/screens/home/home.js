@@ -47,7 +47,7 @@ const Home = () => {
 		return () => clearInterval(id);
 	}, [isLoading]);
 
-	const { winner, loser } = battleResult;
+	const { winner, loser, result } = battleResult;
 
 	return (
 		<Layout>
@@ -56,7 +56,13 @@ const Home = () => {
 			) : (
 				<div className="home-container">
 					<div className="home-container-heading">
-						The winner is: <span>{winner.username}</span>
+						{result === "tie" ? (
+							<div>Tie!</div>
+						) : (
+							<div>
+								The winner is: <span>{winner.username}</span>
+							</div>
+						)}
 					</div>
 
 					<div className="home-container-results">

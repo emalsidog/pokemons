@@ -39,25 +39,25 @@ const UserSchema = new mongoose.Schema(
 			type: Number,
 			default: 0,
 		},
-		battles: [{ type: mongoose.Schema.Types.ObjectId, ref: "Battle" }],
-		favouritePokemons: {
-			type: [
-				{
-					pokemonId: {
-						type: Number,
-					},
+		battles: [
+			{
+				battleId: {
+					type: mongoose.Schema.Types.ObjectId,
+					ref: "Battle",
 				},
-			],
-		},
-		teamPokemons: {
-			type: [
-				{
-					pokemonId: {
-						type: Number,
-					},
+				earnedPoints: {
+					type: Number,
+					required: true,
 				},
-			],
-		},
+				_id: false
+			},
+		],
+		favouritePokemons: [
+			{ type: mongoose.Schema.Types.ObjectId, ref: "Pokemon" },
+		],
+		teamPokemons: [
+			{ type: mongoose.Schema.Types.ObjectId, ref: "Pokemon" },
+		],
 	},
 	{
 		timestamps: true,

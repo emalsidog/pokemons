@@ -3,6 +3,7 @@ const User = require("../models/User");
 
 // Utils
 const getParsedTeam = require("../utils/get-parsed-team");
+const { populationFields } = require("../utils/populate-user");
 
 exports.getUsers = async (req, res, next) => {
 	const { page = 1 } = req.query;
@@ -10,6 +11,8 @@ exports.getUsers = async (req, res, next) => {
 
 	try {
 		const dbUsers = await User.find()
+			.select("_id username teamPokemons warPoints")
+			.populate("teamPokemons", populationFields)
 			.limit(limit * 1)
 			.skip((page - 1) * limit)
 			.exec();
@@ -18,15 +21,20 @@ exports.getUsers = async (req, res, next) => {
 
 		const parsedUsers = await Promise.all(
 			dbUsers.map(async (user) => {
-				const parsedTeam = await getParsedTeam(user.teamPokemons, { withTotal: false });
+				const { _id, username, teamPokemons, warPoints } = user;
+
+				const parsedTeam = getParsedTeam(teamPokemons, {
+					withTotal: false,
+				});
+
 				return {
-					id: user._id,
-					username: user.username,
+					id: _id,
+					username,
 					teamPokemons: parsedTeam,
-					warPoints: user.warPoints,
+					warPoints,
 				};
 			})
-		)
+		);
 
 		res.status(200).json({
 			status: {

@@ -1,8 +1,9 @@
-// Dependencies
-const got = require("got");
+// Models
+const Pokemon = require("../models/Pokemon");
 
 // Utils
 const getParsedTeam = require("../utils/get-parsed-team");
+const { populationFields } = require("../utils/populate-user");
 
 exports.get = async (req, res, next) => {
 	const { page = 1 } = req.query;
@@ -12,20 +13,17 @@ exports.get = async (req, res, next) => {
         limit = 24;
     }
 
-	const offset = (page - 1) * limit;
-	let totalCount = 0;
-
 	try {
-		const { body } = await got(
-			`https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${limit}`
-		);
-		const parsedBody = JSON.parse(body);
+		const pokemons = await Pokemon.find({})
+			.select(populationFields)
+			.limit(limit * 1)
+			.skip((page - 1) * limit)
+			.exec();
 
-		totalCount = parsedBody.count;
+		const totalCount = await Pokemon.countDocuments();;
 
-		const parsedPokemons = await getParsedTeam(parsedBody.results, {
+		const parsedPokemons = getParsedTeam(pokemons, {
 			withTotal: false,
-			bodyHasUrl: true,
 		});
 
 		res.status(200).json({

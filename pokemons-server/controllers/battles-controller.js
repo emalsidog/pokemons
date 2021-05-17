@@ -5,39 +5,46 @@ const Battle = require("../models/Battle");
 const createPlayer = require("../utils/battles-utils/create-player");
 const getParsedTeam = require("../utils/get-parsed-team");
 const ErrorResponse = require("../utils/error-response");
+const { populationFields } = require("../utils/populate-user");
 
 exports.getUserBattles = async (req, res, next) => {
 	let { sort = "time-descending" } = req.query;
 	sort = sort.toLowerCase();
 
 	try {
-		const user = await User.findById(req.user._id)
-			.populate("battles")
-			.exec();
+		const user = await User.aggregate([
+			{ $match: { _id: req.user._id } },
+			{ $project: { battles: 1 } },
+			{ $unwind: "$battles" },
+			{
+				$lookup: {
+					from: "battles",
+					localField: "battles.battleId",
+					foreignField: "_id",
+					as: "battles.battle",
+				},
+			},
+			{ $unwind: "$battles.battle" },
+			{ $sort: createSortingOptions(sort) },
+			{
+				$group: {
+					_id: "$_id",
+					root: { $mergeObjects: "$$ROOT" },
+					battles: { $push: "$battles" },
+				},
+			},
+			{
+				$replaceRoot: {
+					newRoot: {
+						$mergeObjects: ["$root", "$$ROOT"],
+					},
+				},
+			},
+			{ $project: { root: 0 } },
+		]).exec();
 
-		let battles = user.battles;
-
-		if (sort === "time-descending") {
-			battles.sort(
-				(a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-			);
-		} else if (sort === "time-ascending") {
-			battles.sort(
-				(a, b) => new Date(a.createdAt) - new Date(b.createdAt)
-			);
-		} else if (sort === "points-descending") {
-			battles.sort(
-				(a, b) =>
-					new Date(b.currentUserPoints) -
-					new Date(a.currentUserPoints)
-			);
-		} else if (sort === "points-ascending") {
-			battles.sort(
-				(a, b) =>
-					new Date(a.currentUserPoints) -
-					new Date(b.currentUserPoints)
-			);
-		}
+		let battles;
+		user[0] ? battles = user[0].battles : battles = [];
 
 		res.status(200).json({
 			status: {
@@ -61,6 +68,7 @@ exports.battle = async (req, res, next) => {
 			);
 		}
 
+		// Get random opponent
 		let randomArray = await User.aggregate([
 			{
 				$match: {
@@ -75,26 +83,33 @@ exports.battle = async (req, res, next) => {
 			return next(new ErrorResponse("Could not find opponent.", 400));
 		}
 
-		const randomUser = await User.findById(randomArray[0]._id);
+		// Populate fields
+		const randomUser = await User.findById(randomArray[0]._id)
+			.select("_id username teamPokemons battles warPoints")
+			.populate("teamPokemons", populationFields);
 
 		if (!randomUser) {
 			return next(new ErrorResponse("Could not find opponent.", 400));
 		}
 
-		// Parse team
-		const [
-			opponentTeam,
-			opponentTeamTotal,
-		] = await getParsedTeam(randomUser.teamPokemons, { withTotal: true });
+		const parsedCurrentUser = await req.user
+			.populate("teamPokemons", populationFields)
+			.execPopulate();
 
-		const [currentUserTeam, currentUserTeamTotal] = await getParsedTeam(
-			req.user.teamPokemons,
+		// Parse team
+		const [opponentTeam, opponentTeamTotal] = getParsedTeam(
+			randomUser.teamPokemons,
+			{ withTotal: true }
+		);
+
+		const [currentUserTeam, currentUserTeamTotal] = getParsedTeam(
+			parsedCurrentUser.teamPokemons,
 			{ withTotal: true }
 		);
 
 		// Create clear player objects (to compare and send to client)
 		const currentUser = createPlayer(
-			req.user,
+			parsedCurrentUser,
 			currentUserTeam,
 			currentUserTeamTotal
 		);
@@ -113,15 +128,21 @@ exports.battle = async (req, res, next) => {
 			const battle = new Battle({
 				winner: currentUser,
 				loser: opponent,
-				currentUserPoints: winPoints,
 				result: "hasWinner",
 			});
 
-			req.user.warPoints += winPoints;
-			req.user.battles.push(battle._id);
-			randomUser.battles.push(battle._id);
+			parsedCurrentUser.warPoints += winPoints;
 
-			await req.user.save();
+			parsedCurrentUser.battles.push({
+				battleId: battle._id,
+				earnedPoints: winPoints,
+			});
+			randomUser.battles.push({
+				battleId: battle._id,
+				earnedPoints: losePoints,
+			});
+
+			await parsedCurrentUser.save();
 			await randomUser.save();
 			await battle.save();
 
@@ -133,6 +154,7 @@ exports.battle = async (req, res, next) => {
 				body: {
 					winner: currentUser,
 					loser: opponent,
+					result: battle.result
 				},
 			});
 		} else if (currentUser.teamTotal < opponent.teamTotal) {
@@ -144,13 +166,20 @@ exports.battle = async (req, res, next) => {
 			});
 
 			randomUser.warPoints += winPoints;
-			randomUser.battles.push(battle._id);
-			req.user.battles.push(battle._id);
+
+			randomUser.battles.push({
+				battleId: battle._id,
+				earnedPoints: winPoints,
+			});
+			parsedCurrentUser.battles.push({
+				battleId: battle._id,
+				earnedPoints: losePoints,
+			});
 
 			await randomUser.save();
-			await req.user.save();
+			await parsedCurrentUser.save();
 			await battle.save();
-			
+
 			res.status(200).json({
 				status: {
 					isError: false,
@@ -159,6 +188,7 @@ exports.battle = async (req, res, next) => {
 				body: {
 					winner: opponent,
 					loser: currentUser,
+					result: battle.result
 				},
 			});
 		} else if (currentUser.teamTotal === opponent.teamTotal) {
@@ -170,26 +200,60 @@ exports.battle = async (req, res, next) => {
 			});
 
 			randomUser.warPoints += tiePoints;
-			req.user.warPoints += tiePoints;
-			randomUser.battles.push(battle._id);
-			req.user.battles.push(battle._id);
+			parsedCurrentUser.warPoints += tiePoints;
+
+			randomUser.battles.push({
+				battleId: battle._id,
+				earnedPoints: tiePoints,
+			});
+			parsedCurrentUser.battles.push({
+				battleId: battle._id,
+				earnedPoints: tiePoints,
+			});
 
 			await randomUser.save();
-			await req.user.save();
+			await parsedCurrentUser.save();
 			await battle.save();
 
 			res.status(200).json({
 				status: {
 					isError: false,
-					message: `Battle ended. Tie!`,
+					message: "Battle ended. Tie!",
 				},
 				body: {
 					winner: opponent,
 					loser: currentUser,
+					result: battle.result
 				},
 			});
 		}
 	} catch (error) {
 		next(error);
+	}
+};
+
+// Sorting options
+const createSortingOptions = (sortingType) => {
+	switch (sortingType) {
+		case "time-descending": {
+			return {
+				"battles.battle.createdAt": -1,
+			};
+		}
+		case "time-ascending": {
+			return {
+				"battles.battle.createdAt": 1,
+			};
+		}
+		case "points-descending": {
+			return {
+				"battles.earnedPoints": -1,
+			};
+		}
+		case "points-ascending": {
+			return {
+				"battles.earnedPoints": 1,
+			};
+		}
 	}
 };

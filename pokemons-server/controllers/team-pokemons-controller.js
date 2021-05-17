@@ -4,19 +4,24 @@ const User = require("../models/User");
 // Utils
 const ErrorResponse = require("../utils/error-response");
 const getParsedTeam = require("../utils/get-parsed-team");
+const isPokemonIdValid = require("../utils/pokemonId-validation");
+const { populationFields, populateUser } = require("../utils/populate-user");
 
 // GET => /pokemons/team
 exports.get = async (req, res, next) => {
 	try {
-		const user = await User.findById(req.user._id);
+		const user = await User.findById(req.user._id)
+			.populate("teamPokemons", populationFields)
+			.exec();
+
 		if (!user) {
 			return next(new ErrorResponse("Unauthorized.", 401));
 		}
 
-		const parsedTeam = await getParsedTeam(user.teamPokemons, {
+		const parsedTeam = getParsedTeam(user.teamPokemons, {
 			withTotal: false,
 		});
-		
+
 		res.status(200).json({
 			status: {
 				isError: false,
@@ -29,19 +34,16 @@ exports.get = async (req, res, next) => {
 	} catch (error) {
 		next(error);
 	}
-}
+};
 
 // POST => /pokemons/team/add
 exports.add = async (req, res, next) => {
 	const { pokemonId } = req.body;
 
-	if (!pokemonId) {
-		return next(new ErrorResponse("Pokemon id is not specified.", 400));
+	const validationResult = isPokemonIdValid(pokemonId);
+	if (!validationResult.isValid) {
+		return next(new ErrorResponse(validationResult.message, 400));
 	}
-
-    if (isNaN(pokemonId)) {
-        return next(new ErrorResponse("Pokemon id is invalid.", 400));
-    }
 
 	try {
 		const user = await User.findById(req.user._id);
@@ -52,34 +54,33 @@ exports.add = async (req, res, next) => {
 		}
 
 		const result = teamPokemons.find(
-			(pokemon) => (pokemon.pokemonId == pokemonId)
+			(id) => id.toString() === pokemonId.toString()
 		);
-		
-        if (result) {
-            return next(new ErrorResponse("Already in your team.", 400));
-        }
 
-        teamPokemons.push({ pokemonId });
-		if (teamPokemons.length === 5) {
-			if (!warParticipant) {
-				user.warParticipant = true;
-			}
+		if (result) {
+			return next(new ErrorResponse("Already in your team.", 400));
 		}
-        await user.save();
 
-		
-		const parsedTeam = await getParsedTeam(user?.teamPokemons, {
-			withTotal: false
+		teamPokemons.push(pokemonId);
+
+		if (teamPokemons.length === 5 && !warParticipant) {
+			user.warParticipant = true;
+		}
+		await user.save();
+
+		const populatedUser = await populateUser(user, "teamPokemons");
+		const parsedTeam = getParsedTeam(populatedUser.teamPokemons, {
+			withTotal: false,
 		});
 
 		res.status(200).json({
 			status: {
 				isError: false,
-				message: "Added.",
+				message: "Added to team.",
 			},
 			body: {
 				teamPokemons: parsedTeam,
-				warParticipant: user.warParticipant
+				warParticipant: user.warParticipant,
 			},
 		});
 	} catch (error) {
@@ -89,22 +90,19 @@ exports.add = async (req, res, next) => {
 
 // POST => /pokemons/team/remove
 exports.remove = async (req, res, next) => {
-    const { pokemonId } = req.body;
+	const { pokemonId } = req.body;
 
-	if (!pokemonId) {
-		return next(new ErrorResponse("Pokemon id is not specified.", 400));
-	} 
+	const validationResult = isPokemonIdValid(pokemonId);
+	if (!validationResult.isValid) {
+		return next(new ErrorResponse(validationResult.message, 400));
+	}
 
-    if (isNaN(pokemonId)) {
-        return next(new ErrorResponse("Pokemon id is invalid.", 400));
-    }
-
-    try {
-        const user = await User.findByIdAndUpdate(
+	try {
+		const user = await User.findByIdAndUpdate(
 			req.user._id,
 			{
 				$pull: {
-					teamPokemons: { pokemonId },
+					teamPokemons: pokemonId,
 				},
 			},
 			{
@@ -113,29 +111,28 @@ exports.remove = async (req, res, next) => {
 		);
 
 		const { teamPokemons, warParticipant } = user;
-		if (teamPokemons.length < 5) {
-			if (warParticipant) {
-				user.warParticipant = false;
-			}
-		}
 
+		if (teamPokemons.length < 5 && warParticipant) {
+			user.warParticipant = false;
+		}
 		await user.save();
 
-		const parsedTeam = await getParsedTeam(user.teamPokemons, {
-			withTotal: false
+		const populatedUser = await populateUser(user, "teamPokemons");
+		const parsedTeam = getParsedTeam(populatedUser.teamPokemons, {
+			withTotal: false,
 		});
 
 		res.status(200).json({
 			status: {
 				isError: false,
-				message: "Removed.",
+				message: "Removed from team.",
 			},
 			body: {
 				teamPokemons: parsedTeam,
-				warParticipant: user.warParticipant
+				warParticipant: user.warParticipant,
 			},
 		});
-    } catch (error) {
-        next(error);
-    }
+	} catch (error) {
+		next(error);
+	}
 };

@@ -8,13 +8,13 @@ import formatDate from "../../../../utils/format-date";
 import "./header.css";
 
 const Header = (props) => {
-    const { username, createdAt } = props;
+    const { username, result, createdAt } = props;
 
     const [date, time] = formatDate(createdAt);
 
     return (
         <div className="battle-header">
-            <div>Winner: {username}</div>
+            {result === "tie" ? <div>Tie</div> : <div>Winner: {username}</div>}
             <div>Played: {date} [{time}]</div>
         </div>
     )

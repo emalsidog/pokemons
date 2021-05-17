@@ -1,28 +1,15 @@
-// Dependencies
-const got = require("got");
-
 // Utils
 const randomizeTeamTotal = require("./battles-utils/randomize-team-total");
 
-const getParsedTeam = async (teamPokemons, options) => {
-	const { bodyHasUrl = false, withTotal = true } = options;
-
-	let promises = teamPokemons.map((pokemon) => {
-		if (bodyHasUrl) {
-			return got(pokemon.url);
-		}
-		return got(`https://pokeapi.co/api/v2/pokemon/${pokemon.pokemonId}`);
-	});
-
-	const pokemonsData = await Promise.all(promises);
+const getParsedTeam = (teamPokemons, options) => {
+	const { withTotal = true } = options;
 
 	let teamTotal = 0;
 
-	const parsedTeam = pokemonsData.map(({ body }) => {
-		const parsedBody = JSON.parse(body);
-
+	const parsedTeam = teamPokemons.map(pokemon => {
+		
 		// Parse stats
-		const stats = parsedBody.stats.map(({ stat, base_stat }) => {
+		const stats = pokemon.stats.map(({ stat, base_stat }) => {
 			return {
 				name: stat.name,
 				value: base_stat,
@@ -30,7 +17,7 @@ const getParsedTeam = async (teamPokemons, options) => {
 		});
 
 		// Parse types
-		const types = parsedBody.types.map(({ type }) => ({
+		const types = pokemon.types.map(({ type }) => ({
 			type: type.name,
 		}));
 
@@ -41,9 +28,9 @@ const getParsedTeam = async (teamPokemons, options) => {
 		teamTotal += result;
 
 		return {
-			id: parsedBody.id,
-			name: parsedBody.name,
-			sprite: parsedBody.sprites.front_default,
+			id: pokemon._id,
+			name: pokemon.name,
+			sprite: pokemon.sprites.front_default,
 			stats,
 			types,
 		};

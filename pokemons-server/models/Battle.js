@@ -9,21 +9,12 @@ const BattleSchema = new mongoose.Schema(
 		loser: {
 			type: Object,
 		},
-		currentUserPoints: {
-			type: Number,
-		},
 		result: {
 			type: String,
 			enum: ["tie", "hasWinner"],
 		},
 	},
 	{
-		capped: {
-			max: 10,
-			size: 50000,
-			autoIndexId: true,
-		},
-
 		timestamps: true,
 	}
 );

@@ -23,13 +23,14 @@ const battles = (state = initialState, action) => {
             }
         }
         case battleTypes.BATTLE_SUCCESS: {
-            const { winner, loser } = action.response;
+            const { winner, loser, result } = action.response;
             return {
                 ...state,
                 isLoading: false,
                 battleResult: {
                     winner: { ...winner},
-                    loser: { ...loser}
+                    loser: { ...loser},
+                    result
                 }
             }
         }

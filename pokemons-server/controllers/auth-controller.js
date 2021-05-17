@@ -7,6 +7,7 @@ const sendMail = require("../utils/sendMail");
 const ErrorResponse = require("../utils/error-response");
 const transformName = require("../utils/transform-name");
 const getParsedTeam = require("../utils/get-parsed-team");
+const { populationFields } = require("../utils/populate-user");
 
 // Models
 const User = require("../models/User");
@@ -15,7 +16,7 @@ const User = require("../models/User");
 exports.register = async (req, res, next) => {
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
-		const message = errors.array()[0].msg
+		const message = errors.array()[0].msg;
 		return next(new ErrorResponse(message, 422));
 	}
 
@@ -110,14 +111,18 @@ exports.activate = async (req, res, next) => {
 exports.login = async (req, res, next) => {
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
-		const message = errors.array()[0].msg
+		const message = errors.array()[0].msg;
 		return next(new ErrorResponse(message, 422));
 	}
 
 	const { email, password } = req.body;
 
 	try {
-		const user = await User.findOne({ email: email.toLowerCase() });
+		const user = await User.findOne({ email: email.toLowerCase() })
+			.populate("favouritePokemons", populationFields)
+			.populate("teamPokemons", populationFields)
+			.exec();
+			
 		if (!user) {
 			return next(new ErrorResponse("Email does not exist.", 400));
 		}
@@ -133,12 +138,15 @@ exports.login = async (req, res, next) => {
 			"7d"
 		);
 
-		const parsedTeamPokemons = await getParsedTeam(user.teamPokemons, {
+		const parsedTeamPokemons = getParsedTeam(user.teamPokemons, {
 			withTotal: false,
 		});
-		const parsedFavouritePokemons = await getParsedTeam(user.favouritePokemons, {
-			withTotal: false,
-		});
+		const parsedFavouritePokemons = getParsedTeam(
+			user.favouritePokemons,
+			{
+				withTotal: false,
+			}
+		);
 
 		res.status(200).json({
 			status: {
@@ -168,7 +176,7 @@ exports.login = async (req, res, next) => {
 exports.forgot = async (req, res, next) => {
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
-		const message = errors.array()[0].msg
+		const message = errors.array()[0].msg;
 		return next(new ErrorResponse(message, 422));
 	}
 
@@ -182,14 +190,14 @@ exports.forgot = async (req, res, next) => {
 
 		const payload = {
 			id: user._id,
-			hash: user.password.substr(6, 13)
-		}
+			hash: user.password.substr(6, 13),
+		};
 
 		const resetToken = createToken(
 			payload,
 			process.env.RESET_TOKEN_SECRET,
 			"15m"
-		);	
+		);
 
 		const url = `${process.env.CLIENT_URL}/users/reset/${resetToken}`;
 		const subject = "Pokemons | Reset your password";
@@ -214,7 +222,7 @@ exports.forgot = async (req, res, next) => {
 exports.reset = async (req, res, next) => {
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
-		const message = errors.array()[0].msg
+		const message = errors.array()[0].msg;
 		return next(new ErrorResponse(message, 422));
 	}
 	const { password, confirmPassword, resetToken } = req.body;
@@ -224,7 +232,10 @@ exports.reset = async (req, res, next) => {
 	}
 
 	try {
-		const { id, hash } = jwt.verify(resetToken, process.env.RESET_TOKEN_SECRET);
+		const { id, hash } = jwt.verify(
+			resetToken,
+			process.env.RESET_TOKEN_SECRET
+		);
 
 		const user = await User.findById(id);
 		if (!user) {
@@ -235,9 +246,6 @@ exports.reset = async (req, res, next) => {
 				)
 			);
 		}
-		
-		console.log(hash);
-		console.log(user.password.substr(6, 13));
 
 		if (hash !== user.password.substr(6, 13)) {
 			return next(new ErrorResponse("Token has been already used.", 400));

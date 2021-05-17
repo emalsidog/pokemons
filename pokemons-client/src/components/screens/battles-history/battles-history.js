@@ -45,7 +45,7 @@ const BattlesHistory = () => {
 	}, [dispatch, values.sort]);
 
 	const main = battlesHistory.map((battle) => {
-		return <BattleContainer key={battle._id} battle={battle} />;
+		return <BattleContainer key={battle.battleId} battle={battle} />;
 	});
 
 	const listOptions = [

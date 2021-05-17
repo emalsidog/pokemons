@@ -27,9 +27,9 @@ function* battle() {
 		});
 
 		if (data) {
-            const { body: { winner, loser }, status } = data.data;
-
-            yield put(actions.battleSuccess({ winner, loser }));
+            const { body: { winner, loser, result }, status } = data.data;
+            console.log(data.data);
+            yield put(actions.battleSuccess({ winner, loser, result }));
             yield put(addNotification(status));
 
 		} else {
