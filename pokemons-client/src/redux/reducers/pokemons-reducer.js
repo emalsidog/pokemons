@@ -9,7 +9,7 @@ const initialState = {
 	totalCount: 0,
 
 	isFetchingData: false,
-	inInAction: false
+	isInAction: "ASD"
 };
 
 const pokemons = (state = initialState, action) => {
@@ -83,7 +83,7 @@ const pokemons = (state = initialState, action) => {
 		case types.ADD_TO_FAVOURITE_REQUEST: {
 			return {
 				...state,
-				inInAction: true,
+				isInAction: true,
 			};
 		}
 		case types.ADD_TO_FAVOURITE_SUCCESS: {
@@ -94,14 +94,14 @@ const pokemons = (state = initialState, action) => {
 
 			return {
 				...state,
-				inInAction: false,
+				isInAction: false,
 				favouritePokemons: newFavouritePokemons,
 			};
 		}
 		case types.ADD_TO_FAVOURITE_FAILURE: {
 			return {
 				...state,
-				inInAction: false,
+				isInAction: false,
 			};
 		}
 
@@ -109,21 +109,21 @@ const pokemons = (state = initialState, action) => {
 		case types.REMOVE_FROM_FAVOURITE_REQUEST: {
 			return {
 				...state,
-				inInAction: true,
+				isInAction: true,
 			};
 		}
 		case types.REMOVE_FROM_FAVOURITE_SUCCESS: {
 			const { favouritePokemons } = action.body;
 			return {
 				...state,
-				inInAction: false,
+				isInAction: false,
 				favouritePokemons,
 			};
 		}
 		case types.REMOVE_FROM_FAVOURITE_FAILURE: {
 			return {
 				...state,
-				inInAction: false,
+				isInAction: false,
 			};
 		}
 
@@ -131,21 +131,21 @@ const pokemons = (state = initialState, action) => {
 		case types.ADD_TO_TEAM_REQUEST: {
 			return {
 				...state,
-				inInAction: true,
+				isInAction: true,
 			};
 		}
 		case types.ADD_TO_TEAM_SUCCESS: {
 			const { teamPokemons } = action;
 			return {
 				...state,
-				inInAction: false,
+				isInAction: false,
 				teamPokemons,
 			};
 		}
 		case types.ADD_TO_TEAM_FAILURE: {
 			return {
 				...state,
-				inInAction: false,
+				isInAction: false,
 			};
 		}
 
@@ -153,21 +153,21 @@ const pokemons = (state = initialState, action) => {
 		case types.REMOVE_FROM_TEAM_REQUEST: {
 			return {
 				...state,
-				inInAction: true,
+				isInAction: true,
 			};
 		}
 		case types.REMOVE_FROM_TEAM_SUCCESS: {
 			const { teamPokemons } = action;
 			return {
 				...state,
-				inInAction: false,
+				isInAction: false,
 				teamPokemons,
 			};
 		}
 		case types.REMOVE_FROM_TEAM_FAILURE: {
 			return {
 				...state,
-				inInAction: false,
+				isInAction: false,
 			};
 		}
 

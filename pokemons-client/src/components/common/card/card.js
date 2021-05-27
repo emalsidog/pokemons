@@ -11,7 +11,10 @@ import {
 } from "../../../redux/actions/pokemons-actions";
 
 // Selectors
-import { selectFavouritePokemons, selectTeamPokemons } from "../../../redux/selectors/pokemons-selectors";
+import {
+	selectFavouritePokemons,
+	selectTeamPokemons,
+} from "../../../redux/selectors/pokemons-selectors";
 
 // Utils
 import formatString from "../../utils/format-string";

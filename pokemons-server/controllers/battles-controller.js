@@ -9,7 +9,6 @@ const { populationFields } = require("../utils/populate-user");
 
 exports.getUserBattles = async (req, res, next) => {
 	let { sort = "time-descending" } = req.query;
-	sort = sort.toLowerCase();
 
 	try {
 		const user = await User.aggregate([
@@ -25,7 +24,7 @@ exports.getUserBattles = async (req, res, next) => {
 				},
 			},
 			{ $unwind: "$battles.battle" },
-			{ $sort: createSortingOptions(sort) },
+			{ $sort: createSortingOptions(sort.toLowerCase()) },
 			{
 				$group: {
 					_id: "$_id",
@@ -42,9 +41,9 @@ exports.getUserBattles = async (req, res, next) => {
 			},
 			{ $project: { root: 0 } },
 		]).exec();
-
+		
 		let battles;
-		user[0] ? battles = user[0].battles : battles = [];
+		user[0] ? (battles = user[0].battles) : (battles = []);
 
 		res.status(200).json({
 			status: {
@@ -133,14 +132,8 @@ exports.battle = async (req, res, next) => {
 
 			parsedCurrentUser.warPoints += winPoints;
 
-			parsedCurrentUser.battles.push({
-				battleId: battle._id,
-				earnedPoints: winPoints,
-			});
-			randomUser.battles.push({
-				battleId: battle._id,
-				earnedPoints: losePoints,
-			});
+			pushBattle(parsedCurrentUser, winPoints, battle._id);
+			pushBattle(randomUser, losePoints, battle._id);
 
 			await parsedCurrentUser.save();
 			await randomUser.save();
@@ -154,7 +147,7 @@ exports.battle = async (req, res, next) => {
 				body: {
 					winner: currentUser,
 					loser: opponent,
-					result: battle.result
+					result: battle.result,
 				},
 			});
 		} else if (currentUser.teamTotal < opponent.teamTotal) {
@@ -167,14 +160,8 @@ exports.battle = async (req, res, next) => {
 
 			randomUser.warPoints += winPoints;
 
-			randomUser.battles.push({
-				battleId: battle._id,
-				earnedPoints: winPoints,
-			});
-			parsedCurrentUser.battles.push({
-				battleId: battle._id,
-				earnedPoints: losePoints,
-			});
+			pushBattle(parsedCurrentUser, losePoints, battle._id);
+			pushBattle(randomUser, winPoints, battle._id);
 
 			await randomUser.save();
 			await parsedCurrentUser.save();
@@ -188,7 +175,7 @@ exports.battle = async (req, res, next) => {
 				body: {
 					winner: opponent,
 					loser: currentUser,
-					result: battle.result
+					result: battle.result,
 				},
 			});
 		} else if (currentUser.teamTotal === opponent.teamTotal) {
@@ -202,14 +189,8 @@ exports.battle = async (req, res, next) => {
 			randomUser.warPoints += tiePoints;
 			parsedCurrentUser.warPoints += tiePoints;
 
-			randomUser.battles.push({
-				battleId: battle._id,
-				earnedPoints: tiePoints,
-			});
-			parsedCurrentUser.battles.push({
-				battleId: battle._id,
-				earnedPoints: tiePoints,
-			});
+			pushBattle(parsedCurrentUser, tiePoints, battle._id);
+			pushBattle(randomUser, tiePoints, battle._id);
 
 			await randomUser.save();
 			await parsedCurrentUser.save();
@@ -223,7 +204,7 @@ exports.battle = async (req, res, next) => {
 				body: {
 					winner: opponent,
 					loser: currentUser,
-					result: battle.result
+					result: battle.result,
 				},
 			});
 		}
@@ -231,6 +212,22 @@ exports.battle = async (req, res, next) => {
 		next(error);
 	}
 };
+
+const pushBattle = (user, points, battleId) => {
+	if (user.battles.length > 9) {
+		user.battles.splice(0, 1);
+		user.battles.push({
+			battleId,
+			earnedPoints: points,
+		});
+	} else {
+		user.battles.push({
+			battleId,
+			earnedPoints: points,
+		});
+	}
+}
+
 
 // Sorting options
 const createSortingOptions = (sortingType) => {
@@ -253,6 +250,11 @@ const createSortingOptions = (sortingType) => {
 		case "points-ascending": {
 			return {
 				"battles.earnedPoints": 1,
+			};
+		}
+		default: {
+			return {
+				"battles.battle.createdAt": -1,
 			};
 		}
 	}
